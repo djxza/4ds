@@ -1,11 +1,12 @@
-ARCH=x86_64-elf
+#ARCH=x86_64-elf
+ARCH=i386-elf
 CC=$(ARCH)-gcc
 AS=$(ARCH)-as
 LD=$(ARCH)-ld
 
-CFLAGS=-ffreestanding -O2 -Wall -Wextra -m64
+CFLAGS=-ffreestanding -O2 -Wall -Wextra
+ASFLAGS=
 LDFLAGS=-T linker.ld -nostdlib
-
 SRC_DIR=src
 OBJ_DIR=obj
 BIN_DIR=bin
@@ -38,14 +39,14 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 # Assemble (GAS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
-	$(AS) $< -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
 # Link kernel
 $(BIN_DIR)/kernel.elf: $(OBJS) | $(BIN_DIR)
 	$(LD) $(LDFLAGS) $(OBJS) -o $@
 
 # Create bootable image
-$(BIN_DIR)/4ds.img: $(BIN_DIR)/kernel.elf
+$(IMG): $(BIN_DIR)/kernel.elf
 	mkdir -p $(ISO_DIR)/boot/grub
 	cp $< $(ISO_DIR)/boot/kernel.elf
 	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg

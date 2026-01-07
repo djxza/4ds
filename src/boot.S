@@ -2,20 +2,24 @@
 .align 8
 
 multiboot_header:
-    .long 0xe85250d6          # magic
-    .long 0                  # architecture (i386)
+    # Fixed header
+    .long 0xe85250d6
+    .long 0
     .long header_end - multiboot_header
     .long -(0xe85250d6 + 0 + (header_end - multiboot_header))
 
-    # Framebuffer REQUEST (type 5)
+    # Framebuffer REQUEST tag (type 5, size = 20)
     .short 5
     .short 0
     .long 20
-    .long 0                  # width (any)
-    .long 0                  # height (any)
-    .long 32                 # bpp
+    .long 0
+    .long 0
+    .long 32
 
-    # END TAG (MANDATORY)
+    # REQUIRED padding to 8-byte alignment
+    .long 0
+
+    # END tag (type 0, size = 8)
     .short 0
     .short 0
     .long 8
@@ -27,9 +31,8 @@ header_end:
 .extern kmain
 
 _start:
-    mov %rsp, %rbp           # sanity
-    call kmain               # multiboot info ptr already in %rdi
-1:
+    call kmain
+.hang:
     hlt
-    jmp 1b
+    jmp .hang
 
