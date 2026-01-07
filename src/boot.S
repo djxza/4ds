@@ -11,8 +11,8 @@ header_start:
 .align 8
 .long 5
 .long 20
-.long 0
-.long 0
+.long 1024
+.long 768
 .long 32
 
 .align 8
@@ -21,26 +21,25 @@ header_start:
 
 header_end:
 
-.section .text
+.intel_syntax noprefix
+.code64
 .global _start
-# .code32
+.extern kernel_main64
 
+.section .text
 _start:
     cli
-    mov $stack_top, %esp
+    lea rsp, [stack_top]
+    mov rdi, rbx          # PASS multiboot_info pointer
+    call kernel_main64
 
-    push %ebx        # multiboot info
-    push %eax        # magic
-
-    call enter_long_mode
+.hang:
     hlt
+    jmp .hang
 
-# -----------------------
-# Stack
-# -----------------------
 .section .bss
 .align 16
 stack_bottom:
-    .skip 16384      # 16 KiB stack
+    .skip 16384
 stack_top:
 
