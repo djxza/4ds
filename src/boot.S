@@ -1,38 +1,46 @@
 .section .multiboot
 .align 8
 
-multiboot_header:
-    # Fixed header
-    .long 0xe85250d6
-    .long 0
-    .long header_end - multiboot_header
-    .long -(0xe85250d6 + 0 + (header_end - multiboot_header))
+.long 0xe85250d6
+.long 0
+.long header_end - header_start
+.long -(0xe85250d6 + 0 + (header_end - header_start))
 
-    # Framebuffer REQUEST tag (type 5, size = 20)
-    .short 5
-    .short 0
-    .long 20
-    .long 0
-    .long 0
-    .long 32
+header_start:
 
-    # REQUIRED padding to 8-byte alignment
-    .long 0
+.align 8
+.long 5
+.long 20
+.long 0
+.long 0
+.long 32
 
-    # END tag (type 0, size = 8)
-    .short 0
-    .short 0
-    .long 8
+.align 8
+.long 0
+.long 8
 
 header_end:
 
 .section .text
 .global _start
-.extern kmain
+# .code32
 
 _start:
-    call kmain
-.hang:
+    cli
+    mov $stack_top, %esp
+
+    push %ebx        # multiboot info
+    push %eax        # magic
+
+    call enter_long_mode
     hlt
-    jmp .hang
+
+# -----------------------
+# Stack
+# -----------------------
+.section .bss
+.align 16
+stack_bottom:
+    .skip 16384      # 16 KiB stack
+stack_top:
 

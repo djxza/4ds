@@ -1,51 +1,62 @@
-#ARCH=x86_64-elf
-ARCH=i386-elf
-CC=$(ARCH)-gcc
-AS=$(ARCH)-as
-LD=$(ARCH)-ld
+ARCH = x86_64-elf
+CC   = $(ARCH)-gcc
+AS   = $(ARCH)-as
+LD   = $(ARCH)-ld
 
-CFLAGS=-ffreestanding -O2 -Wall -Wextra
-ASFLAGS=
-LDFLAGS=-T linker.ld -nostdlib
-SRC_DIR=src
-OBJ_DIR=obj
-BIN_DIR=bin
-ISO_DIR=iso
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
+ISO_DIR = iso
 
-# Discover all sources
-C_SRCS := $(wildcard $(SRC_DIR)/*.c)
-S_SRCS := $(wildcard $(SRC_DIR)/*.S)
+IMG = $(BIN_DIR)/4ds.img
 
-# Map to object files
-C_OBJS := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRCS))
-S_OBJS := $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(S_SRCS))
+CFLAGS   = -ffreestanding -O2 -Wall -Wextra -m64
+LDFLAGS  = -T linker.ld -nostdlib -z max-page-size=0x1000
 
-OBJS := $(S_OBJS) $(C_OBJS)
+AS32FLAGS = --32
+AS64FLAGS =
 
-IMG =  $(BIN_DIR)/4ds.img
+# -----------------------
+# Sources
+# -----------------------
+
+C_SRCS = $(filter-out $(SRC_DIR)/kernel32.c,$(wildcard $(SRC_DIR)/*.c))
+
+ASM32_SRCS = $(SRC_DIR)/boot.S
+ASM64_SRCS = $(SRC_DIR)/long_mode.S
+
+C_OBJS     = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRCS))
+ASM32_OBJS = $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM32_SRCS))
+ASM64_OBJS = $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM64_SRCS))
+
+OBJS = $(ASM32_OBJS) $(ASM64_OBJS) $(C_OBJS)
+
+# -----------------------
+# Targets
+# -----------------------
 
 all: $(IMG)
 
-# Directories
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(OBJ_DIR) $(BIN_DIR):
+	mkdir -p $@
 
-$(BIN_DIR):
-	mkdir -p $(BIN_DIR)
-
-# Compile C
+# C compilation (64-bit)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Assemble (GAS)
+# 32-bit assembly
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
-	$(AS) $(ASFLAGS) $< -o $@
+	$(AS) $(AS32FLAGS) $< -o $@
 
-# Link kernel
+# 64-bit assembly
+$(OBJ_DIR)/long_mode.o: $(SRC_DIR)/long_mode.S | $(OBJ_DIR)
+	$(AS) $(AS64FLAGS) $< -o $@
+
+# Link kernel ELF
 $(BIN_DIR)/kernel.elf: $(OBJS) | $(BIN_DIR)
 	$(LD) $(LDFLAGS) $(OBJS) -o $@
 
-# Create bootable image
+# ISO image
 $(IMG): $(BIN_DIR)/kernel.elf
 	mkdir -p $(ISO_DIR)/boot/grub
 	cp $< $(ISO_DIR)/boot/kernel.elf
@@ -54,14 +65,14 @@ $(IMG): $(BIN_DIR)/kernel.elf
 
 emu:
 	qemu-system-x86_64 \
-  -cdrom $(IMG) \
-  -m 512M \
-  -no-reboot \
-  -no-shutdown \
-  -vga std
+		-cdrom $(IMG) \
+		-m 512M \
+		-no-reboot \
+		-no-shutdown \
+		-vga std
 
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR) $(ISO_DIR)
 
-.PHONY: all clean
+.PHONY: all clean emu
 
