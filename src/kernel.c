@@ -1,45 +1,50 @@
 #include <stdint.h>
 
-#include "framebuffer.h"
+#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER 8
 
-void _main(void *multiboot_info) {
-  if (!framebuffer_init(multiboot_info)) {
-    // Framebuffer not found: hang forever
-    while (1) {
-      __asm__ volatile("hlt");
-    }
-  }
+struct multiboot_tag {
+  uint32_t type;
+  uint32_t size;
+};
 
-  // Clear screen to dark blue
-  framebuffer_clear(0xFFFFFFFF);
+struct multiboot_tag_framebuffer {
+  uint32_t type;
+  uint32_t size;
+  uint64_t framebuffer_addr;
+  uint32_t framebuffer_pitch;
+  uint32_t framebuffer_width;
+  uint32_t framebuffer_height;
+  uint8_t framebuffer_bpp;
+  uint8_t framebuffer_type;
+  uint16_t reserved;
+};
 
-  // Draw a few test pixels
-  framebuffer_put_pixel(50, 50, 0x00FF0000); // red
-  framebuffer_put_pixel(51, 50, 0x0000FF00); // green
-  framebuffer_put_pixel(
-      52, 50,
-      0x000000FF); // blue
-                   //
-                   // // Pseudo debug: paint first row to see bytes per pixel
-  for (uint32_t y = 0; y < get_fb_height(); y++) {
-    for (uint32_t x = 0; x < get_fb_width(); x++) {
-      // simple gradient
-      uint32_t r = x * 255 / get_fb_width();
-      uint32_t g = y * 255 / get_fb_height();
-      uint32_t b = 128;
-      framebuffer_put_pixel(x, y, (r << 16) | (g << 8) | b);
-    }
-  }
-
-  framebuffer_put_pixel(10, 10, 0xFFFF0000); // bright red
-                                             //
-  unsigned int *vga = (unsigned int *)0xB8000;
-
-  vga[0] = 0xFF00FFFF;
+void kmain(void *mbi) {
+  uint8_t *ptr = (uint8_t *)mbi + 8;
 
   while (1) {
-    __asm__ volatile("hlt");
+    struct multiboot_tag *tag = (struct multiboot_tag *)ptr;
+    if (tag->type == 0)
+      break;
+
+    if (tag->type == MULTIBOOT2_TAG_TYPE_FRAMEBUFFER) {
+      struct multiboot_tag_framebuffer *fb =
+          (struct multiboot_tag_framebuffer *)tag;
+
+      uint32_t *pixels = (uint32_t *)(uint64_t)fb->framebuffer_addr;
+      uint32_t pitch = fb->framebuffer_pitch / 4;
+
+      for (uint32_t y = 0; y < fb->framebuffer_height; y++) {
+        for (uint32_t x = 0; x < fb->framebuffer_width; x++) {
+          pixels[y * pitch + x] = 0xFA3030FF; // visible blue
+        }
+      }
+      break;
+    }
+
+    ptr += (tag->size + 7) & ~7;
   }
 
-  framebuffer_put_pixel(10, 10, 0xFFFF0000); // bright red
+  for (;;)
+    __asm__("hlt");
 }

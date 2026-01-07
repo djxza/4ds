@@ -1,82 +1,66 @@
-# ========================
-# 4DS Console OS Makefile
-# GCC Assembler Edition
-# ========================
+ARCH=x86_64-elf
+CC=$(ARCH)-gcc
+AS=$(ARCH)-as
+LD=$(ARCH)-ld
 
-# Output
-KERNEL      := build/kernel.elf
-IMG         := bin/4ds.img
+CFLAGS=-ffreestanding -O2 -Wall -Wextra -m64
+LDFLAGS=-T linker.ld -nostdlib
 
-# Tools
-CC          := x86_64-elf-gcc
-LD          := x86_64-elf-ld
-GRUBMKRESCUE:= grub-mkrescue
+SRC_DIR=src
+OBJ_DIR=obj
+BIN_DIR=bin
+ISO_DIR=iso
 
-# Flags
-CFLAGS  := -std=gnu2x -ffreestanding -O2 -Wall -Wextra \
-           -fno-stack-protector -fno-pic -mno-red-zone -mcmodel=kernel
+# Discover all sources
+C_SRCS := $(wildcard $(SRC_DIR)/*.c)
+S_SRCS := $(wildcard $(SRC_DIR)/*.S)
 
-ASFLAGS := -ffreestanding
+# Map to object files
+C_OBJS := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRCS))
+S_OBJS := $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(S_SRCS))
 
-LDFLAGS := -T linker.ld -nostdlib
+OBJS := $(S_OBJS) $(C_OBJS)
 
-# Directories
-SRC_DIR   := src
-BUILD_DIR := build
-BIN_DIR   := bin
-
-# Sources
-C_SOURCES  := $(wildcard $(SRC_DIR)/*.c)
-S_SOURCES  := $(wildcard $(SRC_DIR)/*.S)
-
-OBJECTS := \
-  $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES)) \
-  $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o, $(S_SOURCES))
-
-# ========================
-# Targets
-# ========================
+IMG =  $(BIN_DIR)/4ds.img
 
 all: $(IMG)
 
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+# Directories
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
 # Compile C
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Assemble .S using GCC
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.S | $(BUILD_DIR)
-	$(CC) $(ASFLAGS) -c $< -o $@
+# Assemble (GAS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
+	$(AS) $< -o $@
 
 # Link kernel
-$(KERNEL): $(OBJECTS)
-	$(LD) $(LDFLAGS) $(OBJECTS) -o $@
+$(BIN_DIR)/kernel.elf: $(OBJS) | $(BIN_DIR)
+	$(LD) $(LDFLAGS) $(OBJS) -o $@
 
 # Create bootable image
-$(IMG): $(KERNEL) | $(BIN_DIR)
-	rm -rf build/isodir
-	mkdir -p build/isodir/boot/grub
-	cp $(KERNEL) build/isodir/boot/kernel.elf
-	echo 'set timeout=0'                 >  build/isodir/boot/grub/grub.cfg
-	echo 'set default=0'                 >> build/isodir/boot/grub/grub.cfg
-	echo 'set gfxpayload=keep'           >> build/isodir/boot/grub/grub.cfg
-	echo 'menuentry "4DS Console OS" {'  >> build/isodir/boot/grub/grub.cfg
-	echo '  multiboot2 /boot/kernel.elf' >> build/isodir/boot/grub/grub.cfg
-	echo '  boot'                        >> build/isodir/boot/grub/grub.cfg
-	echo '}'                            >> build/isodir/boot/grub/grub.cfg
-	$(GRUBMKRESCUE) -o $(IMG) build/isodir > /dev/null
+$(BIN_DIR)/4ds.img: $(BIN_DIR)/kernel.elf
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp $< $(ISO_DIR)/boot/kernel.elf
+	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
+	grub-mkrescue -o $@ $(ISO_DIR)
 
-run: $(IMG)
-	qemu-system-x86_64 -cdrom $(IMG)
+emu:
+	qemu-system-x86_64 \
+  -cdrom $(IMG) \
+  -m 512M \
+  -no-reboot \
+  -no-shutdown \
+  -vga std
 
 clean:
-	rm -rf build
-	rm -f $(IMG)
+	rm -rf $(OBJ_DIR) $(BIN_DIR) $(ISO_DIR)
 
-.PHONY: all run clean
+.PHONY: all clean
 
