@@ -1,7 +1,8 @@
 #!/bin/bash
 
 OUT=build_dump.txt
-echo "Dumping project into $OUT ..."
+echo "Im trying to make an os, but when i start up only black is visible in qemu, like the framebuffer is laoding but i cant access it. project dump:"
+echo "$OUT ..."
 echo "" > "$OUT"
 
 log() {

@@ -8,35 +8,51 @@
 .section .text
 .code32
 
+.intel_syntax noprefix
+.global _start
+.extern long_mode_start
+
+/* =========================
+ * 32-bit entry
+ * ========================= */
+.section .text
+.code32
+
 _start:
     mov esp, OFFSET stack_top
 
-    call check_multiboot
+    /* Save multiboot2 info pointer IMMEDIATELY (passed in EBX) */
+    push ebx                    /* Save on stack */
+    
+    /* Check multiboot2 magic */
+    cmp eax, 0x36d76289
+    jne no_multiboot
+    
+    /* Restore and save to non-volatile register */
+    pop ebx
+    push ebx                    /* Save again for later */
+
     call check_cpuid
     call check_long_mode
     call setup_page_tables
     call enable_paging
 
     lgdt gdt64_pointer
-    ljmp 0x08, long_mode_start   /* far jump into 64-bit code */
+
+    /* Get the saved MBI pointer */
+    pop esi                     /* ESI = MBI pointer (will be preserved) */
+    
+    ljmp 0x08, OFFSET long_mode_start
 
     hlt
 
-
-/* =========================
- * Checks
- * ========================= */
-
-check_multiboot:
-    cmp eax, 0x36d76289
-    jne no_multiboot
-    ret
+/* ... rest of check_multiboot removed since we do it at start ... */
 
 no_multiboot:
     mov al, 'M'
     jmp error
 
-
+/* ... rest of boot.S remains similar ... */
 check_cpuid:
     pushfd
     pop eax
@@ -96,7 +112,7 @@ pt_loop:
     mov DWORD PTR [page_table_l2 + ecx*8], eax
 
     inc ecx
-    cmp ecx, 512
+    cmp ecx, 512 // sus ahh line
     jne pt_loop
     ret
 
@@ -141,6 +157,8 @@ error:
  * ========================= */
 
 .section .bss
+.global stack_top
+
 .align 4096
 page_table_l4:
     .skip 4096

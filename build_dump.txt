@@ -44,10 +44,16 @@
 │   │           └── origin
 │   │               └── master
 │   ├── objects
+│   │   ├── 00
+│   │   │   └── 860e2c039a65714d0bf462c79fed4b35e946c1
 │   │   ├── 03
 │   │   │   └── c9cbab5251b0a75764c81c7d4f15faaa1ff092
 │   │   ├── 04
 │   │   │   └── 7878c3246287f21e363075f6bdb98eba5e49fd
+│   │   ├── 07
+│   │   │   └── d9154c6b68ba15ae4a65eea0b0a7e25a5d54a3
+│   │   ├── 0f
+│   │   │   └── 63863f70694f17cb0e7e0bbd3a7209bbd6e4a8
 │   │   ├── 12
 │   │   │   └── 695cde5e4ce8ac4aa08aa5b37d5091b30d1f64
 │   │   ├── 13
@@ -58,6 +64,8 @@
 │   │   │   └── 3c8a0b8c1f4c101cfdcb59d964a9cbde98725c
 │   │   ├── 19
 │   │   │   └── c8096b5e05bcf9fd1a62278a6691afe9cfc278
+│   │   ├── 1b
+│   │   │   └── eccc8dd44ed0ce6297cedab680c966dd7b17be
 │   │   ├── 1c
 │   │   │   └── 0b3b6ef3e90a7b821b57458edf1784c85fba4e
 │   │   ├── 1e
@@ -66,20 +74,30 @@
 │   │   │   └── fa60f03c587f2975baf2e33e990ebc7453010e
 │   │   ├── 22
 │   │   │   └── c68bbebfe7baf750d6321afa5d2021ef50b782
+│   │   ├── 25
+│   │   │   └── 57a9939c6abb5b1d7e08821d204d5c662b1065
 │   │   ├── 26
 │   │   │   └── 275c1d4b4ce027c26a0721577520ec4741bf93
 │   │   ├── 2b
 │   │   │   └── 7d7363f888592292b30e906519cf99755809ef
 │   │   ├── 2e
 │   │   │   └── 3f2d10b9b97b157eb909d172e6e4ef664c9101
+│   │   ├── 30
+│   │   │   ├── 00f273d543348e3bfa1ac62818f39d2e609780
+│   │   │   └── b81dccbffd8bd4c3f5a0c28d7c44b1c903f0e0
 │   │   ├── 33
 │   │   │   └── a15c6b9c0c0f113957f428e9709cbd1417a022
 │   │   ├── 36
 │   │   │   └── 9e66391b2b7a6020439ab7621bb91b8154c34a
 │   │   ├── 37
 │   │   │   └── e24ee7ea1755a5562b6c6d9c55dbcfcba0c208
+│   │   ├── 38
+│   │   │   └── 1498e51ad11468caca9afc0db9ceed0a10637a
 │   │   ├── 3a
 │   │   │   └── 2e435d8b8696e9ed472cfa6a751de6a2e4ab99
+│   │   ├── 3b
+│   │   │   ├── 4c8db2fab5cd3a2f3a4304e181114716bfc428
+│   │   │   └── 4d629465695e25ba6128134176e6b385a4d088
 │   │   ├── 3c
 │   │   │   ├── 516d268390dc420d06e7228a19d295ac45af20
 │   │   │   └── 7f0a3ee8446ab86993d57fae3ad41aa91657d7
@@ -93,22 +111,47 @@
 │   │   │   └── 8fb4649cda3d1a59d092633d80d9cab865667b
 │   │   ├── 46
 │   │   │   └── 9343c0d0f5c7f89e36025169b06a044c3c6277
+│   │   ├── 4e
+│   │   │   ├── b2cc464c9afd477034286781d16cdbc7f5c2d0
+│   │   │   └── f09f6322a09e00d553a0008a73379985841d8b
+│   │   ├── 53
+│   │   │   └── 9b3b84aa213ee2c3bcd261af054ddefd2ae9a5
 │   │   ├── 55
 │   │   │   └── 7d915c9f5ddb6f3d24b202959188e1aa1e8321
 │   │   ├── 57
 │   │   │   ├── c260f9c14aa8d6b671bd6c2fa9b1d97eb7eab9
 │   │   │   └── dc83181d7f03796be805e8845ecbdf79417ae5
+│   │   ├── 59
+│   │   │   ├── 0303d9e0ad5c361a65f59653e5ba96a98d05f9
+│   │   │   └── cccefeeb34c11610c9563318932c02a397820b
 │   │   ├── 5b
 │   │   │   └── f98947d10496ca7ad7ff24eac945532234eaf1
+│   │   ├── 5f
+│   │   │   └── ac0edcf826fdf702dfc20fefbdbd9359a18fb6
+│   │   ├── 60
+│   │   │   └── 3143b4e5433eb84c44e13933d84c22ca0e07aa
 │   │   ├── 62
 │   │   │   └── 7a42621c7ce7ee71e67d5a58d2ce8a8376be40
 │   │   ├── 63
+│   │   │   ├── 4300526f074f54c321c0f1020b384abafda845
 │   │   │   ├── 5882ada888dc0472cf90551b5b82ec1864ec19
 │   │   │   └── b8ea0324d8432546a933f8f1c56c2382b2ff88
 │   │   ├── 66
-│   │   │   └── 14a4d54d26cab4c6edc74d1097c9ec1246efda
+│   │   │   ├── 14a4d54d26cab4c6edc74d1097c9ec1246efda
+│   │   │   └── 29077e566fb143be1a728a8ec7b7c50a088d69
+│   │   ├── 68
+│   │   │   └── 1d45878a6246da511f563ba1008c8cde480c7f
+│   │   ├── 69
+│   │   │   └── 81f42544b10a1a3af1bd8d70f99fd20ffff9fe
+│   │   ├── 6c
+│   │   │   └── d028b32716e90178d3537b0b73d9e0285952bc
 │   │   ├── 73
+│   │   │   ├── 4b59703acf34067dbfe6334057aa39aa2af537
 │   │   │   └── 9a2138dd41517ace84cb2d72add7854380fc7b
+│   │   ├── 74
+│   │   │   └── d10aa2b51a49b4aa8e81436d9d2ddd34f56270
+│   │   ├── 75
+│   │   │   └── 5634c15450a349a7bdc0fcd63fc54b2f74b9e7
 │   │   ├── 7b
 │   │   │   ├── 1d9156d9277a210e93d39554020931782a30db
 │   │   │   └── d0cb58236eeafb672b902269d6a5ed51b0ece7
@@ -132,19 +175,33 @@
 │   │   │   └── 5378e906b6daa183ce1a4ac035d34933c00586
 │   │   ├── 91
 │   │   │   └── 1aa66bc80b4fb1572e58607959b29048658a74
+│   │   ├── 93
+│   │   │   └── b15067eaf6e88333b6bd7885092faa87e8ab6c
 │   │   ├── 94
 │   │   │   ├── a65185ad604786deae7f10d01c3d8a3502b8bc
 │   │   │   └── a914833255820b995876406f70c8c81aba7833
 │   │   ├── 96
 │   │   │   └── 430eeef7394779fb1cd97b4cc29cfaa3de33ed
+│   │   ├── 9b
+│   │   │   └── 6428cb17ed6b57828da1f070aff6f552b7cd35
 │   │   ├── 9d
 │   │   │   └── 7f4f8f09f80024b0f42ec190f4ef8bdfc1bd67
+│   │   ├── a0
+│   │   │   └── abb0fa655802854fd9c67eaee88345c2d37b6f
 │   │   ├── a1
 │   │   │   └── a78d583e1aac8f53713c719179fb62316c568d
+│   │   ├── a6
+│   │   │   └── e7a4268bac9e198bbd9af414bd560cda53026e
+│   │   ├── ae
+│   │   │   └── 25251f6b6525999484abf926ee07973732b426
 │   │   ├── b0
 │   │   │   └── 389584b8a494483c0be669ddbf23c3f5c87ac7
+│   │   ├── b1
+│   │   │   └── bf949da41c9d1ae241ed7d9ede8272bed49ab5
 │   │   ├── b4
 │   │   │   └── 67626d08bce246d64f09dd0b4220678ed1747a
+│   │   ├── b5
+│   │   │   └── 4414111194754da0bd4e0bf1536f4eef65588f
 │   │   ├── b6
 │   │   │   └── a344e80d797f70e4879eeb938f40759034d690
 │   │   ├── ba
@@ -155,27 +212,37 @@
 │   │   ├── bf
 │   │   │   └── a7c7fd07085c61b16f44398ff4ef68f3318bc1
 │   │   ├── c0
-│   │   │   └── 0cfcf6e182fa9644b3f0fbbccf4de7acd90f95
+│   │   │   ├── 0cfcf6e182fa9644b3f0fbbccf4de7acd90f95
+│   │   │   └── 1fee50655d761e2e4b3528fe01de8283b1429e
 │   │   ├── c4
 │   │   │   └── d7247d6603eac2d2ed19e854331c2c4f2dde4a
 │   │   ├── c5
-│   │   │   └── 3986d2832d9138b765dadb5c1b5cb1ba49979f
+│   │   │   ├── 3986d2832d9138b765dadb5c1b5cb1ba49979f
+│   │   │   └── 858f0d9b8d87995fc1399dec2eab37d27dfa19
 │   │   ├── c6
 │   │   │   └── d5f7cdba0e8ab6fbd2952c085f9e75c43419f9
+│   │   ├── c8
+│   │   │   └── 2c4404259bcc985bce4c2d6379df70682f88db
+│   │   ├── c9
+│   │   │   └── e6493347c36ed409ba6f36a162154959efe58f
 │   │   ├── cd
 │   │   │   ├── 4fa7fe5f466089184a13839bb7ec33141eb71f
 │   │   │   └── 6ae293276c87698637abc711532f4746a86302
 │   │   ├── cf
-│   │   │   └── 5ebda00a1db5b55f2632ee8e766a4919c6d318
+│   │   │   ├── 5ebda00a1db5b55f2632ee8e766a4919c6d318
+│   │   │   └── 62d45273d9ed8e7849897ed819a76bf93a87fc
 │   │   ├── d2
 │   │   │   └── a41fab191e521e94219ebc738f99be460dea1b
 │   │   ├── d4
 │   │   │   └── 7a2579fe40eb8b8f376851a7b8218e9dc6a822
 │   │   ├── d5
+│   │   │   ├── c62d20a7b6aa414e91eebcf29311b2ea424c69
 │   │   │   └── eac480aa904537cb12d1b33493fd236d5704c6
 │   │   ├── d8
+│   │   │   ├── 051e2ae2c63bed8930ec4c8d966808cc78474c
 │   │   │   └── d702881db77c9ec382ac7b5e586a9fd2c7c22f
 │   │   ├── dd
+│   │   │   ├── 642d37fa8f9480b69b647c15f8616148f26349
 │   │   │   └── d541273705e0c3c1e27f79d29ac01a077a0a66
 │   │   ├── de
 │   │   │   └── 389321a2e13e9d8a48d6112aee4817be7fd742
@@ -183,6 +250,8 @@
 │   │   │   └── 1f052866c909f207ba9585fe725728432aa661
 │   │   ├── e0
 │   │   │   └── 51c195d2410f326336eb9c0c8addafbc649471
+│   │   ├── e3
+│   │   │   └── 20a9dcb7401f3f7477af8d73c761d45857b6d6
 │   │   ├── e4
 │   │   │   └── 28ece25e75199c81dfc4267f28af21b726ad2b
 │   │   ├── e6
@@ -190,23 +259,30 @@
 │   │   ├── e7
 │   │   │   └── a821db70073b78cc48efefbce413f578554d38
 │   │   ├── ef
-│   │   │   └── 49db8dabbbaed741ac3ac04d35d427c206e472
+│   │   │   ├── 49db8dabbbaed741ac3ac04d35d427c206e472
+│   │   │   └── a79412aaa7b4cdf4ef1240ed5af986bc0409d5
 │   │   ├── f2
+│   │   │   ├── 4acd4c2bd715c2d03237227c17224b4ddec33f
 │   │   │   └── d9a66fed2627facdeb1a490d169ad56d039d5d
 │   │   ├── f4
 │   │   │   └── ca852e21562952ea626fc64a6603ae51d0122e
 │   │   ├── f5
+│   │   │   ├── 4c9fc842ea16d8884aeecb37b7bd0450ffb4fc
 │   │   │   └── fdfeacf11f6ac3afc618c38451d594cde67679
 │   │   ├── f6
 │   │   │   └── 01d68da39b3cc8a1a5a8ea4ec8d1228074bb8f
 │   │   ├── f7
-│   │   │   └── 49cf16a9bbd0756ba81436659f1f10be81f34e
+│   │   │   ├── 49cf16a9bbd0756ba81436659f1f10be81f34e
+│   │   │   └── e17afb832ee27ccda29f74d4c8f776ce99587b
 │   │   ├── f8
 │   │   │   └── 08c9f2b14cb764ef55693c6ca4fbcfa751d72c
 │   │   ├── fc
 │   │   │   └── 03a4295db1798f826e98cda1e5259c2323d0c4
 │   │   ├── fd
+│   │   │   ├── 0e9163b0b7333e4451c7249295d06f8be1e312
 │   │   │   └── ea71b78940c41206df2397e288e88d6bab2920
+│   │   ├── fe
+│   │   │   └── 9edbf4f5e90dcfdc95ac2da6517aa36f0dcde7
 │   │   ├── info
 │   │   └── pack
 │   └── refs
@@ -216,6 +292,7 @@
 │       │   └── origin
 │       │       └── master
 │       └── tags
+├── .gitignore
 ├── grub.cfg
 ├── iso
 │   └── boot
@@ -226,14 +303,19 @@
 ├── makefile
 ├── obj
 │   ├── boot.o
-│   └── kernel.o
+│   ├── kernel.o
+│   ├── long_mode.o
+│   └── mb_header.o
+├── qemu.log
 ├── src
 │   ├── boot.S
-│   └── kernel.c
+│   ├── kernel.c
+│   ├── long_mode.S
+│   └── mb_header.S
 └── tools
     └── dump_proj.sh
 
-104 directories, 126 files
+133 directories, 179 files
 
 ===== MAKEFILE =====
 
@@ -298,8 +380,11 @@ $(IMG): $(BIN_DIR)/kernel.elf
 emu:
 	qemu-system-x86_64 \
 		-cdrom $(IMG) \
-		-debugcon stdio \
+		-vga std \
 		-m 512M \
+		-serial stdio \
+		-d cpu_reset \
+		-D qemu.log \
 		-no-reboot \
 		-no-shutdown
 
@@ -318,10 +403,11 @@ dump:
 --- ./linker.ld ---
 ENTRY(_start)
 
-SECTIONS {
+SECTIONS
+{
     . = 1M;
 
-    .multiboot : {
+    .multiboot : ALIGN(8) {
         KEEP(*(.multiboot))
     }
 
@@ -351,6 +437,7 @@ set timeout=0
 set default=0
 set gfxmode=1024x768x32
 set gfxpayload=keep
+set framebuffer=keep
 
 menuentry "4DS" {
     multiboot2 /boot/kernel.elf
@@ -362,6 +449,7 @@ set timeout=0
 set default=0
 set gfxmode=1024x768x32
 set gfxpayload=keep
+set framebuffer=keep
 
 menuentry "4DS" {
     multiboot2 /boot/kernel.elf
@@ -374,116 +462,515 @@ menuentry "4DS" {
 \n--- src/kernel.c ---
 #include <stdint.h>
 
-#define MB2_TAG_END 0
-#define MB2_TAG_FRAMEBUFFER 8
+#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER 5
+#define COM1 0x3F8
+#define VGA_BUFFER 0xB8000
 
-typedef struct {
-  uint32_t type;
-  uint32_t size;
-} mb2_tag_t;
+/* Simple VGA functions */
+void vga_clear() {
+  uint16_t *vga = (uint16_t *)VGA_BUFFER;
+  for (int i = 0; i < 80 * 25; i++) {
+    vga[i] = 0x0F00 | ' ';
+  }
+}
 
-typedef struct {
-  uint32_t type;
-  uint32_t size;
-  uint64_t addr;
-  uint32_t pitch;
-  uint32_t width;
-  uint32_t height;
-  uint8_t bpp;
-  uint8_t type_fb;
-  uint16_t reserved;
-} mb2_fb_tag_t;
+void vga_putc(int x, int y, char c, uint8_t color) {
+  uint16_t *vga = (uint16_t *)VGA_BUFFER;
+  vga[y * 80 + x] = (color << 8) | c;
+}
 
-static inline uint64_t align8(uint64_t x) { return (x + 7) & ~7ULL; }
-
-void kernel_main64(void *mb_info) {
-  uint8_t *ptr = (uint8_t *)mb_info + 8;
-  mb2_fb_tag_t *fb = 0;
-
-  while (1) {
-    mb2_tag_t *tag = (mb2_tag_t *)ptr;
-    if (tag->type == MB2_TAG_END)
-      break;
-    if (tag->type == MB2_TAG_FRAMEBUFFER) {
-      fb = (mb2_fb_tag_t *)tag;
-      break;
+void vga_puts(int x, int y, const char *str, uint8_t color) {
+  while (*str) {
+    vga_putc(x++, y, *str++, color);
+    if (x >= 80) {
+      x = 0;
+      y++;
     }
-    ptr += align8(tag->size);
+  }
+}
+
+void vga_print_hex(int x, int y, uint64_t val, uint8_t color) {
+  const char *hex = "0123456789ABCDEF";
+  for (int i = 0; i < 16; i++) {
+    int nibble = (val >> (60 - i * 4)) & 0xF;
+    vga_putc(x + i, y, hex[nibble], color);
+  }
+}
+
+/* Serial I/O */
+static inline void outb(uint16_t port, uint8_t val) {
+  __asm__ volatile("outb %0, %1" : : "a"(val), "Nd"(port));
+}
+
+static inline uint8_t inb(uint16_t port) {
+  uint8_t ret;
+  __asm__ volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
+  return ret;
+}
+
+void serial_init() {
+  outb(COM1 + 1, 0x00);
+  outb(COM1 + 3, 0x80);
+  outb(COM1 + 0, 0x03);
+  outb(COM1 + 1, 0x00);
+  outb(COM1 + 3, 0x03);
+  outb(COM1 + 2, 0xC7);
+  outb(COM1 + 4, 0x0B);
+}
+
+void serial_putchar(char c) {
+  while (!(inb(COM1 + 5) & 0x20))
+    ;
+  outb(COM1, c);
+}
+
+void serial_print(const char *s) {
+  while (*s)
+    serial_putchar(*s++);
+}
+
+/* Try to detect Multiboot2 info structure */
+struct mb2_header {
+  uint32_t total_size;
+  uint32_t reserved;
+};
+
+void *find_multiboot2_info(uint64_t start_addr, uint64_t end_addr) {
+  // Look for the multiboot2 magic pattern
+  for (uint64_t addr = start_addr; addr < end_addr; addr += 8) {
+    uint32_t *magic_ptr = (uint32_t *)addr;
+    if (*magic_ptr == 0x36d76289) {
+      // Found magic, check if it looks like a valid structure
+      struct mb2_header *header = (struct mb2_header *)(addr + 8);
+      if (header->total_size > 16 && header->total_size < 0x10000) {
+        return (void *)addr;
+      }
+    }
+  }
+  return 0;
+}
+
+/* Direct VGA graphics mode (mode 0x13) as fallback */
+void init_vga_graphics() {
+  // Try to set 320x200 256-color mode through VGA registers
+  outb(0x3C2, 0xE3); // Misc Output Register
+  outb(0x3D4, 0x11); // Sequencer
+  outb(0x3D5, 0x00);
+
+  // More registers would be needed for full mode set...
+  // For now, just use text mode
+}
+
+/* Main kernel */
+void kernel_main(uint64_t mbi_ptr, uint64_t magic) {
+  // Initialize VGA text immediately
+  vga_clear();
+  vga_puts(0, 0, "4DS OS Kernel Started", 0x0F);
+
+  vga_puts(0, 1, "Magic: ", 0x0E);
+  vga_print_hex(7, 1, magic, 0x0E);
+
+  vga_puts(0, 2, "MBI Ptr: ", 0x0E);
+  vga_print_hex(9, 2, mbi_ptr, 0x0E);
+
+  // Initialize serial for debugging
+  serial_init();
+  serial_print("\n\n=== 4DS OS ===\n");
+
+  void *mbi = 0;
+
+  // Try different approaches to find the multiboot2 info
+  if (magic == 0x36d76289 || magic == 0x2BADB002) {
+    // Standard multiboot magic
+    mbi = (void *)mbi_ptr;
+    vga_puts(0, 3, "Using direct MBI pointer", 0x0A);
+  } else {
+    vga_puts(0, 3, "Scanning memory for MBI...", 0x0C);
+
+    // Try to find it in memory
+    mbi = find_multiboot2_info(0x100000, 0x200000);
+    if (!mbi)
+      mbi = find_multiboot2_info(0x2000, 0xA0000);
+
+    if (mbi) {
+      vga_puts(0, 4, "Found MBI at: ", 0x0A);
+      vga_print_hex(14, 4, (uint64_t)mbi, 0x0A);
+    } else {
+      vga_puts(0, 4, "No MBI found!", 0x0C);
+    }
   }
 
-  if (!fb || fb->bpp != 32)
-    for (;;)
-      __asm__("hlt");
+  if (mbi) {
+    vga_puts(0, 5, "MBI Magic: ", 0x0E);
+    uint32_t actual_magic = *(uint32_t *)mbi;
+    vga_print_hex(11, 5, actual_magic, 0x0E);
 
-  uint32_t *pix = (uint32_t *)(uintptr_t)fb->addr;
-  uint32_t pitch = fb->pitch / 4;
+    if (actual_magic == 0x36d76289) {
+      vga_puts(0, 6, "Valid Multiboot2!", 0x0A);
 
-  for (uint32_t y = 0; y < fb->height; y++)
-    for (uint32_t x = 0; x < fb->width; x++)
-      pix[y * pitch + x] = 0x00FF0000; // RED
+      // Parse tags
+      uint8_t *ptr = (uint8_t *)mbi + 8;
+      int y = 7;
 
-  for (;;)
-    __asm__("hlt");
+      while (y < 20) {
+        uint32_t *tag = (uint32_t *)ptr;
+        if (tag[0] == 0)
+          break; // End tag
+
+        vga_puts(0, y, "Tag: ", 0x0E);
+        vga_print_hex(5, y, tag[0], 0x0E);
+
+        if (tag[0] == 5) { // Framebuffer tag
+          vga_puts(25, y, "FB", 0x0A);
+          // We found framebuffer!
+        }
+
+        // Move to next tag
+        uint32_t size = tag[1];
+        ptr += (size + 7) & ~7;
+        y++;
+      }
+    }
+  }
+
+  // Direct VGA color test - always works
+  vga_puts(0, 22, "VGA Color Test:", 0x0F);
+
+  // Draw color bars in text mode
+  for (int x = 0; x < 80; x++) {
+    uint8_t color = (x % 16);
+    for (int y = 23; y < 25; y++) {
+      vga_putc(x, y, 0xDB, color); // Block character
+    }
+  }
+
+  // Animate colors
+  uint32_t frame = 0;
+  while (1) {
+    // Update frame counter
+    vga_puts(70, 0, "Frame:", 0x0F);
+    vga_print_hex(76, 0, frame, 0x0F);
+
+    // Animate color bars
+    for (int x = 0; x < 80; x++) {
+      uint8_t color = ((x + frame) % 16);
+      vga_putc(x, 23, 0xDB, color);
+      vga_putc(x, 24, 0xDB, (color + 8) % 16);
+    }
+
+    frame++;
+
+    // Simple delay
+    for (volatile uint32_t i = 0; i < 1000000; i++)
+      ;
+  }
 }
-\n--- src/boot.S ---
+\n--- src/mb_header.S ---
 .intel_syntax noprefix
+
+#ifndef MULTIBOOT2_HEADER_MAGIC
+# define MULTIBOOT2_HEADER_MAGIC 0xe85250d6
+#endif
+
+#define mb2_magic  MULTIBOOT2_HEADER_MAGIC
+#define mb2_length (mb2_header_end - mb2_header_start)
 
 .section .multiboot
 .align 8
+
 mb2_header_start:
-    .long 0xe85250d6
-    .long 0
-    .long mb2_header_end - mb2_header_start
-    .long -(0xe85250d6 + 0 + (mb2_header_end - mb2_header_start))
+    .long mb2_magic
+    .long 0                  /* architecture = i386 */
+    .long mb2_length
+    .long -(mb2_magic + 0 + mb2_length)
 
-    # framebuffer request
+    /* -----------------------------
+     * Framebuffer request tag
+     * ----------------------------- */
     .align 8
-    .short 5
-    .short 0
-    .long 20
-    .long 1024
-    .long 768
-    .long 32
+framebuffer_tag_start:
+    .short 5                 /* MULTIBOOT_HEADER_TAG_FRAMEBUFFER = 5 */
+    .short 0                 /* FLAGS = REQUIRED */
+    .long framebuffer_tag_end - framebuffer_tag_start
 
-    # end tag
+    .long 1024               /* preferred width  */
+    .long 768                /* preferred height */
+    .long 32                 /* preferred depth  */
+
+framebuffer_tag_end:
+
+    /* -----------------------------
+     * End tag
+     * ----------------------------- */
     .align 8
-    .short 0
-    .short 0
-    .long 8
+    .short 0                 /* type = END */
+    .short 0                 /* flags */
+    .long 8                  /* size */
 
 mb2_header_end:
-
-.section .text
-.code64
+\n--- src/boot.S ---
+.intel_syntax noprefix
 .global _start
-.extern kernel_main64
+.extern long_mode_start
+
+/* =========================
+ * 32-bit entry
+ * ========================= */
+.section .text
+.code32
+
+.intel_syntax noprefix
+.global _start
+.extern long_mode_start
+
+/* =========================
+ * 32-bit entry
+ * ========================= */
+.section .text
+.code32
 
 _start:
-    cli
-    lea rsp, [stack_top]
-    mov rdi, rbx          # multiboot2 info pointer
-    call kernel_main64
+    mov esp, OFFSET stack_top
 
-.hang:
+    /* Save multiboot2 info pointer IMMEDIATELY (passed in EBX) */
+    push ebx                    /* Save on stack */
+    
+    /* Check multiboot2 magic */
+    cmp eax, 0x36d76289
+    jne no_multiboot
+    
+    /* Restore and save to non-volatile register */
+    pop ebx
+    push ebx                    /* Save again for later */
+
+    call check_cpuid
+    call check_long_mode
+    call setup_page_tables
+    call enable_paging
+
+    lgdt gdt64_pointer
+
+    /* Get the saved MBI pointer */
+    pop esi                     /* ESI = MBI pointer (will be preserved) */
+    
+    ljmp 0x08, OFFSET long_mode_start
+
     hlt
-    jmp .hang
+
+/* ... rest of check_multiboot removed since we do it at start ... */
+
+no_multiboot:
+    mov al, 'M'
+    jmp error
+
+/* ... rest of boot.S remains similar ... */
+check_cpuid:
+    pushfd
+    pop eax
+    mov ecx, eax
+    xor eax, (1 << 21)
+    push eax
+    popfd
+    pushfd
+    pop eax
+    push ecx
+    popfd
+    cmp eax, ecx
+    je no_cpuid
+    ret
+
+no_cpuid:
+    mov al, 'C'
+    jmp error
+
+
+check_long_mode:
+    mov eax, 0x80000000
+    cpuid
+    cmp eax, 0x80000001
+    jb no_long_mode
+
+    mov eax, 0x80000001
+    cpuid
+    test edx, (1 << 29)
+    jz no_long_mode
+    ret
+
+no_long_mode:
+    mov al, 'L'
+    jmp error
+
+
+/* =========================
+ * Page tables
+ * ========================= */
+
+setup_page_tables:
+    mov eax, OFFSET page_table_l3
+    or  eax, 0x3                      /* present + writable */
+    mov DWORD PTR [page_table_l4], eax
+
+    mov eax, OFFSET page_table_l2
+    or  eax, 0x3
+    mov DWORD PTR [page_table_l3], eax
+
+    xor ecx, ecx                     /* counter = 0 */
+
+pt_loop:
+    mov eax, 0x200000                /* 2 MiB */
+    mul ecx
+    or  eax, 0x83                    /* present + writable + huge */
+    mov DWORD PTR [page_table_l2 + ecx*8], eax
+
+    inc ecx
+    cmp ecx, 512 // sus ahh line
+    jne pt_loop
+    ret
+
+
+enable_paging:
+    /* load PML4 */
+    mov eax, OFFSET page_table_l4
+    mov cr3, eax
+
+    /* enable PAE */
+    mov eax, cr4
+    or  eax, (1 << 5)
+    mov cr4, eax
+
+    /* enable long mode */
+    mov ecx, 0xC0000080              /* EFER MSR */
+    rdmsr
+    or  eax, (1 << 8)                /* LME */
+    wrmsr
+
+    /* enable paging */
+    mov eax, cr0
+    or  eax, (1 << 31)
+    mov cr0, eax
+    ret
+
+
+/* =========================
+ * Error print (VGA text)
+ * ========================= */
+
+error:
+    mov DWORD PTR [0xB8000], 0x4F524F45   /* 'E''R''R' */
+    mov DWORD PTR [0xB8004], 0x4F3A4F52   /* ':' */
+    mov DWORD PTR [0xB8008], 0x4F204F20   /* ' ' */
+    mov BYTE  PTR [0xB800A], al
+    hlt
+
+
+/* =========================
+ * BSS (zeroed memory)
+ * ========================= */
 
 .section .bss
-.align 16
+.global stack_top
+
+.align 4096
+page_table_l4:
+    .skip 4096
+page_table_l3:
+    .skip 4096
+page_table_l2:
+    .skip 4096
+
 stack_bottom:
-    .skip 16384
+    .skip 4096 * 4
 stack_top:
 
 
+/* =========================
+ * GDT
+ * ========================= */
+
+.section .rodata
+.align 8
+gdt64:
+    .quad 0x0000000000000000         /* null descriptor */
+    .quad 0x00AF9A000000FFFF         /* 64-bit code segment */
+
+gdt64_pointer:
+    .word (gdt64_end - gdt64 - 1)
+    .long gdt64
+
+gdt64_end:
+
+\n--- src/long_mode.S ---
+.intel_syntax noprefix
+
+.global long_mode_start
+.extern kernel_main
+
+.section .text
+.code64
+long_mode_start:
+    /* Set up 64-bit stack */
+    mov rsp, OFFSET stack_top
+    
+    /* Clear segment registers */
+    mov ax, 0
+    mov ss, ax
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    
+    /* ESI has magic, EDI has MBI pointer */
+    /* Pass both to kernel_main */
+    mov rdx, 0
+    mov edx, esi            /* RDX = magic value */
+    mov rdi, 0
+    mov edi, edi            /* RDI = MBI pointer (zero-extend) */
+    
+    /* Call kernel_main with: RDI = MBI pointer, RDX = magic */
+    call kernel_main
+
+    hlt
+
 ===== OBJECT SYMBOLS =====
 
-\n--- obj/kernel.o ---
-0000000000000000 T kernel_main64
-\n--- obj/boot.o ---
-0000000000000011 t .hang
-                 U kernel_main64
+\n--- obj/long_mode.o ---
+                 U kernel_main
+0000000000000000 T long_mode_start
+                 U stack_top
+\n--- obj/mb_header.o ---
+0000000000000024 n framebuffer_tag_end
+0000000000000010 n framebuffer_tag_start
 0000000000000030 n mb2_header_end
 0000000000000000 n mb2_header_start
-0000000000000000 b stack_bottom
-0000000000004000 b stack_top
+\n--- obj/kernel.o ---
+00000000000001e0 T find_multiboot2_info
+0000000000000210 T init_vga_graphics
+0000000000000230 T kernel_main
+0000000000000011 r .LC1
+0000000000000130 T serial_init
+00000000000001a0 T serial_print
+0000000000000180 T serial_putchar
+0000000000000000 T vga_clear
+00000000000000c0 T vga_print_hex
+0000000000000040 T vga_putc
+0000000000000060 T vga_puts
+\n--- obj/boot.o ---
+000000000000003a t check_cpuid
+0000000000000055 t check_long_mode
+00000000000000b0 t enable_paging
+00000000000000db t error
+0000000000000000 r gdt64
+0000000000000016 r gdt64_end
+0000000000000010 r gdt64_pointer
+                 U long_mode_start
+000000000000004e t no_cpuid
+0000000000000073 t no_long_mode
+0000000000000033 t no_multiboot
+0000000000002000 b page_table_l2
+0000000000001000 b page_table_l3
+0000000000000000 b page_table_l4
+0000000000000093 t pt_loop
+0000000000000077 t setup_page_tables
+0000000000003000 b stack_bottom
+0000000000007000 B stack_top
 0000000000000000 T _start
