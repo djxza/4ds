@@ -1,22 +1,28 @@
-KERNEL_VMA = 0xFFFFFFFF80000000;
+ENTRY(_start)
 
-SECTIONS {
+SECTIONS
+{
     . = 1M;
 
-    .text : AT(ADDR(.text) - KERNEL_VMA) {
+    .multiboot : ALIGN(8) {
+        KEEP(*(.multiboot))
+    }
+
+    .text : ALIGN(4K) {
         *(.text*)
     }
 
-    .rodata : AT(ADDR(.rodata) - KERNEL_VMA) {
+    .rodata : ALIGN(4K) {
         *(.rodata*)
     }
 
-    .data : AT(ADDR(.data) - KERNEL_VMA) {
+    .data : ALIGN(4K) {
         *(.data*)
     }
 
-    .bss : AT(ADDR(.bss) - KERNEL_VMA) {
+    .bss : ALIGN(4K) {
         *(COMMON)
         *(.bss*)
     }
 }
+
