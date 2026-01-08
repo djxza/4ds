@@ -17,21 +17,6 @@ mb2_header_start:
     .long -(mb2_magic + 0 + mb2_length)
 
     /* -----------------------------
-     * Framebuffer request tag
-     * ----------------------------- */
-    .align 8
-framebuffer_tag_start:
-    .short 5                 /* MULTIBOOT_HEADER_TAG_FRAMEBUFFER = 5 */
-    .short 0                 /* FLAGS = REQUIRED */
-    .long framebuffer_tag_end - framebuffer_tag_start
-
-    .long 1024               /* preferred width  */
-    .long 768                /* preferred height */
-    .long 32                 /* preferred depth  */
-
-framebuffer_tag_end:
-
-    /* -----------------------------
      * End tag
      * ----------------------------- */
     .align 8
