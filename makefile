@@ -59,6 +59,7 @@ $(IMG): $(BIN_DIR)/kernel.elf
 emu:
 	qemu-system-x86_64 \
 		-cdrom $(IMG) \
+		-debugcon stdio \
 		-m 512M \
 		-no-reboot \
 		-no-shutdown

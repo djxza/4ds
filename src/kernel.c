@@ -1,59 +1,36 @@
 #include <stdint.h>
 
-#define MULTIBOOT2_TAG_TYPE_END 0
-#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER 8
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
+#define VGA_ADDR 0xB8000
 
-typedef struct {
-  uint32_t type;
-  uint32_t size;
-} mb2_tag_t;
+static volatile uint16_t *const vga = (volatile uint16_t *)VGA_ADDR;
 
-typedef struct {
-  uint32_t type;
-  uint32_t size;
-  uint64_t framebuffer_addr;
-  uint32_t framebuffer_pitch;
-  uint32_t framebuffer_width;
-  uint32_t framebuffer_height;
-  uint8_t framebuffer_bpp;
-  uint8_t framebuffer_type;
-  uint16_t reserved;
-} mb2_framebuffer_tag_t;
+static uint16_t cursor = 0;
 
-static inline uint64_t align8(uint64_t x) { return (x + 7) & ~7; }
+static inline uint16_t vga_entry(char c, uint8_t color) {
+  return (uint16_t)c | ((uint16_t)color << 8);
+}
 
-void kernel_main64(void *multiboot_info) {
-  uint8_t *ptr = (uint8_t *)multiboot_info + 8;
-  mb2_framebuffer_tag_t *fb = 0;
-
-  while (1) {
-    mb2_tag_t *tag = (mb2_tag_t *)ptr;
-
-    if (tag->type == MULTIBOOT2_TAG_TYPE_END)
-      break;
-
-    if (tag->type == MULTIBOOT2_TAG_TYPE_FRAMEBUFFER) {
-      fb = (mb2_framebuffer_tag_t *)tag;
-      break;
-    }
-
-    ptr += align8(tag->size);
+void vga_putc(char c) {
+  if (c == '\n') {
+    cursor += VGA_WIDTH - (cursor % VGA_WIDTH);
+    return;
   }
 
-  if (!fb)
-    for (;;)
-      __asm__ volatile("hlt");
+  vga[cursor++] = vga_entry(c, 0x0F);
 
-  volatile uint32_t *pixels = (uint32_t *)(uint64_t)fb->framebuffer_addr;
-  uint32_t pitch_pixels = fb->framebuffer_pitch / 4;
+  if (cursor >= VGA_WIDTH * VGA_HEIGHT)
+    cursor = 0;
+}
 
-  // Paint the screen bright red ❤️
-  for (uint32_t y = 0; y < fb->framebuffer_height; y++) {
-    for (uint32_t x = 0; x < fb->framebuffer_width; x++) {
-      pixels[y * pitch_pixels + x] = 0x00FF0000;
-    }
-  }
+void vga_print(const char *s) {
+  while (*s)
+    vga_putc(*s++);
+}
 
-  for (;;)
+void kernel_main64(void) {
+  vga_print("LONG MODE OK\n");
+  while (1)
     __asm__ volatile("hlt");
 }

@@ -44,22 +44,34 @@
 │   │           └── origin
 │   │               └── master
 │   ├── objects
+│   │   ├── 03
+│   │   │   └── c9cbab5251b0a75764c81c7d4f15faaa1ff092
 │   │   ├── 04
 │   │   │   └── 7878c3246287f21e363075f6bdb98eba5e49fd
 │   │   ├── 12
 │   │   │   └── 695cde5e4ce8ac4aa08aa5b37d5091b30d1f64
 │   │   ├── 13
 │   │   │   └── d16933b0cb9121ff8aa22d986d5ba65e6c848b
+│   │   ├── 14
+│   │   │   └── 595dcebc8aa959b2338519756487890e39ef92
 │   │   ├── 18
 │   │   │   └── 3c8a0b8c1f4c101cfdcb59d964a9cbde98725c
 │   │   ├── 19
 │   │   │   └── c8096b5e05bcf9fd1a62278a6691afe9cfc278
 │   │   ├── 1c
 │   │   │   └── 0b3b6ef3e90a7b821b57458edf1784c85fba4e
+│   │   ├── 1e
+│   │   │   └── da3f3489e3b3c5da1bf058dda597be3015eccf
 │   │   ├── 20
 │   │   │   └── fa60f03c587f2975baf2e33e990ebc7453010e
+│   │   ├── 22
+│   │   │   └── c68bbebfe7baf750d6321afa5d2021ef50b782
 │   │   ├── 26
 │   │   │   └── 275c1d4b4ce027c26a0721577520ec4741bf93
+│   │   ├── 2b
+│   │   │   └── 7d7363f888592292b30e906519cf99755809ef
+│   │   ├── 2e
+│   │   │   └── 3f2d10b9b97b157eb909d172e6e4ef664c9101
 │   │   ├── 33
 │   │   │   └── a15c6b9c0c0f113957f428e9709cbd1417a022
 │   │   ├── 36
@@ -69,6 +81,7 @@
 │   │   ├── 3a
 │   │   │   └── 2e435d8b8696e9ed472cfa6a751de6a2e4ab99
 │   │   ├── 3c
+│   │   │   ├── 516d268390dc420d06e7228a19d295ac45af20
 │   │   │   └── 7f0a3ee8446ab86993d57fae3ad41aa91657d7
 │   │   ├── 3e
 │   │   │   └── 2eabe93a651915b4c7460e49a196a3c7eac4b8
@@ -78,11 +91,17 @@
 │   │   │   └── 65b62a57a778556dd9275910890a18e2e24dc8
 │   │   ├── 43
 │   │   │   └── 8fb4649cda3d1a59d092633d80d9cab865667b
+│   │   ├── 46
+│   │   │   └── 9343c0d0f5c7f89e36025169b06a044c3c6277
+│   │   ├── 55
+│   │   │   └── 7d915c9f5ddb6f3d24b202959188e1aa1e8321
 │   │   ├── 57
 │   │   │   ├── c260f9c14aa8d6b671bd6c2fa9b1d97eb7eab9
 │   │   │   └── dc83181d7f03796be805e8845ecbdf79417ae5
 │   │   ├── 5b
 │   │   │   └── f98947d10496ca7ad7ff24eac945532234eaf1
+│   │   ├── 62
+│   │   │   └── 7a42621c7ce7ee71e67d5a58d2ce8a8376be40
 │   │   ├── 63
 │   │   │   ├── 5882ada888dc0472cf90551b5b82ec1864ec19
 │   │   │   └── b8ea0324d8432546a933f8f1c56c2382b2ff88
@@ -97,10 +116,16 @@
 │   │   │   └── 43da12a293ca5f2363c27b65a58db8f9b518ca
 │   │   ├── 7f
 │   │   │   └── e78f14db92ac9f2cae0118f3799bbd7affafd7
+│   │   ├── 80
+│   │   │   └── 692b6a1709e27a02afa34fe0567c1a69e38a77
 │   │   ├── 81
 │   │   │   └── 44243f02d2fa9b9019e16a21cb584c24aae87c
+│   │   ├── 82
+│   │   │   └── d5c50638498c2fed9d72db85ac18c256d23ef7
 │   │   ├── 89
 │   │   │   └── 642e05df1ecefb1a220f7633d0204f23e4c7bc
+│   │   ├── 8a
+│   │   │   └── c635ede43cf1330681617699f8db8e6c74dae2
 │   │   ├── 8b
 │   │   │   └── fc636e52e46de1713409ac00ebea46454ea997
 │   │   ├── 8c
@@ -112,12 +137,19 @@
 │   │   │   └── a914833255820b995876406f70c8c81aba7833
 │   │   ├── 96
 │   │   │   └── 430eeef7394779fb1cd97b4cc29cfaa3de33ed
+│   │   ├── 9d
+│   │   │   └── 7f4f8f09f80024b0f42ec190f4ef8bdfc1bd67
 │   │   ├── a1
 │   │   │   └── a78d583e1aac8f53713c719179fb62316c568d
 │   │   ├── b0
 │   │   │   └── 389584b8a494483c0be669ddbf23c3f5c87ac7
+│   │   ├── b4
+│   │   │   └── 67626d08bce246d64f09dd0b4220678ed1747a
+│   │   ├── b6
+│   │   │   └── a344e80d797f70e4879eeb938f40759034d690
 │   │   ├── ba
-│   │   │   └── 669abe3b5d6af77cddb074700ea9c6903ce025
+│   │   │   ├── 669abe3b5d6af77cddb074700ea9c6903ce025
+│   │   │   └── cf2224aae0f7580b64a033ad984820cb494239
 │   │   ├── bc
 │   │   │   └── 16c31eb507871ffadd13450498a2f1944e3557
 │   │   ├── bf
@@ -143,8 +175,12 @@
 │   │   │   └── eac480aa904537cb12d1b33493fd236d5704c6
 │   │   ├── d8
 │   │   │   └── d702881db77c9ec382ac7b5e586a9fd2c7c22f
+│   │   ├── dd
+│   │   │   └── d541273705e0c3c1e27f79d29ac01a077a0a66
 │   │   ├── de
 │   │   │   └── 389321a2e13e9d8a48d6112aee4817be7fd742
+│   │   ├── df
+│   │   │   └── 1f052866c909f207ba9585fe725728432aa661
 │   │   ├── e0
 │   │   │   └── 51c195d2410f326336eb9c0c8addafbc649471
 │   │   ├── e4
@@ -190,16 +226,14 @@
 ├── makefile
 ├── obj
 │   ├── boot.o
-│   ├── kernel.o
-│   └── long_mode.o
+│   └── kernel.o
 ├── src
 │   ├── boot.S
-│   ├── kernel.c
-│   └── long_mode.S
+│   └── kernel.c
 └── tools
     └── dump_proj.sh
 
-87 directories, 109 files
+104 directories, 126 files
 
 ===== MAKEFILE =====
 
@@ -264,6 +298,7 @@ $(IMG): $(BIN_DIR)/kernel.elf
 emu:
 	qemu-system-x86_64 \
 		-cdrom $(IMG) \
+		-debugcon stdio \
 		-m 512M \
 		-no-reboot \
 		-no-shutdown
@@ -283,11 +318,10 @@ dump:
 --- ./linker.ld ---
 ENTRY(_start)
 
-SECTIONS
-{
+SECTIONS {
     . = 1M;
 
-    .multiboot : ALIGN(8) {
+    .multiboot : {
         KEEP(*(.multiboot))
     }
 
@@ -340,8 +374,8 @@ menuentry "4DS" {
 \n--- src/kernel.c ---
 #include <stdint.h>
 
-#define MULTIBOOT2_TAG_TYPE_END 0
-#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER 8
+#define MB2_TAG_END 0
+#define MB2_TAG_FRAMEBUFFER 8
 
 typedef struct {
   uint32_t type;
@@ -351,202 +385,89 @@ typedef struct {
 typedef struct {
   uint32_t type;
   uint32_t size;
-  uint64_t framebuffer_addr;
-  uint32_t framebuffer_pitch;
-  uint32_t framebuffer_width;
-  uint32_t framebuffer_height;
-  uint8_t framebuffer_bpp;
-  uint8_t framebuffer_type;
+  uint64_t addr;
+  uint32_t pitch;
+  uint32_t width;
+  uint32_t height;
+  uint8_t bpp;
+  uint8_t type_fb;
   uint16_t reserved;
-} mb2_framebuffer_tag_t;
+} mb2_fb_tag_t;
 
-static inline uint64_t align8(uint64_t x) { return (x + 7) & ~7; }
+static inline uint64_t align8(uint64_t x) { return (x + 7) & ~7ULL; }
 
-void kernel_main64(void *multiboot_info) {
-
-  unsigned int *vga = (unsigned int *)0xB8000;
-
-  vga[0] = 0xFF00FFFF;
-  uint8_t *ptr = (uint8_t *)multiboot_info + 8;
-  mb2_framebuffer_tag_t *fb = 0;
+void kernel_main64(void *mb_info) {
+  uint8_t *ptr = (uint8_t *)mb_info + 8;
+  mb2_fb_tag_t *fb = 0;
 
   while (1) {
     mb2_tag_t *tag = (mb2_tag_t *)ptr;
-
-    if (tag->type == MULTIBOOT2_TAG_TYPE_END)
+    if (tag->type == MB2_TAG_END)
       break;
-
-    if (tag->type == MULTIBOOT2_TAG_TYPE_FRAMEBUFFER) {
-      fb = (mb2_framebuffer_tag_t *)tag;
+    if (tag->type == MB2_TAG_FRAMEBUFFER) {
+      fb = (mb2_fb_tag_t *)tag;
       break;
     }
-
     ptr += align8(tag->size);
   }
 
-  if (!fb)
+  if (!fb || fb->bpp != 32)
     for (;;)
-      __asm__ volatile("hlt");
+      __asm__("hlt");
 
-  volatile uint32_t *pixels = (uint32_t *)(uint64_t)fb->framebuffer_addr;
-  uint32_t pitch_pixels = fb->framebuffer_pitch / 4;
+  uint32_t *pix = (uint32_t *)(uintptr_t)fb->addr;
+  uint32_t pitch = fb->pitch / 4;
 
-  // Paint the screen bright red ❤️
-  for (uint32_t y = 0; y < fb->framebuffer_height; y++) {
-    for (uint32_t x = 0; x < fb->framebuffer_width; x++) {
-      pixels[y * pitch_pixels + x] = 0x00FF0000;
-    }
-  }
+  for (uint32_t y = 0; y < fb->height; y++)
+    for (uint32_t x = 0; x < fb->width; x++)
+      pix[y * pitch + x] = 0x00FF0000; // RED
 
   for (;;)
-    __asm__ volatile("hlt");
+    __asm__("hlt");
 }
 \n--- src/boot.S ---
+.intel_syntax noprefix
+
 .section .multiboot
 .align 8
+mb2_header_start:
+    .long 0xe85250d6
+    .long 0
+    .long mb2_header_end - mb2_header_start
+    .long -(0xe85250d6 + 0 + (mb2_header_end - mb2_header_start))
 
-.long 0xe85250d6
-.long 0
-.long header_end - header_start
-.long -(0xe85250d6 + 0 + (header_end - header_start))
+    # framebuffer request
+    .align 8
+    .short 5
+    .short 0
+    .long 20
+    .long 1024
+    .long 768
+    .long 32
 
-header_start:
+    # end tag
+    .align 8
+    .short 0
+    .short 0
+    .long 8
 
-.align 8
-.long 5
-.long 20
-.long 1024
-.long 768
-.long 32
+mb2_header_end:
 
-.align 8
-.long 0
-.long 8
-
-header_end:
-
-.intel_syntax noprefix
+.section .text
 .code64
 .global _start
 .extern kernel_main64
 
-.section .text
 _start:
     cli
     lea rsp, [stack_top]
-    xor rdi, rdi          # placeholder for multiboot ptr if needed later
+    mov rdi, rbx          # multiboot2 info pointer
     call kernel_main64
 
 .hang:
     hlt
     jmp .hang
 
-.section .bss
-.align 16
-stack_bottom:
-    .skip 16384
-stack_top:
-
-\n--- src/long_mode.S ---
-.intel_syntax noprefix
-.global enter_long_mode
-.extern kernel_main64
-
-.section .text
-.code32
-enter_long_mode:
-    cli
-
-    # Load GDT
-    lgdt [gdt_desc]
-
-    # Enable PAE
-    mov eax, cr4
-    or  eax, 1 << 5
-    mov cr4, eax
-
-    # Load PML4 base
-    mov eax, pml4_table
-    mov cr3, eax
-
-    # Enable long mode (EFER.LME)
-    mov ecx, 0xC0000080
-    rdmsr
-    or  eax, 1 << 8
-    wrmsr
-
-    # Enable paging
-    mov eax, cr0
-    or  eax, 1 << 31
-    mov cr0, eax
-
-    # Far jump into 64-bit code
-    ljmp 0x08, long_mode_entry
-
-
-.section .text
-.code64
-long_mode_entry:
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov ss, ax
-
-    lea rsp, [stack_top]
-
-    call kernel_main64
-
-.hang:
-    hlt
-    jmp .hang
-
-# --------------------------------------------------
-# GDT
-# --------------------------------------------------
-.section .rodata
-.align 8
-
-gdt:
-    .quad 0x0000000000000000
-    .quad 0x00AF9A000000FFFF    # code = 0x08
-    .quad 0x00AF92000000FFFF    # data = 0x10
-
-gdt_desc:
-    .word (gdt_end - gdt - 1)
-    .quad gdt
-gdt_end:
-
-
-# --------------------------------------------------
-# Paging tables (identity map first 1GiB)
-# --------------------------------------------------
-.section .data
-.align 4096
-
-pml4_table:
-    .quad pdpt_table + 0x3
-    .fill 511,8,0
-
-.align 4096
-pdpt_table:
-    .quad pd_table + 0x3          # first 1 GiB
-    .quad pd_table + 0x3 + (1<<30)  # second 1 GiB
-    .quad pd_table + 0x3 + (2<<30)  # third 1 GiB
-    .quad pd_table + 0x3 + (3<<30)  # fourth 1 GiB
-    .fill 508,8,0
-
-.align 4096
-pd_table:
-    .set i, 0
-    .rept 512
-        .quad (i << 21) + 0x83
-        .set i, i + 1
-    .endr
-
-
-# --------------------------------------------------
-# Stack
-# --------------------------------------------------
 .section .bss
 .align 16
 stack_bottom:
@@ -556,27 +477,13 @@ stack_top:
 
 ===== OBJECT SYMBOLS =====
 
-\n--- obj/long_mode.o ---
-0000000000000000 T enter_long_mode
-0000000000000000 r gdt
-0000000000000018 r gdt_desc
-0000000000000022 r gdt_end
-0000000000000050 t .hang
-0000000000000200 a i
-                 U kernel_main64
-0000000000000039 t long_mode_entry
-0000000000001000 d pdpt_table
-0000000000002000 d pd_table
-0000000000000000 d pml4_table
-0000000000000000 b stack_bottom
-0000000000004000 b stack_top
 \n--- obj/kernel.o ---
 0000000000000000 T kernel_main64
 \n--- obj/boot.o ---
 0000000000000011 t .hang
-0000000000000030 n header_end
-0000000000000010 n header_start
                  U kernel_main64
+0000000000000030 n mb2_header_end
+0000000000000000 n mb2_header_start
 0000000000000000 b stack_bottom
 0000000000004000 b stack_top
 0000000000000000 T _start
