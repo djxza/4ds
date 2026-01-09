@@ -1,157 +1,132 @@
-# Nuke built-in rules.
+# Nuke built-in rules and variables
 .SUFFIXES:
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
-# Target architecture to build for. Default to x86_64.
-ARCH := x86_64
+# ========= CONFIGURATION =========
+ARCH ?= x86_64
+IMAGE_NAME := template-$(ARCH)
+QEMUFLAGS ?= -m 2G
 
-# Default user QEMU flags. These are appended to the QEMU command calls.
-QEMUFLAGS := -m 2G
-
-override IMAGE_NAME := template-$(ARCH)
-
-# Toolchain for building the 'limine' executable for the host.
+# Toolchain configuration
 HOST_CC := cc
-HOST_CFLAGS := -g -O2 -pipe
+HOST_CFLAGS := -g -O2 -pipe -Wall
 HOST_CPPFLAGS :=
 HOST_LDFLAGS :=
 HOST_LIBS :=
 
-.PHONY: all
+# Architecture-specific configurations
+# Format: ARCH:MACHINE:CPU:GPU
+X86_64_MACHINE := q35
+X86_64_CPU := 
+X86_64_GPU := VGA,vgamem_mb=16
+
+AARCH64_MACHINE := virt
+AARCH64_CPU := cortex-a72
+AARCH64_GPU := ramfb
+
+RISCV64_MACHINE := virt
+RISCV64_CPU := rv64
+RISCV64_GPU := ramfb
+
+LOONGARCH64_MACHINE := virt
+LOONGARCH64_CPU := la464
+LOONGARCH64_GPU := ramfb
+
+# Set machine, cpu, and gpu based on ARCH
+ifeq ($(ARCH),x86_64)
+MACHINE := $(X86_64_MACHINE)
+CPU := $(X86_64_CPU)
+GPU_DEVICE := $(X86_64_GPU)
+endif
+
+ifeq ($(ARCH),aarch64)
+MACHINE := $(AARCH64_MACHINE)
+CPU := $(AARCH64_CPU)
+GPU_DEVICE := $(AARCH64_GPU)
+endif
+
+ifeq ($(ARCH),riscv64)
+MACHINE := $(RISCV64_MACHINE)
+CPU := $(RISCV64_CPU)
+GPU_DEVICE := $(RISCV64_GPU)
+endif
+
+ifeq ($(ARCH),loongarch64)
+MACHINE := $(LOONGARCH64_MACHINE)
+CPU := $(LOONGARCH64_CPU)
+GPU_DEVICE := $(LOONGARCH64_GPU)
+endif
+
+# Define supported architectures
+SUPPORTED_ARCHS := x86_64 aarch64 riscv64 loongarch64
+
+# ========= VALIDATION =========
+ifeq ($(filter $(ARCH),$(SUPPORTED_ARCHS)),)
+$(error Unsupported architecture: $(ARCH). Supported: $(SUPPORTED_ARCHS))
+endif
+
+# ========= PHONY TARGETS =========
+.PHONY: all all-hdd run run-hdd clean distclean dump help
+
 all: $(IMAGE_NAME).iso
 
-.PHONY: all-hdd
 all-hdd: $(IMAGE_NAME).hdd
 
-.PHONY: run
 run: run-$(ARCH)
 
-.PHONY: run-hdd
 run-hdd: run-hdd-$(ARCH)
 
-.PHONY: run-x86_64
-run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		    -device VGA,vgamem_mb=16 \
-    -display sdl \
-	 -full-screen \
-		-serial stdio \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+clean:
+	$(MAKE) -C kernel clean
+	rm -rf iso_root $(IMAGE_NAME).iso $(IMAGE_NAME).hdd
 
-#    -full-screen \
-# D3D3D3
+distclean:
+	$(MAKE) -C kernel distclean
+	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
 
-.PHONY: run-hdd-x86_64
-run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+dump:
+	chmod +x ./tools/dump_proj.sh
+	./tools/dump_proj.sh
 
-.PHONY: run-aarch64
-run-aarch64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu cortex-a72 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+help:
+	@echo "Available targets:"
+	@echo "  all           - Build ISO image for $(ARCH)"
+	@echo "  all-hdd       - Build hard disk image for $(ARCH)"
+	@echo "  run           - Run ISO in QEMU for $(ARCH)"
+	@echo "  run-hdd       - Run HDD in QEMU for $(ARCH)"
+	@echo "  clean         - Remove build artifacts"
+	@echo "  distclean     - Remove all generated files"
+	@echo "  dump          - Dump project structure"
+	@echo ""
+	@echo "Configuration:"
+	@echo "  ARCH          - Target architecture ($(ARCH))"
+	@echo "  QEMUFLAGS     - QEMU additional flags ($(QEMUFLAGS))"
+	@echo ""
+	@echo "Supported architectures: $(SUPPORTED_ARCHS)"
 
-.PHONY: run-hdd-aarch64
-run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu cortex-a72 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+# ========= DEPENDENCIES =========
+.PHONY: deps limine-deps kernel-deps ovmf-deps
 
-.PHONY: run-riscv64
-run-riscv64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu rv64 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+deps: ovmf-deps limine-deps kernel-deps
 
-.PHONY: run-hdd-riscv64
-run-hdd-riscv64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu rv64 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+ovmf-deps: edk2-ovmf
 
-.PHONY: run-loongarch64
-run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu la464 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+limine-deps: limine/limine
 
-.PHONY: run-hdd-loongarch64
-run-hdd-loongarch64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu la464 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
-
-
-.PHONY: run-bios
-run-bios: $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-cdrom $(IMAGE_NAME).iso \
-		-boot d \
-		$(QEMUFLAGS)
-
-.PHONY: run-hdd-bios
-run-hdd-bios: $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+kernel-deps: kernel/.deps-obtained
 
 edk2-ovmf:
-	curl -L https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/edk2-ovmf.tar.gz | gunzip | tar -xf -
+	@echo "Downloading EDK2 OVMF firmware..."
+	curl -Ls https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/edk2-ovmf.tar.gz | \
+		tar -xzf - 2>/dev/null || \
+		(echo "Failed to download OVMF firmware" && false)
 
 limine/limine:
+	@echo "Building Limine bootloader..."
 	rm -rf limine
-	git clone https://codeberg.org/Limine/Limine.git limine --branch=v10.x-binary --depth=1
-	$(MAKE) -C limine \
+	git clone -q --branch=v10.x-binary --depth=1 \
+		https://codeberg.org/Limine/Limine.git limine 2>/dev/null
+	$(MAKE) -s -C limine \
 		CC="$(HOST_CC)" \
 		CFLAGS="$(HOST_CFLAGS)" \
 		CPPFLAGS="$(HOST_CPPFLAGS)" \
@@ -163,65 +138,109 @@ kernel/.deps-obtained:
 
 .PHONY: kernel
 kernel: kernel/.deps-obtained
-	$(MAKE) -C kernel
+	$(MAKE) -C kernel ARCH=$(ARCH)
 
+# ========= QEMU RUN TARGETS =========
+define QEMU_UEFI_RUN
+qemu-system-$(ARCH) \
+    -M $(MACHINE) \
+    $(if $(CPU),-cpu $(CPU)) \
+    $(if $(GPU_DEVICE),-device $(GPU_DEVICE)) \
+    -drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+    -device isa-debug-exit,iobase=0xf4,iosize=0x04 \
+    -display sdl \
+    -serial stdio \
+    $(1) \
+    $(QEMUFLAGS)
+endef
+
+.PHONY: run-x86_64 run-aarch64 run-riscv64 run-loongarch64
+.PHONY: run-hdd-x86_64 run-hdd-aarch64 run-hdd-riscv64 run-hdd-loongarch64
+
+run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-aarch64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-riscv64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-riscv64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-loongarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+# BIOS targets (x86_64 only)
+.PHONY: run-bios run-hdd-bios
+run-bios: $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-cdrom $(IMAGE_NAME).iso \
+		-boot d \
+		$(QEMUFLAGS)
+
+run-hdd-bios: $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+# ========= IMAGE BUILDING =========
+# Common ISO creation function
+define CREATE_ISO
+	rm -rf iso_root
+	mkdir -p iso_root/boot/limine iso_root/EFI/BOOT
+	cp -v kernel/bin-$(ARCH)/kernel iso_root/boot/
+	cp -v limine.conf iso_root/boot/limine/
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v $(1) iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J \
+		-hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+	rm -rf iso_root
+endef
+
+# x86_64-specific ISO creation
+ifeq ($(ARCH),x86_64)
 $(IMAGE_NAME).iso: limine/limine kernel
 	rm -rf iso_root
-	mkdir -p iso_root/boot
+	mkdir -p iso_root/boot/limine iso_root/EFI/BOOT
 	cp -v kernel/bin-$(ARCH)/kernel iso_root/boot/
-	mkdir -p iso_root/boot/limine
 	cp -v limine.conf iso_root/boot/limine/
-	mkdir -p iso_root/EFI/BOOT
-ifeq ($(ARCH),x86_64)
 	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTX64.EFI iso_root/EFI/BOOT/
-	cp -v limine/BOOTIA32.EFI iso_root/EFI/BOOT/
+	cp -v limine/BOOTX64.EFI limine/BOOTIA32.EFI iso_root/EFI/BOOT/
 	xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
 		-apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		iso_root -o $(IMAGE_NAME).iso
 	./limine/limine bios-install $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),aarch64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTAA64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),riscv64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTRISCV64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),loongarch64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTLOONGARCH64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
 	rm -rf iso_root
+else
+# Non-x86_64 ISO creation
+$(IMAGE_NAME).iso: limine/limine kernel
+	$(call CREATE_ISO,limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI)
+endif
 
+# HDD image creation
 $(IMAGE_NAME).hdd: limine/limine kernel
 	rm -f $(IMAGE_NAME).hdd
-	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd
-ifeq ($(ARCH),x86_64)
-	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 -m 1
-	./limine/limine bios-install $(IMAGE_NAME).hdd
-else
-	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00
-endif
-	mformat -i $(IMAGE_NAME).hdd@@1M
+	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd status=none
+	sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 $(if $(filter x86_64,$(ARCH)),-m 1,) >/dev/null 2>&1
+	mformat -i $(IMAGE_NAME).hdd@@1M -F >/dev/null 2>&1
 	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT ::/boot ::/boot/limine
 	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin-$(ARCH)/kernel ::/boot
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine.conf ::/boot/limine
@@ -229,27 +248,15 @@ ifeq ($(ARCH),x86_64)
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/boot/limine
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTX64.EFI ::/EFI/BOOT
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTIA32.EFI ::/EFI/BOOT
-endif
-ifeq ($(ARCH),aarch64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTAA64.EFI ::/EFI/BOOT
-endif
-ifeq ($(ARCH),riscv64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTRISCV64.EFI ::/EFI/BOOT
-endif
-ifeq ($(ARCH),loongarch64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTLOONGARCH64.EFI ::/EFI/BOOT
+else
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI ::/EFI/BOOT
 endif
 
-.PHONY: clean
-clean:
-	$(MAKE) -C kernel clean
-	rm -rf iso_root $(IMAGE_NAME).iso $(IMAGE_NAME).hdd
+# ========= AUTOMATIC VARIABLES =========
+# Ensure proper dependency tracking
+-include $(wildcard .*.d)
 
-.PHONY: distclean
-distclean:
-	$(MAKE) -C kernel distclean
-	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
-
-dump:
-	chmod +x ./tools/dump_proj.sh
-	./tools/dump_proj.sh
+# Silent mode by default
+ifeq (,$(findstring s,$(MAKEFLAGS)))
+.SILENT:
+endif

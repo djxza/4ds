@@ -14,6 +14,8 @@ tree -a | tee -a "$OUT"
 
 log "MAKEFILE"
 sed -n '1,300p' makefile | tee -a "$OUT"
+log "kernel/GNUMAKEFILE"
+sed -n '1,300p' kernel/GNUmakefile | tee -a "$OUT"
 
 log "LINKER SCRIPTS"
 find . -name "*.ld" -exec sh -c 'echo "--- {} ---"; sed -n "1,300p" {}' \; | tee -a "$OUT"
@@ -22,7 +24,7 @@ log "GRUB CONFIG"
 find . -name "grub.cfg" -exec sh -c 'echo "--- {} ---"; sed -n "1,300p" {}' \; | tee -a "$OUT"
 
 log "SOURCE FILES"
-find src -type f \( -name "*.c" -o -name "*.S" -o -name "*.asm" -o -name "*.h" \) \
+find ./kernel/src -type f \( -name "*.c" -o -name "*.S" -o -name "*.asm" -o -name "*.h" \) \
 -exec sh -c 'echo "\n--- {} ---"; sed -n "1,300p" {}' \; | tee -a "$OUT"
 
 log "OBJECT SYMBOLS"

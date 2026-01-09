@@ -19,6 +19,7 @@
 │   ├── ovmf-vars-riscv64.fd
 │   └── ovmf-vars-x86_64.fd
 ├── .git
+│   ├── COMMIT_EDITMSG
 │   ├── config
 │   ├── description
 │   ├── HEAD
@@ -44,11 +45,44 @@
 │   │   ├── HEAD
 │   │   └── refs
 │   │       ├── heads
-│   │       │   └── trunk
+│   │       │   └── master
 │   │       └── remotes
 │   │           └── origin
-│   │               └── HEAD
+│   │               └── master
 │   ├── objects
+│   │   ├── 06
+│   │   │   └── 37a088a01e8ddab3bf3fa98dbe804cbde1a0dc
+│   │   ├── 07
+│   │   │   └── af307e799f034ee78235f47e34d65be0c91a52
+│   │   ├── 0d
+│   │   │   └── 8021d142a3f69117df3d420ab9509169fe56f2
+│   │   ├── 14
+│   │   │   └── ae439e7378d3ba10b4fe3b5e1cb23d9e0267fe
+│   │   ├── 31
+│   │   │   └── 393ee2f413db7db6558c501d17b68db76b6915
+│   │   ├── 3d
+│   │   │   ├── 1e8235d4488162c915b40294dd2da7a885fefb
+│   │   │   └── 25dea21a8930666d35aa4e8bbabae183e00fb6
+│   │   ├── 46
+│   │   │   └── acf33cc911911692cd08ac32070d02b9b51941
+│   │   ├── 5c
+│   │   │   └── 088c861001e559f34e81a04d39398e7b63589f
+│   │   ├── 65
+│   │   │   └── 4b0cc226e73aff9aad2b545ef9acac065237bb
+│   │   ├── 6f
+│   │   │   └── 65f883b66d4fc01fa412d76b657efc96e184a2
+│   │   ├── 99
+│   │   │   └── ce76393558879a25c1cc29ce1f04e3f6c1447c
+│   │   ├── c5
+│   │   │   └── b65dec26f84cb740d0c598f98188d38e81bfb0
+│   │   ├── d0
+│   │   │   └── e3313723fe99c377fd1acc7e65e839fcbfbf1c
+│   │   ├── d2
+│   │   │   └── 52697ce88ffe9fc71405108d61f0cc5c37cff3
+│   │   ├── d6
+│   │   │   └── f40020e060c74d66f0e91044e01e84a0d3d738
+│   │   ├── ee
+│   │   │   └── 6a8528bdb71dc3ee84e490f6ce694f3c532051
 │   │   ├── info
 │   │   └── pack
 │   │       ├── pack-ad941032bbb8d18c562051f276ae8dcba059cbd4.idx
@@ -57,10 +91,10 @@
 │   ├── packed-refs
 │   └── refs
 │       ├── heads
-│       │   └── trunk
+│       │   └── master
 │       ├── remotes
 │       │   └── origin
-│       │       └── HEAD
+│       │       └── master
 │       └── tags
 ├── .gitignore
 ├── kernel
@@ -238,12 +272,37 @@
 │   │   │       ├── cc-runtime.c.d
 │   │   │       └── cc-runtime.c.o
 │   │   └── src
+│   │       ├── gfx.c.d
+│   │       ├── gfx.c.o
+│   │       ├── io.c.d
+│   │       ├── io.c.o
+│   │       ├── keyboard.c.d
+│   │       ├── keyboard.c.o
 │   │       ├── main.c.d
-│   │       └── main.c.o
+│   │       ├── main.c.o
+│   │       ├── stdlib.c.d
+│   │       ├── stdlib.c.o
+│   │       ├── string.c.d
+│   │       ├── string.c.o
+│   │       └── ui
+│   │           ├── home.c.d
+│   │           └── home.c.o
 │   └── src
+│       ├── gfx.c
+│       ├── gfx.h
+│       ├── io.c
+│       ├── io.h
+│       ├── keyboard.c
+│       ├── keyboard.h
 │       ├── main.c
 │       ├── math.h
-│       └── string.h
+│       ├── stdlib.c
+│       ├── stdlib.h
+│       ├── string.c
+│       ├── string.h
+│       └── ui
+│           ├── home.c
+│           └── home.h
 ├── LICENSE
 ├── limine
 │   ├── BOOTAA64.EFI
@@ -309,164 +368,139 @@
 └── tools
     └── dump_proj.sh
 
-94 directories, 212 files
+112 directories, 253 files
 
 ===== MAKEFILE =====
 
-# Nuke built-in rules.
+# Nuke built-in rules and variables
 .SUFFIXES:
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
-# Target architecture to build for. Default to x86_64.
-ARCH := x86_64
+# ========= CONFIGURATION =========
+ARCH ?= x86_64
+IMAGE_NAME := template-$(ARCH)
+QEMUFLAGS ?= -m 2G
 
-# Default user QEMU flags. These are appended to the QEMU command calls.
-QEMUFLAGS := -m 2G
-
-override IMAGE_NAME := template-$(ARCH)
-
-# Toolchain for building the 'limine' executable for the host.
+# Toolchain configuration
 HOST_CC := cc
-HOST_CFLAGS := -g -O2 -pipe
+HOST_CFLAGS := -g -O2 -pipe -Wall
 HOST_CPPFLAGS :=
 HOST_LDFLAGS :=
 HOST_LIBS :=
 
-.PHONY: all
+# Architecture-specific configurations
+# Format: ARCH:MACHINE:CPU:GPU
+X86_64_MACHINE := q35
+X86_64_CPU := 
+X86_64_GPU := VGA,vgamem_mb=16
+
+AARCH64_MACHINE := virt
+AARCH64_CPU := cortex-a72
+AARCH64_GPU := ramfb
+
+RISCV64_MACHINE := virt
+RISCV64_CPU := rv64
+RISCV64_GPU := ramfb
+
+LOONGARCH64_MACHINE := virt
+LOONGARCH64_CPU := la464
+LOONGARCH64_GPU := ramfb
+
+# Set machine, cpu, and gpu based on ARCH
+ifeq ($(ARCH),x86_64)
+MACHINE := $(X86_64_MACHINE)
+CPU := $(X86_64_CPU)
+GPU_DEVICE := $(X86_64_GPU)
+endif
+
+ifeq ($(ARCH),aarch64)
+MACHINE := $(AARCH64_MACHINE)
+CPU := $(AARCH64_CPU)
+GPU_DEVICE := $(AARCH64_GPU)
+endif
+
+ifeq ($(ARCH),riscv64)
+MACHINE := $(RISCV64_MACHINE)
+CPU := $(RISCV64_CPU)
+GPU_DEVICE := $(RISCV64_GPU)
+endif
+
+ifeq ($(ARCH),loongarch64)
+MACHINE := $(LOONGARCH64_MACHINE)
+CPU := $(LOONGARCH64_CPU)
+GPU_DEVICE := $(LOONGARCH64_GPU)
+endif
+
+# Define supported architectures
+SUPPORTED_ARCHS := x86_64 aarch64 riscv64 loongarch64
+
+# ========= VALIDATION =========
+ifeq ($(filter $(ARCH),$(SUPPORTED_ARCHS)),)
+$(error Unsupported architecture: $(ARCH). Supported: $(SUPPORTED_ARCHS))
+endif
+
+# ========= PHONY TARGETS =========
+.PHONY: all all-hdd run run-hdd clean distclean dump help
+
 all: $(IMAGE_NAME).iso
 
-.PHONY: all-hdd
 all-hdd: $(IMAGE_NAME).hdd
 
-.PHONY: run
 run: run-$(ARCH)
 
-.PHONY: run-hdd
 run-hdd: run-hdd-$(ARCH)
 
-.PHONY: run-x86_64
-run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		    -device VGA,vgamem_mb=16 \
-    -display sdl \
-	 -full-screen \
-		-serial stdio \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+clean:
+	$(MAKE) -C kernel clean
+	rm -rf iso_root $(IMAGE_NAME).iso $(IMAGE_NAME).hdd
 
-#    -full-screen \
-# D3D3D3
+distclean:
+	$(MAKE) -C kernel distclean
+	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
 
-.PHONY: run-hdd-x86_64
-run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+dump:
+	chmod +x ./tools/dump_proj.sh
+	./tools/dump_proj.sh
 
-.PHONY: run-aarch64
-run-aarch64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu cortex-a72 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+help:
+	@echo "Available targets:"
+	@echo "  all           - Build ISO image for $(ARCH)"
+	@echo "  all-hdd       - Build hard disk image for $(ARCH)"
+	@echo "  run           - Run ISO in QEMU for $(ARCH)"
+	@echo "  run-hdd       - Run HDD in QEMU for $(ARCH)"
+	@echo "  clean         - Remove build artifacts"
+	@echo "  distclean     - Remove all generated files"
+	@echo "  dump          - Dump project structure"
+	@echo ""
+	@echo "Configuration:"
+	@echo "  ARCH          - Target architecture ($(ARCH))"
+	@echo "  QEMUFLAGS     - QEMU additional flags ($(QEMUFLAGS))"
+	@echo ""
+	@echo "Supported architectures: $(SUPPORTED_ARCHS)"
 
-.PHONY: run-hdd-aarch64
-run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu cortex-a72 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+# ========= DEPENDENCIES =========
+.PHONY: deps limine-deps kernel-deps ovmf-deps
 
-.PHONY: run-riscv64
-run-riscv64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu rv64 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+deps: ovmf-deps limine-deps kernel-deps
 
-.PHONY: run-hdd-riscv64
-run-hdd-riscv64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu rv64 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+ovmf-deps: edk2-ovmf
 
-.PHONY: run-loongarch64
-run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu la464 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-cdrom $(IMAGE_NAME).iso \
-		$(QEMUFLAGS)
+limine-deps: limine/limine
 
-.PHONY: run-hdd-loongarch64
-run-hdd-loongarch64: edk2-ovmf $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M virt \
-		-cpu la464 \
-		-device ramfb \
-		-device qemu-xhci \
-		-device usb-kbd \
-		-device usb-mouse \
-		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
-
-
-.PHONY: run-bios
-run-bios: $(IMAGE_NAME).iso
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-cdrom $(IMAGE_NAME).iso \
-		-boot d \
-		$(QEMUFLAGS)
-
-.PHONY: run-hdd-bios
-run-hdd-bios: $(IMAGE_NAME).hdd
-	qemu-system-$(ARCH) \
-		-M q35 \
-		-hda $(IMAGE_NAME).hdd \
-		$(QEMUFLAGS)
+kernel-deps: kernel/.deps-obtained
 
 edk2-ovmf:
-	curl -L https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/edk2-ovmf.tar.gz | gunzip | tar -xf -
+	@echo "Downloading EDK2 OVMF firmware..."
+	curl -Ls https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/edk2-ovmf.tar.gz | \
+		tar -xzf - 2>/dev/null || \
+		(echo "Failed to download OVMF firmware" && false)
 
 limine/limine:
+	@echo "Building Limine bootloader..."
 	rm -rf limine
-	git clone https://codeberg.org/Limine/Limine.git limine --branch=v10.x-binary --depth=1
-	$(MAKE) -C limine \
+	git clone -q --branch=v10.x-binary --depth=1 \
+		https://codeberg.org/Limine/Limine.git limine 2>/dev/null
+	$(MAKE) -s -C limine \
 		CC="$(HOST_CC)" \
 		CFLAGS="$(HOST_CFLAGS)" \
 		CPPFLAGS="$(HOST_CPPFLAGS)" \
@@ -478,65 +512,109 @@ kernel/.deps-obtained:
 
 .PHONY: kernel
 kernel: kernel/.deps-obtained
-	$(MAKE) -C kernel
+	$(MAKE) -C kernel ARCH=$(ARCH)
 
+# ========= QEMU RUN TARGETS =========
+define QEMU_UEFI_RUN
+qemu-system-$(ARCH) \
+    -M $(MACHINE) \
+    $(if $(CPU),-cpu $(CPU)) \
+    $(if $(GPU_DEVICE),-device $(GPU_DEVICE)) \
+    -drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+    -device isa-debug-exit,iobase=0xf4,iosize=0x04 \
+    -display sdl \
+    -serial stdio \
+    $(1) \
+    $(QEMUFLAGS)
+endef
+
+.PHONY: run-x86_64 run-aarch64 run-riscv64 run-loongarch64
+.PHONY: run-hdd-x86_64 run-hdd-aarch64 run-hdd-riscv64 run-hdd-loongarch64
+
+run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-aarch64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-riscv64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
+	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
+
+run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-riscv64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+run-hdd-loongarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+
+# BIOS targets (x86_64 only)
+.PHONY: run-bios run-hdd-bios
+run-bios: $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-cdrom $(IMAGE_NAME).iso \
+		-boot d \
+		$(QEMUFLAGS)
+
+run-hdd-bios: $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+# ========= IMAGE BUILDING =========
+# Common ISO creation function
+define CREATE_ISO
+	rm -rf iso_root
+	mkdir -p iso_root/boot/limine iso_root/EFI/BOOT
+	cp -v kernel/bin-$(ARCH)/kernel iso_root/boot/
+	cp -v limine.conf iso_root/boot/limine/
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v $(1) iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J \
+		-hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+	rm -rf iso_root
+endef
+
+# x86_64-specific ISO creation
+ifeq ($(ARCH),x86_64)
 $(IMAGE_NAME).iso: limine/limine kernel
 	rm -rf iso_root
-	mkdir -p iso_root/boot
+	mkdir -p iso_root/boot/limine iso_root/EFI/BOOT
 	cp -v kernel/bin-$(ARCH)/kernel iso_root/boot/
-	mkdir -p iso_root/boot/limine
 	cp -v limine.conf iso_root/boot/limine/
-	mkdir -p iso_root/EFI/BOOT
-ifeq ($(ARCH),x86_64)
 	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTX64.EFI iso_root/EFI/BOOT/
-	cp -v limine/BOOTIA32.EFI iso_root/EFI/BOOT/
+	cp -v limine/BOOTX64.EFI limine/BOOTIA32.EFI iso_root/EFI/BOOT/
 	xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
 		-apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
 		iso_root -o $(IMAGE_NAME).iso
 	./limine/limine bios-install $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),aarch64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTAA64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),riscv64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTRISCV64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
-ifeq ($(ARCH),loongarch64)
-	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
-	cp -v limine/BOOTLOONGARCH64.EFI iso_root/EFI/BOOT/
-	xorriso -as mkisofs -R -r -J \
-		-hfsplus -apm-block-size 2048 \
-		--efi-boot boot/limine/limine-uefi-cd.bin \
-		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		iso_root -o $(IMAGE_NAME).iso
-endif
 	rm -rf iso_root
+else
+# Non-x86_64 ISO creation
+$(IMAGE_NAME).iso: limine/limine kernel
+	$(call CREATE_ISO,limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI)
+endif
 
+# HDD image creation
 $(IMAGE_NAME).hdd: limine/limine kernel
 	rm -f $(IMAGE_NAME).hdd
-	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd
-ifeq ($(ARCH),x86_64)
-	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 -m 1
-	./limine/limine bios-install $(IMAGE_NAME).hdd
-else
-	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00
-endif
-	mformat -i $(IMAGE_NAME).hdd@@1M
+	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd status=none
+	sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 $(if $(filter x86_64,$(ARCH)),-m 1,) >/dev/null 2>&1
+	mformat -i $(IMAGE_NAME).hdd@@1M -F >/dev/null 2>&1
 	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT ::/boot ::/boot/limine
 	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin-$(ARCH)/kernel ::/boot
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine.conf ::/boot/limine
@@ -544,30 +622,255 @@ ifeq ($(ARCH),x86_64)
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/boot/limine
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTX64.EFI ::/EFI/BOOT
 	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTIA32.EFI ::/EFI/BOOT
+else
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI ::/EFI/BOOT
+endif
+
+# ========= AUTOMATIC VARIABLES =========
+# Ensure proper dependency tracking
+-include $(wildcard .*.d)
+
+# Silent mode by default
+ifeq (,$(findstring s,$(MAKEFLAGS)))
+.SILENT:
+endif
+
+===== kernel/GNUMAKEFILE =====
+
+# Nuke built-in rules.
+.SUFFIXES:
+
+# This is the name that our final executable will have.
+# Change as needed.
+override OUTPUT := kernel
+
+# Target architecture to build for. Default to x86_64.
+ARCH := x86_64
+
+# Install prefix; /usr/local is a good, standard default pick.
+PREFIX := /usr/local
+
+# Check if the architecture is supported.
+ifeq ($(filter $(ARCH),aarch64 loongarch64 riscv64 x86_64),)
+    $(error Architecture $(ARCH) not supported)
+endif
+
+# User controllable toolchain and toolchain prefix.
+TOOLCHAIN :=
+TOOLCHAIN_PREFIX :=
+ifneq ($(TOOLCHAIN),)
+    ifeq ($(TOOLCHAIN_PREFIX),)
+        TOOLCHAIN_PREFIX := $(TOOLCHAIN)-
+    endif
+endif
+
+# User controllable C compiler command.
+ifneq ($(TOOLCHAIN_PREFIX),)
+    CC := $(TOOLCHAIN_PREFIX)gcc
+else
+    CC := cc
+endif
+
+# User controllable linker command.
+LD := $(TOOLCHAIN_PREFIX)ld
+
+# Defaults overrides for variables if using "llvm" as toolchain.
+ifeq ($(TOOLCHAIN),llvm)
+    CC := clang
+    LD := ld.lld
+endif
+
+# User controllable C flags.
+CFLAGS := -g -O2 -pipe
+
+# User controllable C preprocessor flags. We set none by default.
+CPPFLAGS :=
+
+ifeq ($(ARCH),x86_64)
+    # User controllable nasm flags.
+    NASMFLAGS := -g
+endif
+
+# User controllable linker flags. We set none by default.
+LDFLAGS :=
+
+# Ensure the dependencies have been obtained.
+ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
+    ifeq ($(wildcard .deps-obtained),)
+        $(error Please run the ./get-deps script first)
+    endif
+endif
+
+# Check if CC is Clang.
+override CC_IS_CLANG := $(shell ! $(CC) --version 2>/dev/null | grep -q '^Target: '; echo $$?)
+
+# Internal C flags that should not be changed by the user.
+override CFLAGS += \
+    -Wall \
+    -Wextra \
+    -std=gnu11 \
+    -nostdinc \
+    -ffreestanding \
+    -fno-stack-protector \
+    -fno-stack-check \
+    -fno-lto \
+    -fno-PIC \
+    -ffunction-sections \
+    -fdata-sections
+
+# Internal C preprocessor flags that should not be changed by the user.
+override CPPFLAGS := \
+    -I src \
+    -I limine-protocol/include \
+    -isystem freestnd-c-hdrs/include \
+    $(CPPFLAGS) \
+    -MMD \
+    -MP
+
+ifeq ($(ARCH),x86_64)
+    # Internal nasm flags that should not be changed by the user.
+    override NASMFLAGS := \
+        $(patsubst -g,-g -F dwarf,$(NASMFLAGS)) \
+        -Wall
+endif
+
+# Architecture specific internal flags.
+ifeq ($(ARCH),x86_64)
+    ifeq ($(CC_IS_CLANG),1)
+        override CC += \
+            -target x86_64-unknown-none-elf
+    endif
+    override CFLAGS += \
+        -m64 \
+        -march=x86-64 \
+        -mabi=sysv \
+        -mno-80387 \
+        -mno-mmx \
+        -mno-sse \
+        -mno-sse2 \
+        -mno-red-zone \
+        -mcmodel=kernel
+    override LDFLAGS += \
+        -m elf_x86_64
+    override NASMFLAGS := \
+        -f elf64 \
+        $(NASMFLAGS)
 endif
 ifeq ($(ARCH),aarch64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTAA64.EFI ::/EFI/BOOT
+    ifeq ($(CC_IS_CLANG),1)
+        override CC += \
+            -target aarch64-unknown-none-elf
+    endif
+    override CFLAGS += \
+        -mcpu=generic \
+        -march=armv8-a+nofp+nosimd \
+        -mgeneral-regs-only
+    override LDFLAGS += \
+        -m aarch64elf
 endif
 ifeq ($(ARCH),riscv64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTRISCV64.EFI ::/EFI/BOOT
+    ifeq ($(CC_IS_CLANG),1)
+        override CC += \
+            -target riscv64-unknown-none-elf
+    endif
+    override CFLAGS += \
+        -march=rv64imac_zicsr_zifencei \
+        -mabi=lp64 \
+        -mno-relax
+    override LDFLAGS += \
+        -m elf64lriscv \
+        --no-relax
 endif
 ifeq ($(ARCH),loongarch64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTLOONGARCH64.EFI ::/EFI/BOOT
+    ifeq ($(CC_IS_CLANG),1)
+        override CC += \
+            -target loongarch64-unknown-none-elf
+    endif
+    override CFLAGS += \
+        -march=loongarch64 \
+        -mabi=lp64s \
+        -mfpu=none \
+        -msimd=none
+    override LDFLAGS += \
+        -m elf64loongarch
 endif
 
+# Internal linker flags that should not be changed by the user.
+override LDFLAGS += \
+    -nostdlib \
+    -static \
+    -z max-page-size=0x1000 \
+    --gc-sections \
+    -T linker-scripts/$(ARCH).lds
+
+# Use "find" to glob all *.c, *.S, and *.asm files in the tree
+# (except the src/arch/* directories, as those are gonna be added
+# in the next step).
+override SRCFILES := $(shell find -L src cc-runtime/src -type f -not -path 'src/arch/*' 2>/dev/null | LC_ALL=C sort)
+# Add architecture specific files, if they exist.
+override SRCFILES += $(shell find -L src/arch/$(ARCH) -type f 2>/dev/null | LC_ALL=C sort)
+# Obtain the object and header dependencies file names.
+override CFILES := $(filter %.c,$(SRCFILES))
+override ASFILES := $(filter %.S,$(SRCFILES))
+ifeq ($(ARCH),x86_64)
+override NASMFILES := $(filter %.asm,$(SRCFILES))
+endif
+override OBJ := $(addprefix obj-$(ARCH)/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o))
+ifeq ($(ARCH),x86_64)
+override OBJ += $(addprefix obj-$(ARCH)/,$(NASMFILES:.asm=.asm.o))
+endif
+override HEADER_DEPS := $(addprefix obj-$(ARCH)/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
+
+# Default target. This must come first, before header dependencies.
+.PHONY: all
+all: bin-$(ARCH)/$(OUTPUT)
+
+# Include header dependencies.
+-include $(HEADER_DEPS)
+
+# Link rules for the final executable.
+bin-$(ARCH)/$(OUTPUT): GNUmakefile linker-scripts/$(ARCH).lds $(OBJ)
+	mkdir -p "$(dir $@)"
+	$(LD) $(LDFLAGS) $(OBJ) -o $@
+
+# Compilation rules for *.c files.
+obj-$(ARCH)/%.c.o: %.c GNUmakefile
+	mkdir -p "$(dir $@)"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+# Compilation rules for *.S files.
+obj-$(ARCH)/%.S.o: %.S GNUmakefile
+	mkdir -p "$(dir $@)"
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
+ifeq ($(ARCH),x86_64)
+# Compilation rules for *.asm (nasm) files.
+obj-$(ARCH)/%.asm.o: %.asm GNUmakefile
+	mkdir -p "$(dir $@)"
+	nasm $(NASMFLAGS) $< -o $@
+endif
+
+# Remove object files and the final executable.
 .PHONY: clean
 clean:
-	$(MAKE) -C kernel clean
-	rm -rf iso_root $(IMAGE_NAME).iso $(IMAGE_NAME).hdd
+	rm -rf bin-$(ARCH) obj-$(ARCH)
 
+# Remove everything built and generated including downloaded dependencies.
 .PHONY: distclean
 distclean:
-	$(MAKE) -C kernel distclean
-	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
+	rm -rf bin-* obj-* .deps-obtained .cache compile_commands.json freestnd-c-hdrs cc-runtime limine-protocol
 
-dump:
-	chmod +x ./tools/dump_proj.sh
-	./tools/dump_proj.sh
+# Install the final built executable to its final on-root location.
+.PHONY: install
+install: all
+	install -d "$(DESTDIR)$(PREFIX)/share/$(OUTPUT)"
+	install -m 644 bin-$(ARCH)/$(OUTPUT) "$(DESTDIR)$(PREFIX)/share/$(OUTPUT)/$(OUTPUT)-$(ARCH)"
+
+# Try to undo whatever the "install" target did.
+.PHONY: uninstall
+uninstall:
+	rm -f "$(DESTDIR)$(PREFIX)/share/$(OUTPUT)/$(OUTPUT)-$(ARCH)"
+	-rmdir "$(DESTDIR)$(PREFIX)/share/$(OUTPUT)"
 
 ===== LINKER SCRIPTS =====
 
@@ -577,6 +880,2010 @@ dump:
 
 ===== SOURCE FILES =====
 
+\n--- ./kernel/src/keyboard.h ---
+#ifndef _KEYBOARD_H
+#define _KEYBOARD_H
+
+#include "stdlib.h"
+
+// Key state tracking structure
+typedef struct {
+  bool pressed;       // Is the key currently pressed?
+  bool just_pressed;  // Was the key just pressed this frame?
+  bool just_released; // Was the key just released this frame?
+} key_state_t;
+
+// Initialize keyboard
+void keyboard_init(void);
+
+// Poll keyboard for input (call this regularly)
+void keyboard_poll(void);
+
+// Check if a specific key is currently pressed
+bool keyboard_is_pressed(u8 keycode);
+
+// Check if a key was just pressed (one-time check)
+bool keyboard_just_pressed(u8 keycode);
+
+// Check if a key was just released (one-time check)
+bool keyboard_just_released(u8 keycode);
+
+// Update keyboard state (call this at the end of each frame)
+void keyboard_update(void);
+
+#endif // _KEYBOARD_H
+\n--- ./kernel/src/gfx.h ---
+#ifndef _GFX_H
+#define _GFX_H
+
+#include "../limine-protocol/include/limine.h"
+
+#include "io.h"
+#include "stdlib.h"
+
+typedef struct {
+  int width;
+  int height;
+  u32 *pixels;
+  u64 pitch; // in pixels
+} screen_t;
+
+void initscr();
+screen_t get_screen();
+
+// ------------------------------------------------------------
+// Drawing primitives
+// ------------------------------------------------------------
+void putpixel(int x, int y, u32 col, u32 *pixels);
+
+u32 lerp_color(u32 a, u32 b, int t, int max);
+
+void fill_rect(int x, int y, int w, int h, u32 col, u32 *pixels);
+
+// Draw anti-aliased circle for better rounded corners
+void draw_circle(int cx, int cy, int radius, u32 color, u32 *pixels);
+
+// Rounded rectangle with proper anti-aliasing
+void fill_rounded_rect(int x, int y, int w, int h, int radius, u32 col,
+                       u32 *pixels);
+// Font rendering
+void draw_char(int x, int y, char c, u32 color, u32 *pixels);
+void draw_text(int x, int y, const char *text, u32 color, u32 shadow_color,
+               u32 *pixels);
+
+#endif // _GFX_H
+\n--- ./kernel/src/ui/home.c ---
+// ===== ./kernel/src/ui/home.c (rename to ui.c) =====
+#include "home.h"
+
+// system_t sys;
+
+void draw_icon(int x, int y, int size, int icon_type, u32 *pixels) {
+  theme_t *t = &sys.home.theme;
+  int center_x = x + size / 2;
+  int center_y = y + size / 2;
+
+  // Icon background circle
+  for (int i = -size / 3; i <= size / 3; i++) {
+    for (int j = -size / 3; j <= size / 3; j++) {
+      if (i * i + j * j <= (size / 3) * (size / 3)) {
+        putpixel(center_x + i, center_y + j, t->icon_bg, pixels);
+      }
+    }
+  }
+
+  // Draw icon based on type
+  switch (icon_type) {
+  case 0: // App 1
+    fill_rect(center_x - 12, center_y - 8, 24, 16, 0xFFFFFF, pixels);
+    putpixel(center_x - 6, center_y - 4, 0x000000, pixels);
+    putpixel(center_x + 6, center_y - 4, 0x000000, pixels);
+    putpixel(center_x, center_y + 4, 0x000000, pixels);
+    break;
+  case 1: // App 2
+    fill_rect(center_x - 2, center_y - 10, 4, 20, 0xFFFFFF, pixels);
+    fill_rect(center_x - 10, center_y - 2, 20, 4, 0xFFFFFF, pixels);
+    break;
+  case 2: // App 3
+    for (int i = -size / 4; i <= size / 4; i++) {
+      for (int j = -size / 4; j <= size / 4; j++) {
+        if (i * i + j * j <= (size / 4) * (size / 4)) {
+          putpixel(center_x + i, center_y + j, 0xFFFFFF, pixels);
+        }
+      }
+    }
+    fill_rect(center_x - size / 4, center_y, size / 2, 1, 0x000000, pixels);
+    fill_rect(center_x, center_y - size / 4, 1, size / 2, 0x000000, pixels);
+    break;
+  case 3: // App 4
+    fill_rect(center_x - 10, center_y - 6, 20, 12, 0xFFFFFF, pixels);
+    break;
+  case 4: // App 5
+    for (int i = 0; i < 12; i++) {
+      int start = -i;
+      int end = i;
+      for (int j = start; j <= end; j++) {
+        putpixel(center_x + j, center_y - 6 + i, 0xFFFFFF, pixels);
+      }
+    }
+    break;
+  case 5: // App 6
+    for (int i = -6; i <= 6; i++) {
+      for (int j = -6; j <= 6; j++) {
+        if (i * i + j * j <= 36) {
+          putpixel(center_x - 8 + i, center_y - 4 + j, 0xFFFFFF, pixels);
+          putpixel(center_x + 8 + i, center_y - 4 + j, 0xFFFFFF, pixels);
+        }
+      }
+    }
+    break;
+  case 6: // System
+    fill_rect(center_x - 2, center_y - 10, 4, 20, 0xFFFFFF, pixels);
+    fill_rect(center_x - 10, center_y - 2, 20, 4, 0xFFFFFF, pixels);
+    break;
+  }
+}
+
+void draw_notification_badge(int x, int y, u32 *pixels) {
+  theme_t *t = &sys.home.theme;
+
+  // Red notification circle
+  for (int i = -6; i <= 6; i++) {
+    for (int j = -6; j <= 6; j++) {
+      if (i * i + j * j <= 36) {
+        putpixel(x + i, y + j, t->notification, pixels);
+      }
+    }
+  }
+
+  // White "1" inside
+  fill_rect(x - 1, y - 3, 2, 6, 0xFFFFFF, pixels);
+  fill_rect(x - 2, y + 3, 4, 2, 0xFFFFFF, pixels);
+}
+
+void draw_tile(int x, int y, int w, int h, bool selected, app_t *app,
+               u32 *pixels) {
+  theme_t *t = &sys.home.theme;
+  int radius = 12;
+
+  // Shadow with offset
+  fill_rounded_rect(x + 8, y + 8, w, h, radius, t->shadow, pixels);
+
+  // Main tile with gradient
+  for (int yy = 0; yy < h; yy++) {
+    u32 tile_color = lerp_color(
+        app->color, selected ? t->highlight : t->tile_dark, yy * 2, h * 3);
+
+    for (int xx = 0; xx < w; xx++) {
+      // Rounded corners check
+      bool in_corner = false;
+      if (yy < radius && xx < radius) {
+        int dx = radius - xx;
+        int dy = radius - yy;
+        if (dx * dx + dy * dy > radius * radius)
+          in_corner = true;
+      }
+      if (yy < radius && xx >= w - radius) {
+        int dx = xx - (w - radius);
+        int dy = radius - yy;
+        if (dx * dx + dy * dy > radius * radius)
+          in_corner = true;
+      }
+      if (yy >= h - radius && xx < radius) {
+        int dx = radius - xx;
+        int dy = yy - (h - radius);
+        if (dx * dx + dy * dy > radius * radius)
+          in_corner = true;
+      }
+      if (yy >= h - radius && xx >= w - radius) {
+        int dx = xx - (w - radius);
+        int dy = yy - (h - radius);
+        if (dx * dx + dy * dy > radius * radius)
+          in_corner = true;
+      }
+
+      if (!in_corner) {
+        putpixel(x + xx, y + yy, tile_color, pixels);
+      }
+    }
+  }
+
+  // Top glossy highlight
+  for (int yy = 0; yy < h / 6; yy++) {
+    u32 highlight_color = lerp_color(t->tile_light, 0x00FFFFFF, yy, h / 6);
+    for (int xx = radius; xx < w - radius; xx++) {
+      putpixel(x + xx, y + yy + 2, highlight_color, pixels);
+    }
+  }
+
+  // Icon
+  draw_icon(x + w / 2, y + h / 3, 48, app->icon_type, pixels);
+
+  // App name
+  draw_text(x + w / 2 - (strlen(app->name) * 12), y + h - 40, app->name,
+            t->text_color, t->text_shadow, pixels);
+
+  // Notification badge
+  if (app->has_notification) {
+    draw_notification_badge(x + w - 20, y + 20, pixels);
+  }
+
+  // Wii U-style selection highlight (thicker, corner-only)
+  if (selected) {
+    // Bright blue color for Wii U style
+    u32 wiiu_blue = 0x0066CCFF;
+    int border_thickness = 6; // Much thicker than before
+    int corner_length = 40;   // Length of each corner segment
+
+    // Top-left corner (__ )
+    for (int i = 0; i < border_thickness; i++) {
+      // Horizontal part (top)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + j, y - border_thickness + i, wiiu_blue, pixels);
+      }
+      // Vertical part (left)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x - border_thickness + i, y + j, wiiu_blue, pixels);
+      }
+    }
+
+    // Top-right corner ( __)
+    for (int i = 0; i < border_thickness; i++) {
+      // Horizontal part (top)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + w - 1 - j, y - border_thickness + i, wiiu_blue, pixels);
+      }
+      // Vertical part (right)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + w - 1 + border_thickness - i, y + j, wiiu_blue, pixels);
+      }
+    }
+
+    // Bottom-left corner (|__ )
+    for (int i = 0; i < border_thickness; i++) {
+      // Horizontal part (bottom)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + j, y + h - 1 + border_thickness - i, wiiu_blue, pixels);
+      }
+      // Vertical part (left)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x - border_thickness + i, y + h - 1 - j, wiiu_blue, pixels);
+      }
+    }
+
+    // Bottom-right corner ( __|)
+    for (int i = 0; i < border_thickness; i++) {
+      // Horizontal part (bottom)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + w - 1 - j, y + h - 1 + border_thickness - i, wiiu_blue,
+                 pixels);
+      }
+      // Vertical part (right)
+      for (int j = 0; j < corner_length; j++) {
+        putpixel(x + w - 1 + border_thickness - i, y + h - 1 - j, wiiu_blue,
+                 pixels);
+      }
+    }
+
+    // Add small diagonal connectors in corners (makes it look more connected)
+    for (int i = 0; i < border_thickness; i++) {
+      // Top-left diagonal connector
+      for (int j = 0; j < border_thickness; j++) {
+        putpixel(x + corner_length + j, y - border_thickness + i, wiiu_blue,
+                 pixels);
+        putpixel(x - border_thickness + i, y + corner_length + j, wiiu_blue,
+                 pixels);
+      }
+
+      // Top-right diagonal connector
+      for (int j = 0; j < border_thickness; j++) {
+        putpixel(x + w - 1 - corner_length - j, y - border_thickness + i,
+                 wiiu_blue, pixels);
+        putpixel(x + w - 1 + border_thickness - i, y + corner_length + j,
+                 wiiu_blue, pixels);
+      }
+
+      // Bottom-left diagonal connector
+      for (int j = 0; j < border_thickness; j++) {
+        putpixel(x + corner_length + j, y + h - 1 + border_thickness - i,
+                 wiiu_blue, pixels);
+        putpixel(x - border_thickness + i, y + h - 1 - corner_length - j,
+                 wiiu_blue, pixels);
+      }
+
+      // Bottom-right diagonal connector
+      for (int j = 0; j < border_thickness; j++) {
+        putpixel(x + w - 1 - corner_length - j,
+                 y + h - 1 + border_thickness - i, wiiu_blue, pixels);
+        putpixel(x + w - 1 + border_thickness - i,
+                 y + h - 1 - corner_length - j, wiiu_blue, pixels);
+      }
+    }
+  }
+}
+
+void draw_header(u32 *pixels) {
+  theme_t *t = &sys.home.theme;
+  int h = get_screen().height / 12;
+
+  // Header with subtle gradient
+  for (int y = 0; y < h; y++) {
+    u32 header_color = lerp_color(t->header, t->header_shadow, y, h);
+    u32 *row = &pixels[y * get_screen().pitch];
+    for (int x = 0; x < get_screen().width; x++) {
+      row[x] = header_color;
+    }
+  }
+
+  // Time display (simulated)
+  draw_text(50, 20, "12:00", 0x333333, 0x888888, pixels);
+
+  // Center "OS LAUNCHER" properly
+  int text_width = 11 * 9; // "OS LAUNCHER" has 11 characters
+  draw_text(get_screen().width / 2 - text_width / 2, 20, "4DS LAUNCHER",
+            0x333333, 0x888888, pixels); // User icon
+  int user_x = get_screen().width - 100;
+  draw_circle(user_x, h / 2, 20, 0x0077BB, pixels);
+
+  // Bottom shadow line
+  fill_rect(0, h, get_screen().width, 2, t->shadow, pixels);
+}
+
+void draw_bottom_bar(u32 *pixels) {
+  theme_t *t = &sys.home.theme;
+  int bar_height = get_screen().height / 14;
+  int y = get_screen().height - bar_height;
+
+  // Bar with gradient
+  for (int yy = 0; yy < bar_height; yy++) {
+    u32 bar_color = lerp_color(0x00F0F0F0, 0x00E0E0E0, yy, bar_height);
+    u32 *row = &pixels[(y + yy) * get_screen().pitch];
+    for (int x = 0; x < get_screen().width; x++) {
+      row[x] = bar_color;
+    }
+  }
+
+  // Top shadow line
+  fill_rect(0, y, get_screen().width, 2, t->shadow, pixels);
+
+  // Quick launch icons
+  const char *quick_icons[] = {"HOME", "APPS", "SETTINGS", "HELP"};
+  for (int i = 0; i < 4; i++) {
+    int icon_width = strlen(quick_icons[i]) * 9;
+    int icon_x = 100 + i * 200 - icon_width / 2;
+    draw_text(icon_x, y + 15, quick_icons[i], 0x666666, 0xBBBBBB, pixels);
+  }
+\n--- ./kernel/src/ui/home.h ---
+// ===== ./kernel/src/ui/home.h (rename to ui.h) =====
+#ifndef _UI_H
+#define _UI_H
+
+#include "../gfx.h"
+#include "../stdlib.h"
+#include "../string.h"
+
+typedef struct {
+  u32 bg_top;
+  u32 bg_bottom;
+  u32 tile;
+  u32 tile_light;
+  u32 tile_dark;
+  u32 shadow;
+  u32 header;
+  u32 header_shadow;
+  u32 icon_bg;
+  u32 text_color;
+  u32 text_shadow;
+  u32 highlight;
+  u32 notification;
+} theme_t;
+
+typedef struct {
+  char name[32];
+  u32 color;
+  int icon_type;
+  bool has_notification;
+} app_t;
+
+typedef struct {
+  int cols;
+  int rows;
+  int app_count;
+  int selected_tile;
+  theme_t theme;
+  app_t apps[16];
+} home_t;
+
+typedef struct {
+  home_t home;
+} system_t;
+
+extern system_t sys;
+
+// ------------------------------------------------------------
+// UI elements
+// ------------------------------------------------------------
+void draw_icon(int x, int y, int size, int icon_type, u32 *pixels);
+void draw_notification_badge(int x, int y, u32 *pixels);
+void draw_tile(int x, int y, int w, int h, bool selected, app_t *app,
+               u32 *pixels);
+
+void draw_header(u32 *pixels);
+void draw_bottom_bar(u32 *pixels);
+
+void draw_background(u32 *pixels);
+void draw_home_screen(u32 *pixels);
+
+void init_apps();
+
+#endif // _UI_H
+\n--- ./kernel/src/math.h ---
+// ============================================================================
+// math.h implementations
+// ============================================================================
+
+#ifndef _MATH_H
+#define _MATH_H
+
+#include <stdbool.h>
+#include <stdint.h>
+
+// ------------------------------------------------------------
+// Constants
+// ------------------------------------------------------------
+
+#define M_E 2.71828182845904523536        // e
+#define M_LOG2E 1.44269504088896340736    // log2(e)
+#define M_LOG10E 0.43429448190325182765   // log10(e)
+#define M_LN2 0.69314718055994530942      // ln(2)
+#define M_LN10 2.30258509299404568402     // ln(10)
+#define M_PI 3.14159265358979323846       // π
+#define M_PI_2 1.57079632679489661923     // π/2
+#define M_PI_4 0.78539816339744830962     // π/4
+#define M_1_PI 0.31830988618379067154     // 1/π
+#define M_2_PI 0.63661977236758134308     // 2/π
+#define M_2_SQRTPI 1.12837916709551257390 // 2/√π
+#define M_SQRT2 1.41421356237309504880    // √2
+#define M_SQRT1_2 0.70710678118654752440  // 1/√2
+#define M_TAU 6.28318530717958647692      // τ (2π)
+
+// Floating point types
+typedef float f32;
+typedef double f64;
+
+// ------------------------------------------------------------
+// Function prototypes
+// ------------------------------------------------------------
+
+// Basic functions
+static inline f64 fabs(f64 x);
+static inline f32 fabsf(f32 x);
+static f64 fmod(f64 x, f64 y);
+static inline f64 fmax(f64 a, f64 b);
+static inline f64 fmin(f64 a, f64 b);
+
+// Power and exponential
+static f64 sqrt(f64 x);
+static f32 sqrtf(f32 x);
+static f64 powi(f64 base, int exp);
+static f64 pow(f64 x, f64 y);
+static f64 exp(f64 x);
+static f64 log(f64 x);
+static f64 log10(f64 x);
+static f64 log2(f64 x);
+
+// Trigonometric
+static f64 reduce_angle(f64 x);
+static f64 sin(f64 x);
+static f64 cos(f64 x);
+static f64 tan(f64 x);
+static f64 asin(f64 x);
+static f64 acos(f64 x);
+static f64 atan(f64 x);
+static f64 atan2(f64 y, f64 x);
+
+// Hyperbolic
+static f64 sinh(f64 x);
+static f64 cosh(f64 x);
+static f64 tanh(f64 x);
+
+// Rounding
+static f64 floor(f64 x);
+static f64 ceil(f64 x);
+static f64 trunc(f64 x);
+static f64 round(f64 x);
+
+// Absolute value and sign
+static inline int abs(int x);
+static inline long int labs(long int x);
+static inline long long int llabs(long long int x);
+static inline f64 copysign(f64 x, f64 y);
+static inline f64 signbit(f64 x);
+
+// Special functions
+static f64 hypot(f64 x, f64 y);
+static f64 erf(f64 x);
+static f64 erfc(f64 x);
+static f64 tgamma(f64 x);
+static f64 lgamma(f64 x);
+
+// Floating point classification
+static inline int fpclassify(f64 x);
+static inline int isfinite(f64 x);
+static inline int isinf(f64 x);
+static inline int isnan(f64 x);
+static inline int isnormal(f64 x);
+
+// ------------------------------------------------------------
+// Basic functions implementations
+// ------------------------------------------------------------
+
+static inline f64 fabs(f64 x) {
+  union {
+    f64 f;
+    uint64_t i;
+  } u = {x};
+  u.i &= 0x7FFFFFFFFFFFFFFFULL;
+  return u.f;
+}
+
+static inline f32 fabsf(f32 x) {
+  union {
+    f32 f;
+    uint32_t i;
+  } u = {x};
+  u.i &= 0x7FFFFFFF;
+  return u.f;
+}
+
+static inline f64 fmax(f64 a, f64 b) {
+  if (a != a)
+    return b; // a is NaN
+  if (b != b)
+    return a; // b is NaN
+  return (a > b) ? a : b;
+}
+
+static inline f64 fmin(f64 a, f64 b) {
+  if (a != a)
+    return b; // a is NaN
+  if (b != b)
+    return a; // b is NaN
+  return (a < b) ? a : b;
+}
+
+// ------------------------------------------------------------
+// Power and exponential functions
+// ------------------------------------------------------------
+
+// Square root using Newton's method
+static f64 sqrt(f64 x) {
+  if (x < 0.0)
+    return 0.0 / 0.0; // NaN
+  if (x == 0.0)
+    return 0.0;
+
+  // Initial guess
+  f64 y = x;
+  f64 z = (y + x / y) / 2.0;
+
+  // Iterate to improve accuracy
+  while (fabs(y - z) >= 1e-15) {
+    y = z;
+    z = (y + x / y) / 2.0;
+  }
+
+  return z;
+}
+
+static f32 sqrtf(f32 x) { return (f32)sqrt((f64)x); }
+
+// Fast integer power
+static f64 powi(f64 base, int exp) {
+  if (exp == 0)
+    return 1.0;
+  if (exp == 1)
+    return base;
+  if (exp < 0)
+    return 1.0 / powi(base, -exp);
+
+  f64 result = 1.0;
+  while (exp > 0) {
+    if (exp & 1)
+      result *= base;
+    base *= base;
+    exp >>= 1;
+  }
+  return result;
+}
+
+// Exponential function using Taylor series
+static f64 exp(f64 x) {
+  // Handle negative inputs
+  bool neg = x < 0;
+  if (neg)
+    x = -x;
+
+  // Scale down
+  int n = 0;
+  while (x > 1.0) {
+    x /= M_E;
+    n++;
+  }
+
+  // Taylor series expansion
+  f64 term = 1.0;
+  f64 sum = 1.0;
+
+  for (int i = 1; i < 20; i++) {
+    term *= x / i;
+    sum += term;
+    if (term < 1e-15)
+      break;
+  }
+
+  // Scale back up
+  while (n > 0) {
+    sum *= M_E;
+    n--;
+  }
+
+  return neg ? 1.0 / sum : sum;
+}
+
+// Natural logarithm using Newton's method
+static f64 log(f64 x) {
+  if (x <= 0.0)
+    return 0.0 / 0.0; // NaN
+
+  // Reduce range
+  f64 y = 0.0;
+  while (x >= 2.0) {
+    x /= M_E;
+    y += 1.0;
+  }
+  while (x < 1.0) {
+    x *= M_E;
+    y -= 1.0;
+  }
+
+  // Newton's method: solve exp(z) = x
+  x -= 1.0; // Now x is in [0, 1)
+  f64 z = x;
+  f64 term = x;
+
+  for (int i = 2; i < 30; i++) {
+    term *= -x;
+    z += term / i;
+    if (fabs(term) < 1e-15)
+      break;
+  }
+
+  return y + z;
+}
+
+// General power function using exp(y * log(x))
+static f64 pow(f64 x, f64 y) {
+  // Handle special cases
+  if (x == 1.0 || y == 0.0)
+    return 1.0;
+  if (y == 1.0)
+    return x;
+  if (x == 0.0) {
+    if (y > 0.0)
+      return 0.0;
+    if (y < 0.0)
+      return 1.0 / 0.0; // Infinity
+    return 1.0;         // 0^0
+  }
+
+  // Use identity: x^y = exp(y * log(x))
+  return exp(y * log(x));
+}
+
+// Base-10 logarithm
+static f64 log10(f64 x) { return log(x) * M_LOG10E; }
+
+// Base-2 logarithm
+static f64 log2(f64 x) { return log(x) * M_LOG2E; }
+
+// ------------------------------------------------------------
+// Rounding functions (need to be defined before fmod)
+// ------------------------------------------------------------
+
+static f64 floor(f64 x) {
+  if (x >= 0.0)
+    return (f64)((int64_t)x);
+  f64 i = (f64)((int64_t)x);
+  return (i == x) ? i : i - 1.0;
+}
+
+static f64 ceil(f64 x) {
+  if (x <= 0.0)
+    return (f64)((int64_t)x);
+  f64 i = (f64)((int64_t)x);
+  return (i == x) ? i : i + 1.0;
+}
+
+static f64 trunc(f64 x) { return (x >= 0.0) ? floor(x) : ceil(x); }
+
+static f64 round(f64 x) { return (x >= 0.0) ? floor(x + 0.5) : ceil(x - 0.5); }
+
+// Now define fmod after trunc is defined
+static f64 fmod(f64 x, f64 y) {
+  if (y == 0.0)
+    return 0.0 / 0.0; // NaN
+
+  f64 n = trunc(x / y);
+  return x - n * y;
+}
+
+\n--- ./kernel/src/gfx.c ---
+#include "gfx.h"
+
+__attribute__((used)) volatile struct limine_framebuffer_request fb_request = {
+    .id = LIMINE_FRAMEBUFFER_REQUEST_ID, .revision = 0};
+
+screen_t _screen;
+struct limine_framebuffer *fb = NULL;
+
+void initscr() {
+  ASSERT(fb_request.response && fb_request.response->framebuffers > 0);
+  fb = fb_request.response->framebuffers[0];
+
+  _screen.pixels = (u32 *)fb->address;
+  _screen.width = fb->width;
+  _screen.height = fb->height;
+  _screen.pitch = fb->pitch / 4;
+}
+
+screen_t get_screen() { return _screen; }
+
+void putpixel(int x, int y, u32 col, u32 *pixels) {
+  if ((unsigned)x >= (unsigned)_screen.width ||
+      (unsigned)y >= (unsigned)_screen.height)
+    return;
+
+  pixels[y * _screen.pitch + x] = col;
+}
+
+u32 lerp_color(u32 a, u32 b, int t, int max) {
+  int ar = (a >> 16) & 255;
+  int ag = (a >> 8) & 255;
+  int ab = (a) & 255;
+
+  int br = (b >> 16) & 255;
+  int bg = (b >> 8) & 255;
+  int bb = (b) & 255;
+
+  int r = ar + (br - ar) * t / max;
+  int g = ag + (bg - ag) * t / max;
+  int b2 = ab + (bb - ab) * t / max;
+
+  return (r << 16) | (g << 8) | b2;
+}
+
+void fill_rect(int x, int y, int w, int h, u32 col, u32 *pixels) {
+  if (w <= 0 || h <= 0)
+    return;
+
+  for (int yy = 0; yy < h; yy++) {
+    u32 *row = &pixels[(y + yy) * _screen.pitch + x];
+    for (int xx = 0; xx < w; xx++)
+      row[xx] = col;
+  }
+}
+
+// Draw anti-aliased circle for better rounded corners
+void draw_circle(int cx, int cy, int radius, u32 color, u32 *pixels) {
+  int r2 = radius * radius;
+  for (int y = -radius; y <= radius; y++) {
+    for (int x = -radius; x <= radius; x++) {
+      if (x * x + y * y <= r2) {
+        putpixel(cx + x, cy + y, color, pixels);
+      }
+    }
+  }
+}
+
+// Rounded rectangle with proper anti-aliasing
+void fill_rounded_rect(int x, int y, int w, int h, int radius, u32 col,
+                       u32 *pixels) {
+  // Fill center
+  fill_rect(x + radius, y, w - 2 * radius, h, col, pixels);
+  fill_rect(x, y + radius, w, h - 2 * radius, col, pixels);
+
+  // Draw corners
+  for (int i = 0; i <= radius; i++) {
+    for (int j = 0; j <= radius; j++) {
+      if (i * i + j * j <= radius * radius) {
+        putpixel(x + i, y + j, col, pixels);
+        putpixel(x + w - 1 - i, y + j, col, pixels);
+        putpixel(x + i, y + h - 1 - j, col, pixels);
+        putpixel(x + w - 1 - i, y + h - 1 - j, col, pixels);
+      }
+    }
+  }
+}
+
+// Simple 8x8 font - ASCII 32-127
+static const u8 font_8x8[96][8] = {
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // space
+    {0x18, 0x3C, 0x3C, 0x18, 0x18, 0x00, 0x18, 0x00}, // !
+    {0x6C, 0x6C, 0x6C, 0x00, 0x00, 0x00, 0x00, 0x00}, // "
+    {0x6C, 0x6C, 0xFE, 0x6C, 0xFE, 0x6C, 0x6C, 0x00}, // #
+    {0x30, 0x7C, 0xC0, 0x78, 0x0C, 0xF8, 0x30, 0x00}, // $
+    {0x00, 0xC6, 0xCC, 0x18, 0x30, 0x66, 0xC6, 0x00}, // %
+    {0x38, 0x6C, 0x38, 0x76, 0xDC, 0xCC, 0x76, 0x00}, // &
+    {0x60, 0x60, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00}, // '
+    {0x18, 0x30, 0x60, 0x60, 0x60, 0x30, 0x18, 0x00}, // (
+    {0x60, 0x30, 0x18, 0x18, 0x18, 0x30, 0x60, 0x00}, // )
+    {0x00, 0x66, 0x3C, 0xFF, 0x3C, 0x66, 0x00, 0x00}, // *
+    {0x00, 0x30, 0x30, 0xFC, 0x30, 0x30, 0x00, 0x00}, // +
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x30, 0x60}, // ,
+    {0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00, 0x00}, // -
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x30, 0x00}, // .
+    {0x06, 0x0C, 0x18, 0x30, 0x60, 0xC0, 0x80, 0x00}, // /
+
+    // Digits 0-9
+    {0x7C, 0xC6, 0xCE, 0xD6, 0xE6, 0xC6, 0x7C, 0x00}, // 0
+    {0x30, 0x70, 0x30, 0x30, 0x30, 0x30, 0xFC, 0x00}, // 1
+    {0x78, 0xCC, 0x0C, 0x38, 0x60, 0xCC, 0xFC, 0x00}, // 2
+    {0x78, 0xCC, 0x0C, 0x38, 0x0C, 0xCC, 0x78, 0x00}, // 3
+    {0x1C, 0x3C, 0x6C, 0xCC, 0xFE, 0x0C, 0x1E, 0x00}, // 4
+    {0xFC, 0xC0, 0xF8, 0x0C, 0x0C, 0xCC, 0x78, 0x00}, // 5
+    {0x38, 0x60, 0xC0, 0xF8, 0xCC, 0xCC, 0x78, 0x00}, // 6
+    {0xFC, 0xCC, 0x0C, 0x18, 0x30, 0x30, 0x30, 0x00}, // 7
+    {0x78, 0xCC, 0xCC, 0x78, 0xCC, 0xCC, 0x78, 0x00}, // 8
+    {0x78, 0xCC, 0xCC, 0x7C, 0x0C, 0x18, 0x70, 0x00}, // 9
+
+    // Colon, semicolon, etc.
+    {0x00, 0x30, 0x30, 0x00, 0x00, 0x30, 0x30, 0x00}, // :
+    {0x00, 0x30, 0x30, 0x00, 0x00, 0x30, 0x30, 0x60}, // ;
+    {0x18, 0x30, 0x60, 0xC0, 0x60, 0x30, 0x18, 0x00}, // <
+    {0x00, 0x00, 0xFC, 0x00, 0x00, 0xFC, 0x00, 0x00}, // =
+    {0x60, 0x30, 0x18, 0x0C, 0x18, 0x30, 0x60, 0x00}, // >
+    {0x78, 0xCC, 0x0C, 0x18, 0x30, 0x00, 0x30, 0x00}, // ?
+    {0x7C, 0xC6, 0xDE, 0xDE, 0xDE, 0xC0, 0x78, 0x00}, // @
+
+    // Uppercase A-Z
+    {0x30, 0x78, 0xCC, 0xCC, 0xFC, 0xCC, 0xCC, 0x00}, // A
+    {0xFC, 0x66, 0x66, 0x7C, 0x66, 0x66, 0xFC, 0x00}, // B
+    {0x3C, 0x66, 0xC0, 0xC0, 0xC0, 0x66, 0x3C, 0x00}, // C
+    {0xF8, 0x6C, 0x66, 0x66, 0x66, 0x6C, 0xF8, 0x00}, // D
+    {0xFE, 0x62, 0x68, 0x78, 0x68, 0x62, 0xFE, 0x00}, // E
+    {0xFE, 0x62, 0x68, 0x78, 0x68, 0x60, 0xF0, 0x00}, // F
+    {0x3C, 0x66, 0xC0, 0xC0, 0xCE, 0x66, 0x3E, 0x00}, // G
+    {0xCC, 0xCC, 0xCC, 0xFC, 0xCC, 0xCC, 0xCC, 0x00}, // H
+    {0x78, 0x30, 0x30, 0x30, 0x30, 0x30, 0x78, 0x00}, // I
+    {0x1E, 0x0C, 0x0C, 0x0C, 0xCC, 0xCC, 0x78, 0x00}, // J
+    {0xE6, 0x66, 0x6C, 0x78, 0x6C, 0x66, 0xE6, 0x00}, // K
+    {0xF0, 0x60, 0x60, 0x60, 0x62, 0x66, 0xFE, 0x00}, // L
+    {0xC6, 0xEE, 0xFE, 0xFE, 0xD6, 0xC6, 0xC6, 0x00}, // M
+    {0xC6, 0xE6, 0xF6, 0xDE, 0xCE, 0xC6, 0xC6, 0x00}, // N
+    {0x38, 0x6C, 0xC6, 0xC6, 0xC6, 0x6C, 0x38, 0x00}, // O
+    {0xFC, 0x66, 0x66, 0x7C, 0x60, 0x60, 0xF0, 0x00}, // P
+    {0x78, 0xCC, 0xCC, 0xCC, 0xDC, 0x78, 0x1C, 0x00}, // Q
+    {0xFC, 0x66, 0x66, 0x7C, 0x6C, 0x66, 0xE6, 0x00}, // R
+    {0x78, 0xCC, 0xE0, 0x70, 0x1C, 0xCC, 0x78, 0x00}, // S
+    {0xFC, 0xB4, 0x30, 0x30, 0x30, 0x30, 0x78, 0x00}, // T
+    {0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0xFC, 0x00}, // U
+    {0xCC, 0xCC, 0xCC, 0xCC, 0xCC, 0x78, 0x30, 0x00}, // V
+    {0xC6, 0xC6, 0xC6, 0xD6, 0xFE, 0xEE, 0xC6, 0x00}, // W
+    {0xC6, 0xC6, 0x6C, 0x38, 0x38, 0x6C, 0xC6, 0x00}, // X
+    {0xCC, 0xCC, 0xCC, 0x78, 0x30, 0x30, 0x78, 0x00}, // Y
+    {0xFE, 0xC6, 0x8C, 0x18, 0x32, 0x66, 0xFE, 0x00}, // Z
+
+    // Brackets
+    {0x78, 0x60, 0x60, 0x60, 0x60, 0x60, 0x78, 0x00}, // [
+    {0xC0, 0x60, 0x30, 0x18, 0x0C, 0x06, 0x02, 0x00}, // backslash
+    {0x78, 0x18, 0x18, 0x18, 0x18, 0x18, 0x78, 0x00}, // ]
+    {0x10, 0x38, 0x6C, 0xC6, 0x00, 0x00, 0x00, 0x00}, // ^
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF}, // _
+    {0x30, 0x30, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00}, // `
+
+    // Lowercase a-z
+    {0x00, 0x00, 0x78, 0x0C, 0x7C, 0xCC, 0x76, 0x00}, // a
+    {0xE0, 0x60, 0x60, 0x7C, 0x66, 0x66, 0xDC, 0x00}, // b
+    {0x00, 0x00, 0x78, 0xCC, 0xC0, 0xCC, 0x78, 0x00}, // c
+    {0x1C, 0x0C, 0x0C, 0x7C, 0xCC, 0xCC, 0x76, 0x00}, // d
+    {0x00, 0x00, 0x78, 0xCC, 0xFC, 0xC0, 0x78, 0x00}, // e
+    {0x38, 0x6C, 0x60, 0xF0, 0x60, 0x60, 0xF0, 0x00}, // f
+    {0x00, 0x00, 0x76, 0xCC, 0xCC, 0x7C, 0x0C, 0xF8}, // g
+    {0xE0, 0x60, 0x6C, 0x76, 0x66, 0x66, 0xE6, 0x00}, // h
+    {0x30, 0x00, 0x70, 0x30, 0x30, 0x30, 0x78, 0x00}, // i
+    {0x0C, 0x00, 0x0C, 0x0C, 0x0C, 0xCC, 0xCC, 0x78}, // j
+    {0xE0, 0x60, 0x66, 0x6C, 0x78, 0x6C, 0xE6, 0x00}, // k
+    {0x70, 0x30, 0x30, 0x30, 0x30, 0x30, 0x78, 0x00}, // l
+    {0x00, 0x00, 0xCC, 0xFE, 0xFE, 0xD6, 0xC6, 0x00}, // m
+    {0x00, 0x00, 0xF8, 0xCC, 0xCC, 0xCC, 0xCC, 0x00}, // n
+    {0x00, 0x00, 0x78, 0xCC, 0xCC, 0xCC, 0x78, 0x00}, // o
+    {0x00, 0x00, 0xDC, 0x66, 0x66, 0x7C, 0x60, 0xF0}, // p
+    {0x00, 0x00, 0x76, 0xCC, 0xCC, 0x7C, 0x0C, 0x1E}, // q
+    {0x00, 0x00, 0xDC, 0x76, 0x66, 0x60, 0xF0, 0x00}, // r
+    {0x00, 0x00, 0x7C, 0xC0, 0x78, 0x0C, 0xF8, 0x00}, // s
+    {0x10, 0x30, 0x7C, 0x30, 0x30, 0x34, 0x18, 0x00}, // t
+    {0x00, 0x00, 0xCC, 0xCC, 0xCC, 0xCC, 0x76, 0x00}, // u
+    {0x00, 0x00, 0xCC, 0xCC, 0xCC, 0x78, 0x30, 0x00}, // v
+    {0x00, 0x00, 0xC6, 0xD6, 0xFE, 0xFE, 0x6C, 0x00}, // w
+    {0x00, 0x00, 0xC6, 0x6C, 0x38, 0x6C, 0xC6, 0x00}, // x
+    {0x00, 0x00, 0xCC, 0xCC, 0xCC, 0x7C, 0x0C, 0xF8}, // y
+    {0x00, 0x00, 0xFC, 0x98, 0x30, 0x64, 0xFC, 0x00}, // z
+
+    // Braces
+    {0x1C, 0x30, 0x30, 0xE0, 0x30, 0x30, 0x1C, 0x00}, // {
+    {0x18, 0x18, 0x18, 0x00, 0x18, 0x18, 0x18, 0x00}, // |
+    {0xE0, 0x30, 0x30, 0x1C, 0x30, 0x30, 0xE0, 0x00}, // }
+    {0x76, 0xDC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // ~
+    {0x00, 0x10, 0x38, 0x6C, 0xC6, 0xC6, 0xFE, 0x00}  // del
+};
+
+// Draw a single character
+void draw_char(int x, int y, char c, u32 color, u32 *pixels) {
+  if (c < 32 || c > 127)
+    return; // Only printable ASCII
+
+  const u8 *glyph = font_8x8[c - 32];
+
+  for (int row = 0; row < 8; row++) {
+    u8 row_data = glyph[row];
+    for (int col = 0; col < 8; col++) {
+      if (row_data & (1 << (7 - col))) {
+        putpixel(x + col, y + row, color, pixels);
+      }
+    }
+  }
+}
+
+// Draw text string
+void draw_text(int x, int y, const char *text, u32 color, u32 shadow_color,
+               u32 *pixels) {
+  int start_x = x;
+
+  while (*text) {
+    // Draw shadow (offset by 1 pixel)
+    if (shadow_color != 0) {
+      draw_char(start_x + 1, y + 1, *text, shadow_color, pixels);
+    }
+
+    // Draw main character
+    draw_char(start_x, y, *text, color, pixels);
+
+    start_x += 9; // 8 pixels width + 1 pixel spacing
+    text++;
+  }
+}
+\n--- ./kernel/src/keyboard.c ---
+#include "keyboard.h"
+#include "io.h"
+#include "stdlib.h"
+#include "string.h"
+
+// Key states for all possible keys (0-127)
+static key_state_t key_states[128];
+static key_state_t prev_key_states[128];
+
+// Initialize keyboard
+void keyboard_init(void) {
+  printb_str("Initializing keyboard...\n");
+
+  // Clear all key states
+  memset(key_states, 0, sizeof(key_states));
+  memset(prev_key_states, 0, sizeof(prev_key_states));
+
+  // Simple PS/2 initialization
+  keyboard_send_command(KEYBOARD_ENABLE);
+
+  // Clear any pending data
+  while (inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) {
+    inb(PS2_DATA_PORT);
+  }
+
+  printb_str("Keyboard ready\n");
+}
+
+// Poll keyboard for input
+void keyboard_poll(void) {
+  if (inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) {
+    u8 scancode = inb(PS2_DATA_PORT);
+
+    // Debug: print scancode
+    printb_str("Scancode: 0x");
+    printb_hex(scancode);
+    printb_str("\n");
+
+    // Check for key release (bit 7 set)
+    bool released = scancode & 0x80;
+    u8 keycode = scancode & 0x7F;
+
+    if (released) {
+      // Key released
+      key_states[keycode].pressed = false;
+      key_states[keycode].just_released = true;
+      printb_str("Key released: 0x");
+      printb_hex(keycode);
+      printb_str("\n");
+    } else {
+      // Key pressed
+      key_states[keycode].pressed = true;
+      key_states[keycode].just_pressed = true;
+      printb_str("Key pressed: 0x");
+      printb_hex(keycode);
+      printb_str("\n");
+
+      // Update modifier keys
+      switch (keycode) {
+      case KEY_LSHIFT:
+      case KEY_RSHIFT:
+        shift_pressed = true;
+        break;
+      case KEY_LCTRL:
+        ctrl_pressed = true;
+        break;
+      case KEY_LALT:
+        alt_pressed = true;
+        break;
+      case KEY_CAPSLOCK:
+        caps_lock = !caps_lock;
+        keyboard_set_leds(scroll_lock, num_lock, caps_lock);
+        break;
+      }
+    }
+  }
+}
+
+// Check if a key is currently pressed
+bool keyboard_is_pressed(u8 keycode) {
+  if (keycode >= 128)
+    return false;
+  return key_states[keycode].pressed;
+}
+
+// Check if a key was just pressed
+bool keyboard_just_pressed(u8 keycode) {
+  if (keycode >= 128)
+    return false;
+  return key_states[keycode].just_pressed;
+}
+
+// Check if a key was just released
+bool keyboard_just_released(u8 keycode) {
+  if (keycode >= 128)
+    return false;
+  return key_states[keycode].just_released;
+}
+
+// Update keyboard state (call at end of frame)
+void keyboard_update(void) {
+  // Copy current states to previous states
+  memcpy(prev_key_states, key_states, sizeof(key_states));
+
+  // Clear the "just" flags for next frame
+  for (int i = 0; i < 128; i++) {
+    key_states[i].just_pressed = false;
+    key_states[i].just_released = false;
+  }
+}
+\n--- ./kernel/src/io.c ---
+#include "io.h"
+
+// Basic port I/O
+void outb(u16 port, u8 value) {
+  __asm__ volatile("outb %0, %1" : : "a"(value), "Nd"(port));
+}
+
+u8 inb(u16 port) {
+  uint8_t ret;
+  __asm__ volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
+  return ret;
+}
+
+void outw(u16 port, u16 value) {
+  __asm__ volatile("outw %0, %1" : : "a"(value), "Nd"(port));
+}
+
+u16 inw(u16 port) {
+  uint16_t ret;
+  __asm__ volatile("inw %1, %0" : "=a"(ret) : "Nd"(port));
+  return ret;
+}
+
+void outl(u16 port, u32 value) {
+  __asm__ volatile("outl %0, %1" : : "a"(value), "Nd"(port));
+}
+
+u32 inl(u16 port) {
+  uint32_t ret;
+  __asm__ volatile("inl %1, %0" : "=a"(ret) : "Nd"(port));
+  return ret;
+}
+
+// Small delay for I/O operations
+void io_wait(void) { outb(0x80, 0); }
+
+// ========= KEYBOARD IMPLEMENTATION =========
+
+// REMOVE THE 'static' KEYWORD - these variables are now shared
+bool shift_pressed = false;
+bool ctrl_pressed = false;
+bool alt_pressed = false;
+bool caps_lock = false;
+bool num_lock = false;
+bool scroll_lock = false;
+
+// Wait for keyboard input buffer to be ready
+static void keyboard_wait_write(void) {
+  while (inb(PS2_STATUS_PORT) & PS2_INPUT_FULL)
+    io_wait();
+}
+
+// Wait for keyboard output buffer to have data
+static void keyboard_wait_read(void) {
+  while (!(inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL))
+    io_wait();
+}
+
+// Send command to keyboard controller
+void keyboard_send_command(u8 cmd) {
+  keyboard_wait_write();
+  outb(PS2_COMMAND_PORT, cmd);
+}
+
+// Send command to keyboard (not controller)
+static void keyboard_send_data(u8 data) {
+  keyboard_wait_write();
+  outb(PS2_DATA_PORT, data);
+}
+
+// In io.c, update keyboard_init:/*
+/*void keyboard_init(void) {
+  printb_str("Starting keyboard initialization...\n");
+
+  // Disable keyboard
+  keyboard_send_command(KEYBOARD_DISABLE);
+  io_wait();
+
+  // Clear any pending data
+  while (inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) {
+    u8 data = inb(PS2_DATA_PORT);
+    printb_str("Clearing garbage: 0x");
+    printb_hex(data);
+    printb_str("\n");
+    io_wait();
+  }
+
+  // Enable keyboard
+  keyboard_send_command(KEYBOARD_ENABLE);
+  io_wait();
+
+  // Send reset command
+  keyboard_send_data(0xFF); // Reset command
+  io_wait();
+
+  // Wait for response
+  int timeout = 100000;
+  while (!(inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) && timeout-- > 0) {
+    io_wait();
+  }
+
+  if (timeout > 0) {
+    u8 response = inb(PS2_DATA_PORT);
+    printb_str("Reset response: 0x");
+    printb_hex(response);
+    printb_str("\n");
+
+    if (response == 0xFA) {
+      // Wait for success code
+      timeout = 100000;
+      while (!(inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) && timeout-- > 0) {
+        io_wait();
+      }
+      if (timeout > 0) {
+        u8 success = inb(PS2_DATA_PORT);
+        printb_str("Reset success: 0x");
+        printb_hex(success);
+        printb_str("\n");
+      }
+    }
+  }*
+
+// Enable scanning
+keyboard_send_data(0xF4);
+io_wait();
+
+timeout = 100000;
+while (!(inb(PS2_STATUS_PORT) & PS2_OUTPUT_FULL) && timeout-- > 0) {
+  io_wait();
+}
+
+if (timeout > 0) {
+  u8 ack = inb(PS2_DATA_PORT);
+  printb_str("Keyboard ACK: 0x");
+  printb_hex(ack);
+  printb_str("\n");
+} else {
+  printb_str("Keyboard timeout - assuming it's working\n");
+}
+
+printb_str("Keyboard initialization complete\n");
+}*/
+
+// Read a scancode from keyboard
+u8 keyboard_read_scancode(void) {
+  keyboard_wait_read();
+  return inb(PS2_DATA_PORT);
+}
+
+// Set keyboard LED states
+void keyboard_set_leds(bool scroll, bool num, bool caps) {
+  keyboard_send_data(0xED); // Command to set LEDs
+  keyboard_wait_read();
+  inb(PS2_DATA_PORT); // Read ACK
+
+  u8 led_state = 0;
+  if (scroll)
+    led_state |= 0x01;
+  if (num)
+    led_state |= 0x02;
+  if (caps)
+    led_state |= 0x04;
+
+  keyboard_send_data(led_state);
+  keyboard_wait_read();
+  inb(PS2_DATA_PORT); // Read ACK
+
+  scroll_lock = scroll;
+  num_lock = num;
+  caps_lock = caps;
+}
+
+// Check if scancode is for a printable character
+bool keyboard_is_printable(u8 scancode) {
+  // Printable scancodes range from 0x02 to 0x53 (excluding special keys)
+  if (scancode >= 0x02 && scancode <= 0x0D)
+    return true; // 1-0 and symbols
+  if (scancode >= 0x10 && scancode <= 0x1B)
+    return true; // Q-P and symbols
+  if (scancode >= 0x1E && scancode <= 0x26)
+    return true; // A-L and symbols
+  if (scancode >= 0x2C && scancode <= 0x32)
+    return true; // Z-M and symbols
+  if (scancode >= 0x39 && scancode <= 0x3A)
+    return true; // Space and Caps
+  if (scancode == 0x0E)
+    return true; // Backspace (we treat as printable for editing)
+  if (scancode == 0x1C)
+    return true; // Enter
+  if (scancode == 0x0F)
+    return true; // Tab
+
+  return false;
+}
+
+// Convert scancode to character (ASCII)
+char keyboard_scancode_to_char(u8 scancode, bool shift_pressed) {
+  // US QWERTY keyboard layout
+  static const char normal_map[] = {
+      0,   0,   '1',  '2', '3',  '4', '5', '6',  '7', '8', '9', '0',
+      '-', '=', 0x08, 0,   'q',  'w', 'e', 'r',  't', 'y', 'u', 'i',
+      'o', 'p', '[',  ']', '\n', 0,   'a', 's',  'd', 'f', 'g', 'h',
+      'j', 'k', 'l',  ';', '\'', '`', 0,   '\\', 'z', 'x', 'c', 'v',
+      'b', 'n', 'm',  ',', '.',  '/', 0,   '*',  0,   ' '};
+
+  static const char shift_map[] = {
+      0,   0,   '!',  '@', '#',  '$', '%', '^', '&', '*', '(', ')',
+      '_', '+', 0x08, 0,   'Q',  'W', 'E', 'R', 'T', 'Y', 'U', 'I',
+      'O', 'P', '{',  '}', '\n', 0,   'A', 'S', 'D', 'F', 'G', 'H',
+      'J', 'K', 'L',  ':', '"',  '~', 0,   '|', 'Z', 'X', 'C', 'V',
+      'B', 'N', 'M',  '<', '>',  '?', 0,   '*', 0,   ' '};
+
+  static const char caps_map[] = {
+      0,   0,   '1',  '2', '3',  '4', '5', '6',  '7', '8', '9', '0',
+      '-', '=', 0x08, 0,   'Q',  'W', 'E', 'R',  'T', 'Y', 'U', 'I',
+      'O', 'P', '[',  ']', '\n', 0,   'A', 'S',  'D', 'F', 'G', 'H',
+      'J', 'K', 'L',  ';', '\'', '`', 0,   '\\', 'Z', 'X', 'C', 'V',
+      'B', 'N', 'M',  ',', '.',  '/', 0,   '*',  0,   ' '};
+
+  static const char caps_shift_map[] = {
+      0,   0,   '!',  '@', '#',  '$', '%', '^', '&', '*', '(', ')',
+      '_', '+', 0x08, 0,   'q',  'w', 'e', 'r', 't', 'y', 'u', 'i',
+      'o', 'p', '{',  '}', '\n', 0,   'a', 's', 'd', 'f', 'g', 'h',
+      'j', 'k', 'l',  ':', '"',  '~', 0,   '|', 'z', 'x', 'c', 'v',
+      'B', 'N', 'M',  '<', '>',  '?', 0,   '*', 0,   ' '};
+
+  if (scancode >= sizeof(normal_map))
+    return 0;
+
+  if (caps_lock) {
+    if (shift_pressed) {
+      return caps_shift_map[scancode];
+    } else {
+      return caps_map[scancode];
+    }
+  } else {
+    if (shift_pressed) {
+      return shift_map[scancode];
+    } else {
+      return normal_map[scancode];
+    }
+  }
+}
+
+// ========= SERIAL OUTPUT =========
+
+void printb_str(const char *str) {
+  for (; *str; ++str) {
+    outb(COM1, *str);
+  }
+}
+
+void printb_char(char c) { outb(COM1, c); }
+
+void printb_hex(u32 n) {
+  char buf[9];
+  const char *hex = "0123456789ABCDEF";
+
+  for (int i = 7; i >= 0; i--) {
+    buf[i] = hex[n & 0xF];
+    n >>= 4;
+  }
+  buf[8] = '\0';
+
+  printb_str("0x");
+  printb_str(buf);
+}
+
+void printb_dec(u32 n) {
+  char buf[11];
+  int i = 0;
+
+  if (n == 0) {
+    buf[i++] = '0';
+  } else {
+    while (n > 0) {
+      buf[i++] = '0' + (n % 10);
+      n /= 10;
+    }
+  }
+  buf[i] = '\0';
+
+  // Reverse the string
+  for (int j = 0; j < i / 2; j++) {
+    char temp = buf[j];
+    buf[j] = buf[i - j - 1];
+    buf[i - j - 1] = temp;
+  }
+
+  printb_str(buf);
+}
+\n--- ./kernel/src/io.h ---
+#ifndef _IO_H
+#define _IO_H
+
+#include "stdlib.h"
+
+#define COM1 0x3F8
+
+// PS/2 Keyboard Controller Ports
+#define PS2_DATA_PORT 0x60
+#define PS2_STATUS_PORT 0x64
+#define PS2_COMMAND_PORT 0x64
+
+// Status Register Bits
+#define PS2_OUTPUT_FULL 0x01  // Output buffer is full (data available)
+#define PS2_INPUT_FULL 0x02   // Input buffer is full (don't write yet)
+#define PS2_SYSTEM_FLAG 0x04  // System flag
+#define PS2_COMMAND_DATA 0x08 // Command/data (0=data, 1=command)
+#define PS2_TIMEOUT_ERR 0x40  // Timeout error
+#define PS2_PARITY_ERR 0x80   // Parity error
+
+// Keyboard Commands
+#define KEYBOARD_ENABLE 0xAE  // Enable keyboard
+#define KEYBOARD_DISABLE 0xAD // Disable keyboard
+#define KEYBOARD_RESET 0xFF   // Reset keyboard
+
+// Special Key Codes
+#define KEY_ENTER 0x1C
+#define KEY_BACKSPACE 0x0E
+#define KEY_TAB 0x0F
+#define KEY_ESC 0x01
+#define KEY_LSHIFT 0x2A
+#define KEY_RSHIFT 0x36
+#define KEY_LCTRL 0x1D
+#define KEY_LALT 0x38
+#define KEY_CAPSLOCK 0x3A
+#define KEY_F1 0x3B
+#define KEY_F2 0x3C
+#define KEY_F3 0x3D
+#define KEY_F4 0x3E
+#define KEY_F5 0x3F
+#define KEY_F6 0x40
+#define KEY_F7 0x41
+#define KEY_F8 0x42
+#define KEY_F9 0x43
+#define KEY_F10 0x44
+#define KEY_F11 0x57
+#define KEY_F12 0x58
+#define KEY_NUMLOCK 0x45
+#define KEY_SCROLLLOCK 0x46
+#define KEY_HOME 0x47
+#define KEY_UP 0x48
+#define KEY_PGUP 0x49
+#define KEY_LEFT 0x4B
+#define KEY_RIGHT 0x4D
+#define KEY_END 0x4F
+#define KEY_DOWN 0x50
+#define KEY_PGDN 0x51
+#define KEY_INS 0x52
+#define KEY_DEL 0x53
+
+// Basic I/O functions
+void outb(u16 port, u8 value);
+u8 inb(u16 port);
+void outw(u16 port, u16 value);
+u16 inw(u16 port);
+void outl(u16 port, u32 value);
+u32 inl(u16 port);
+void io_wait(void);
+
+void keyboard_send_command(u8 cmd);
+
+// Keyboard functions
+void keyboard_init(void);
+u8 keyboard_read_scancode(void);
+char keyboard_scancode_to_char(u8 scancode, bool shift_pressed);
+bool keyboard_is_printable(u8 scancode);
+void keyboard_set_leds(bool scroll, bool num, bool caps);
+
+// Serial functions
+void printb_str(const char *str);
+void printb_char(char c);
+void printb_hex(u32 n);
+void printb_dec(u32 n);
+
+// Keyboard state variables (now exported)
+extern bool shift_pressed;
+extern bool ctrl_pressed;
+extern bool alt_pressed;
+extern bool caps_lock;
+extern bool num_lock;
+extern bool scroll_lock;
+
+// Helper functions to check keyboard state
+static inline bool keyboard_is_shift_pressed(void) { return shift_pressed; }
+static inline bool keyboard_is_ctrl_pressed(void) { return ctrl_pressed; }
+static inline bool keyboard_is_alt_pressed(void) { return alt_pressed; }
+static inline bool keyboard_is_capslock_on(void) { return caps_lock; }
+
+#endif // _IO_H
+\n--- ./kernel/src/string.h ---
+#ifndef _STRING_H
+#define _STRING_H
+
+#include <stddef.h>
+#include <stdint.h>
+
+// ------------------------------------------------------------
+// Memory functions
+// ------------------------------------------------------------
+
+void *memcpy(void *dest, const void *src, size_t n);
+void *memset(void *s, int c, size_t n);
+int memcmp(const void *s1, const void *s2, size_t n);
+void *memmove(void *dest, const void *src, size_t n); // Add this line
+
+// ------------------------------------------------------------
+// String functions
+// ------------------------------------------------------------
+size_t strlen(const char *s);
+char *strcpy(char *dest, const char *src);
+char *strncpy(char *dest, const char *src, size_t n);
+char *strcat(char *dest, const char *src);
+char *strncat(char *dest, const char *src, size_t n);
+int strcmp(const char *s1, const char *s2);
+int strncmp(const char *s1, const char *s2, size_t n);
+char *strchr(const char *s, int c);
+char *strrchr(const char *s, int c);
+size_t strspn(const char *s, const char *accept);
+size_t strcspn(const char *s, const char *reject);
+char *strpbrk(const char *s, const char *accept);
+
+// ------------------------------------------------------------
+// Additional useful functions
+// ------------------------------------------------------------
+
+// Convert integer to string
+char *itoa(int value, char *str, int base);
+
+// Convert unsigned integer to string
+char *utoa(unsigned int value, char *str, int base);
+
+#endif // _STRING_H
+\n--- ./kernel/src/main.c ---
+#include "../limine-protocol/include/limine.h"
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "gfx.h"
+#include "io.h"
+#include "keyboard.h"
+#include "math.h"
+#include "stdlib.h"
+#include "string.h"
+#include "ui/home.h"
+
+system_t sys;
+
+// Simple keyboard handling
+void handle_keyboard(void) {
+  // Poll keyboard
+  keyboard_poll();
+
+  // Check for arrow keys
+  if (keyboard_just_pressed(KEY_UP)) {
+    sys.home.selected_tile = (sys.home.selected_tile - sys.home.cols);
+    if (sys.home.selected_tile < 0) {
+      sys.home.selected_tile += sys.home.app_count;
+    }
+    printb_str("Up pressed - Selected: ");
+    printb_dec(sys.home.selected_tile);
+    printb_str("\n");
+  }
+
+  if (keyboard_just_pressed(KEY_DOWN)) {
+    sys.home.selected_tile =
+        (sys.home.selected_tile + sys.home.cols) % sys.home.app_count;
+    printb_str("Down pressed - Selected: ");
+    printb_dec(sys.home.selected_tile);
+    printb_str("\n");
+  }
+
+  if (keyboard_just_pressed(KEY_LEFT)) {
+    sys.home.selected_tile = (sys.home.selected_tile - 1);
+    if (sys.home.selected_tile < 0) {
+      sys.home.selected_tile += sys.home.app_count;
+    }
+    printb_str("Left pressed - Selected: ");
+    printb_dec(sys.home.selected_tile);
+    printb_str("\n");
+  }
+
+  if (keyboard_just_pressed(KEY_RIGHT)) {
+    sys.home.selected_tile = (sys.home.selected_tile + 1) % sys.home.app_count;
+    printb_str("Right pressed - Selected: ");
+    printb_dec(sys.home.selected_tile);
+    printb_str("\n");
+  }
+
+  if (keyboard_just_pressed(KEY_ENTER)) {
+    printb_str("Enter pressed - Launching: ");
+    printb_str(sys.home.apps[sys.home.selected_tile].name);
+    printb_str("\n");
+  }
+
+  if (keyboard_just_pressed(KEY_ESC)) {
+    printb_str("Escape pressed\n");
+  }
+
+  // Test regular keys
+  for (u8 key = 'A'; key <= 'Z'; key++) {
+    if (keyboard_just_pressed(key)) {
+      printb_str("Key pressed: ");
+      printb_char(key);
+      printb_str("\n");
+    }
+  }
+
+  for (u8 key = '1'; key <= '9'; key++) {
+    if (keyboard_just_pressed(key)) {
+      printb_str("Key pressed: ");
+      printb_char(key);
+      printb_str("\n");
+    }
+  }
+}
+
+// Kernel entry
+void _start(void) {
+  // Initialize serial
+  outb(COM1 + 1, 0x00);
+  outb(COM1 + 3, 0x80);
+  outb(COM1 + 0, 0x03);
+  outb(COM1 + 1, 0x00);
+  outb(COM1 + 3, 0x03);
+  outb(COM1 + 2, 0xC7);
+  outb(COM1 + 4, 0x0B);
+
+  // Initialize graphics
+  initscr();
+  screen_t screen = get_screen();
+
+  printb_str("=== 4DS Launcher ===\n");
+  printb_str("Screen: ");
+  printb_dec(screen.width);
+  printb_str("x");
+  printb_dec(screen.height);
+  printb_str("\n");
+
+  // Initialize system
+  memset(&sys, 0, sizeof(sys));
+
+  // Initialize keyboard
+  keyboard_init();
+  keyboard_set_leds(false, true, false);
+
+  // UI Configuration
+  sys.home.cols = 4;
+  sys.home.rows = 2;
+  sys.home.app_count = 8;
+  sys.home.selected_tile = 0;
+
+  // Theme
+  sys.home.theme.bg_top = 0x00F8FCFF;
+  sys.home.theme.bg_bottom = 0x00E0E8F0;
+  sys.home.theme.tile = 0x0099CCFF;
+  sys.home.theme.tile_light = 0x00CCEEFF;
+  sys.home.theme.tile_dark = 0x006699CC;
+  sys.home.theme.shadow = 0x00404040;
+  sys.home.theme.header = 0x00FFFFFF;
+  sys.home.theme.header_shadow = 0x00E0E0E0;
+  sys.home.theme.icon_bg = 0x00FFFFFF;
+  sys.home.theme.text_color = 0x00333333;
+  sys.home.theme.text_shadow = 0x00AAAAAA;
+  sys.home.theme.highlight = 0x0066CCFF;
+  sys.home.theme.notification = 0x00FF3333;
+
+  // Initialize apps (you need to complete init_apps in home.c)
+  init_apps();
+
+  // Draw initial screen
+  draw_home_screen(screen.pixels);
+
+  printb_str("Ready. Press arrow keys to navigate, Enter to select.\n");
+
+  int last_selected = -1;
+
+  while (1) {
+    // Handle keyboard input
+    handle_keyboard();
+
+    // Update keyboard state for next frame
+    keyboard_update();
+
+    if (keyboard_read_scancode() == KEY_LSHIFT) {
+      printb_str("AA");
+    }
+
+    // Redraw if selection changed
+    if (sys.home.selected_tile != last_selected) {
+      draw_home_screen(screen.pixels);
+      last_selected = sys.home.selected_tile;
+    }
+
+    // Small delay
+    for (volatile int i = 0; i < 10000; i++)
+      ;
+  }
+}
+\n--- ./kernel/src/string.c ---
+#include "string.h"
+
+void *memcpy(void *dest, const void *src, size_t n) {
+  uint8_t *d = (uint8_t *)dest;
+  const uint8_t *s = (const uint8_t *)src;
+
+  // Simple byte-by-byte copy
+  for (size_t i = 0; i < n; i++) {
+    d[i] = s[i];
+  }
+
+  return dest;
+}
+
+void *memset(void *s, int c, size_t n) {
+  uint8_t *p = (uint8_t *)s;
+
+  for (size_t i = 0; i < n; i++) {
+    p[i] = (uint8_t)c;
+  }
+
+  return s;
+}
+
+int memcmp(const void *s1, const void *s2, size_t n) {
+  const uint8_t *p1 = (const uint8_t *)s1;
+  const uint8_t *p2 = (const uint8_t *)s2;
+
+  for (size_t i = 0; i < n; i++) {
+    if (p1[i] != p2[i]) {
+      return p1[i] - p2[i];
+    }
+  }
+
+  return 0;
+}
+
+void *memmove(void *dest, const void *src, size_t n) {
+  uint8_t *d = (uint8_t *)dest;
+  const uint8_t *s = (const uint8_t *)src;
+
+  if (d == s)
+    return dest;
+
+  // If buffers don't overlap, use memcpy
+  if (d + n <= s || s + n <= d) {
+    return memcpy(dest, src, n);
+  }
+
+  // Buffers overlap - copy carefully
+  if (d < s) {
+    // Copy forward
+    for (size_t i = 0; i < n; i++) {
+      d[i] = s[i];
+    }
+  } else {
+    // Copy backward
+    for (size_t i = n; i > 0; i--) {
+      d[i - 1] = s[i - 1];
+    }
+  }
+
+  return dest;
+}
+
+// ------------------------------------------------------------
+// String functions
+// ------------------------------------------------------------
+
+size_t strlen(const char *s) {
+  size_t len = 0;
+  while (s[len])
+    len++;
+  return len;
+}
+
+char *strcpy(char *dest, const char *src) {
+  char *d = dest;
+  while ((*d++ = *src++))
+    ;
+  return dest;
+}
+
+char *strncpy(char *dest, const char *src, size_t n) {
+  size_t i;
+
+  for (i = 0; i < n && src[i] != '\0'; i++) {
+    dest[i] = src[i];
+  }
+
+  for (; i < n; i++) {
+    dest[i] = '\0';
+  }
+
+  return dest;
+}
+
+char *strcat(char *dest, const char *src) {
+  char *d = dest;
+
+  // Find end of dest
+  while (*d)
+    d++;
+
+  // Copy src
+  while ((*d++ = *src++))
+    ;
+
+  return dest;
+}
+
+char *strncat(char *dest, const char *src, size_t n) {
+  char *d = dest;
+
+  // Find end of dest
+  while (*d)
+    d++;
+
+  // Copy at most n chars
+  size_t i;
+  for (i = 0; i < n && src[i] != '\0'; i++) {
+    d[i] = src[i];
+  }
+
+  // Null terminate
+  d[i] = '\0';
+
+  return dest;
+}
+
+int strcmp(const char *s1, const char *s2) {
+  while (*s1 && (*s1 == *s2)) {
+    s1++;
+    s2++;
+  }
+
+  return *(const unsigned char *)s1 - *(const unsigned char *)s2;
+}
+
+int strncmp(const char *s1, const char *s2, size_t n) {
+  if (n == 0)
+    return 0;
+
+  while (--n && *s1 && (*s1 == *s2)) {
+    s1++;
+    s2++;
+  }
+
+  return *(const unsigned char *)s1 - *(const unsigned char *)s2;
+}
+
+char *strchr(const char *s, int c) {
+  while (*s != (char)c) {
+    if (*s == '\0')
+      return NULL;
+    s++;
+  }
+
+  return (char *)s;
+}
+
+char *strrchr(const char *s, int c) {
+  const char *last = NULL;
+
+  do {
+    if (*s == (char)c) {
+      last = s;
+    }
+  } while (*s++);
+
+  return (char *)last;
+}
+
+size_t strspn(const char *s, const char *accept) {
+  size_t count = 0;
+
+  while (*s && strchr(accept, *s)) {
+    count++;
+    s++;
+  }
+
+  return count;
+}
+
+size_t strcspn(const char *s, const char *reject) {
+  size_t count = 0;
+
+  while (*s && !strchr(reject, *s)) {
+    count++;
+    s++;
+  }
+
+  return count;
+}
+
+char *strpbrk(const char *s, const char *accept) {
+  while (*s) {
+    if (strchr(accept, *s)) {
+      return (char *)s;
+    }
+    s++;
+  }
+
+  return NULL;
+}
+
+// ------------------------------------------------------------
+// Additional useful functions
+// ------------------------------------------------------------
+
+// Convert integer to string
+char *itoa(int value, char *str, int base) {
+  static char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+  char *ptr = str;
+  char *ptr1 = str;
+  char tmp;
+  unsigned int v;
+
+  // Handle negative numbers for base 10
+  if (base == 10 && value < 0) {
+    *ptr++ = '-';
+    ptr1 = ptr;
+    v = (unsigned int)(-value);
+  } else {
+    v = (unsigned int)value;
+  }
+
+  // Convert number
+  do {
+    *ptr++ = digits[v % base];
+    v /= base;
+  } while (v);
+
+  *ptr-- = '\0';
+
+  // Reverse string
+  while (ptr1 < ptr) {
+    tmp = *ptr;
+    *ptr-- = *ptr1;
+    *ptr1++ = tmp;
+  }
+
+  return str;
+}
+
+// Convert unsigned integer to string
+char *utoa(unsigned int value, char *str, int base) {
+  static char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+  char *ptr = str;
+  char *ptr1 = str;
+  char tmp;
+
+  // Convert number
+  do {
+    *ptr++ = digits[value % base];
+    value /= base;
+  } while (value);
+
+  *ptr-- = '\0';
+
+  // Reverse string
+  while (ptr1 < ptr) {
+    tmp = *ptr;
+    *ptr-- = *ptr1;
+    *ptr1++ = tmp;
+  }
+
+  return str;
+}
+\n--- ./kernel/src/stdlib.h ---
+#ifndef _STDLIB_H
+#define _STDLIB_H
+
+#define NULL ((void *)0)
+#define ASSERT(_e) (_assert(_e, #_e))
+
+#include <stdbool.h>
+#include <stdint.h>
+
+typedef unsigned long size_t;
+typedef signed long ssize_t;
+
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
+
+typedef float f32;
+typedef double f64;
+
+typedef size_t usize;
+typedef ssize_t isize;
+
+void hang();
+void _assert(bool expr, const char *msg);
+
+#endif // _STDLIB_H
+\n--- ./kernel/src/stdlib.c ---
+#include "stdlib.h"
+#include "io.h"
+
+void hang() {
+  for (;;)
+    __asm__ volatile("hlt");
+}
+
+void _assert(bool expr, const char *msg) {
+  if (!expr) {
+    printb_str(msg);
+    outb(COM1, '\n'); // newline
+    hang();
+  }
+}
 
 ===== OBJECT SYMBOLS =====
 
