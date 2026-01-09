@@ -1,0 +1,582 @@
+
+
+===== TREE =====
+
+.
+├── '
+├── build_dump.txt
+├── .clangd
+├── compile_commands.json
+├── edk2-ovmf
+│   ├── ovmf-code-aarch64.fd
+│   ├── ovmf-code-ia32.fd
+│   ├── ovmf-code-loongarch64.fd
+│   ├── ovmf-code-riscv64.fd
+│   ├── ovmf-code-x86_64.fd
+│   ├── ovmf-vars-aarch64.fd
+│   ├── ovmf-vars-ia32.fd
+│   ├── ovmf-vars-loongarch64.fd
+│   ├── ovmf-vars-riscv64.fd
+│   └── ovmf-vars-x86_64.fd
+├── .git
+│   ├── config
+│   ├── description
+│   ├── HEAD
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   └── trunk
+│   │       └── remotes
+│   │           └── origin
+│   │               └── HEAD
+│   ├── objects
+│   │   ├── info
+│   │   └── pack
+│   │       ├── pack-ad941032bbb8d18c562051f276ae8dcba059cbd4.idx
+│   │       ├── pack-ad941032bbb8d18c562051f276ae8dcba059cbd4.pack
+│   │       └── pack-ad941032bbb8d18c562051f276ae8dcba059cbd4.rev
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       │   └── trunk
+│       ├── remotes
+│       │   └── origin
+│       │       └── HEAD
+│       └── tags
+├── .gitignore
+├── kernel
+│   ├── bin-x86_64
+│   │   └── kernel
+│   ├── cc-runtime
+│   │   ├── CREDITS.TXT
+│   │   ├── .git
+│   │   │   ├── config
+│   │   │   ├── description
+│   │   │   ├── HEAD
+│   │   │   ├── hooks
+│   │   │   │   ├── applypatch-msg.sample
+│   │   │   │   ├── commit-msg.sample
+│   │   │   │   ├── fsmonitor-watchman.sample
+│   │   │   │   ├── post-update.sample
+│   │   │   │   ├── pre-applypatch.sample
+│   │   │   │   ├── pre-commit.sample
+│   │   │   │   ├── pre-merge-commit.sample
+│   │   │   │   ├── prepare-commit-msg.sample
+│   │   │   │   ├── pre-push.sample
+│   │   │   │   ├── pre-rebase.sample
+│   │   │   │   ├── pre-receive.sample
+│   │   │   │   ├── push-to-checkout.sample
+│   │   │   │   ├── sendemail-validate.sample
+│   │   │   │   └── update.sample
+│   │   │   ├── index
+│   │   │   ├── info
+│   │   │   │   └── exclude
+│   │   │   ├── logs
+│   │   │   │   ├── HEAD
+│   │   │   │   └── refs
+│   │   │   │       ├── heads
+│   │   │   │       │   └── packed
+│   │   │   │       └── remotes
+│   │   │   │           └── origin
+│   │   │   │               └── HEAD
+│   │   │   ├── objects
+│   │   │   │   ├── info
+│   │   │   │   └── pack
+│   │   │   │       ├── pack-8292436babd9703e777840633171138cebdaed0d.idx
+│   │   │   │       ├── pack-8292436babd9703e777840633171138cebdaed0d.pack
+│   │   │   │       └── pack-8292436babd9703e777840633171138cebdaed0d.rev
+│   │   │   ├── packed-refs
+│   │   │   └── refs
+│   │   │       ├── heads
+│   │   │       │   └── packed
+│   │   │       ├── remotes
+│   │   │       │   └── origin
+│   │   │       │       └── HEAD
+│   │   │       └── tags
+│   │   ├── LICENSE.TXT
+│   │   ├── README
+│   │   └── src
+│   │       └── cc-runtime.c
+│   ├── .deps-obtained
+│   ├── freestnd-c-hdrs
+│   │   ├── .git
+│   │   │   ├── config
+│   │   │   ├── description
+│   │   │   ├── HEAD
+│   │   │   ├── hooks
+│   │   │   │   ├── applypatch-msg.sample
+│   │   │   │   ├── commit-msg.sample
+│   │   │   │   ├── fsmonitor-watchman.sample
+│   │   │   │   ├── post-update.sample
+│   │   │   │   ├── pre-applypatch.sample
+│   │   │   │   ├── pre-commit.sample
+│   │   │   │   ├── pre-merge-commit.sample
+│   │   │   │   ├── prepare-commit-msg.sample
+│   │   │   │   ├── pre-push.sample
+│   │   │   │   ├── pre-rebase.sample
+│   │   │   │   ├── pre-receive.sample
+│   │   │   │   ├── push-to-checkout.sample
+│   │   │   │   ├── sendemail-validate.sample
+│   │   │   │   └── update.sample
+│   │   │   ├── index
+│   │   │   ├── info
+│   │   │   │   └── exclude
+│   │   │   ├── logs
+│   │   │   │   ├── HEAD
+│   │   │   │   └── refs
+│   │   │   │       ├── heads
+│   │   │   │       │   └── trunk
+│   │   │   │       └── remotes
+│   │   │   │           └── origin
+│   │   │   │               └── HEAD
+│   │   │   ├── objects
+│   │   │   │   ├── info
+│   │   │   │   └── pack
+│   │   │   │       ├── pack-2fe7870c8495a91b54da1dd9ebd0336bd2aa0326.idx
+│   │   │   │       ├── pack-2fe7870c8495a91b54da1dd9ebd0336bd2aa0326.pack
+│   │   │   │       └── pack-2fe7870c8495a91b54da1dd9ebd0336bd2aa0326.rev
+│   │   │   ├── packed-refs
+│   │   │   └── refs
+│   │   │       ├── heads
+│   │   │       │   └── trunk
+│   │   │       ├── remotes
+│   │   │       │   └── origin
+│   │   │       │       └── HEAD
+│   │   │       └── tags
+│   │   ├── include
+│   │   │   ├── float.h
+│   │   │   ├── iso646.h
+│   │   │   ├── limits.h
+│   │   │   ├── stdalign.h
+│   │   │   ├── stdarg.h
+│   │   │   ├── stdbool.h
+│   │   │   ├── stddef.h
+│   │   │   ├── stdint.h
+│   │   │   └── stdnoreturn.h
+│   │   ├── LICENSE
+│   │   └── README
+│   ├── get-deps
+│   ├── .gitignore
+│   ├── GNUmakefile
+│   ├── limine-protocol
+│   │   ├── .git
+│   │   │   ├── config
+│   │   │   ├── description
+│   │   │   ├── HEAD
+│   │   │   ├── hooks
+│   │   │   │   ├── applypatch-msg.sample
+│   │   │   │   ├── commit-msg.sample
+│   │   │   │   ├── fsmonitor-watchman.sample
+│   │   │   │   ├── post-update.sample
+│   │   │   │   ├── pre-applypatch.sample
+│   │   │   │   ├── pre-commit.sample
+│   │   │   │   ├── pre-merge-commit.sample
+│   │   │   │   ├── prepare-commit-msg.sample
+│   │   │   │   ├── pre-push.sample
+│   │   │   │   ├── pre-rebase.sample
+│   │   │   │   ├── pre-receive.sample
+│   │   │   │   ├── push-to-checkout.sample
+│   │   │   │   ├── sendemail-validate.sample
+│   │   │   │   └── update.sample
+│   │   │   ├── index
+│   │   │   ├── info
+│   │   │   │   └── exclude
+│   │   │   ├── logs
+│   │   │   │   ├── HEAD
+│   │   │   │   └── refs
+│   │   │   │       ├── heads
+│   │   │   │       │   └── trunk
+│   │   │   │       └── remotes
+│   │   │   │           └── origin
+│   │   │   │               └── HEAD
+│   │   │   ├── objects
+│   │   │   │   ├── info
+│   │   │   │   └── pack
+│   │   │   │       ├── pack-9c857db502e62912bee0ef8f5cc6b799d8e14cf9.idx
+│   │   │   │       ├── pack-9c857db502e62912bee0ef8f5cc6b799d8e14cf9.pack
+│   │   │   │       └── pack-9c857db502e62912bee0ef8f5cc6b799d8e14cf9.rev
+│   │   │   ├── packed-refs
+│   │   │   └── refs
+│   │   │       ├── heads
+│   │   │       │   └── trunk
+│   │   │       ├── remotes
+│   │   │       │   └── origin
+│   │   │       │       └── HEAD
+│   │   │       └── tags
+│   │   ├── include
+│   │   │   └── limine.h
+│   │   ├── LICENSE
+│   │   ├── PROTOCOL.md
+│   │   └── README.md
+│   ├── linker-scripts
+│   │   ├── aarch64.lds
+│   │   ├── loongarch64.lds
+│   │   ├── riscv64.lds
+│   │   └── x86_64.lds
+│   ├── obj-x86_64
+│   │   ├── cc-runtime
+│   │   │   └── src
+│   │   │       ├── cc-runtime.c.d
+│   │   │       └── cc-runtime.c.o
+│   │   └── src
+│   │       ├── main.c.d
+│   │       └── main.c.o
+│   └── src
+│       ├── main.c
+│       ├── math.h
+│       └── string.h
+├── LICENSE
+├── limine
+│   ├── BOOTAA64.EFI
+│   ├── BOOTIA32.EFI
+│   ├── BOOTLOONGARCH64.EFI
+│   ├── BOOTRISCV64.EFI
+│   ├── BOOTX64.EFI
+│   ├── .git
+│   │   ├── config
+│   │   ├── description
+│   │   ├── HEAD
+│   │   ├── hooks
+│   │   │   ├── applypatch-msg.sample
+│   │   │   ├── commit-msg.sample
+│   │   │   ├── fsmonitor-watchman.sample
+│   │   │   ├── post-update.sample
+│   │   │   ├── pre-applypatch.sample
+│   │   │   ├── pre-commit.sample
+│   │   │   ├── pre-merge-commit.sample
+│   │   │   ├── prepare-commit-msg.sample
+│   │   │   ├── pre-push.sample
+│   │   │   ├── pre-rebase.sample
+│   │   │   ├── pre-receive.sample
+│   │   │   ├── push-to-checkout.sample
+│   │   │   ├── sendemail-validate.sample
+│   │   │   └── update.sample
+│   │   ├── index
+│   │   ├── info
+│   │   │   └── exclude
+│   │   ├── logs
+│   │   │   ├── HEAD
+│   │   │   └── refs
+│   │   │       └── heads
+│   │   │           └── v10.x-binary
+│   │   ├── objects
+│   │   │   ├── info
+│   │   │   └── pack
+│   │   │       ├── pack-f6e48d293f840a4605923945a8cf88e21678d73e.idx
+│   │   │       ├── pack-f6e48d293f840a4605923945a8cf88e21678d73e.pack
+│   │   │       └── pack-f6e48d293f840a4605923945a8cf88e21678d73e.rev
+│   │   ├── packed-refs
+│   │   ├── refs
+│   │   │   ├── heads
+│   │   │   │   └── v10.x-binary
+│   │   │   └── tags
+│   │   │       └── v10.6.2-binary
+│   │   └── shallow
+│   ├── .gitignore
+│   ├── LICENSE
+│   ├── limine
+│   ├── limine-bios-cd.bin
+│   ├── limine-bios-hdd.h
+│   ├── limine-bios-pxe.bin
+│   ├── limine-bios.sys
+│   ├── limine.c
+│   ├── limine.exe
+│   ├── limine-uefi-cd.bin
+│   └── Makefile
+├── limine.conf
+├── makefile
+├── README.md
+├── template-x86_64.iso
+└── tools
+    └── dump_proj.sh
+
+94 directories, 212 files
+
+===== MAKEFILE =====
+
+# Nuke built-in rules.
+.SUFFIXES:
+
+# Target architecture to build for. Default to x86_64.
+ARCH := x86_64
+
+# Default user QEMU flags. These are appended to the QEMU command calls.
+QEMUFLAGS := -m 2G
+
+override IMAGE_NAME := template-$(ARCH)
+
+# Toolchain for building the 'limine' executable for the host.
+HOST_CC := cc
+HOST_CFLAGS := -g -O2 -pipe
+HOST_CPPFLAGS :=
+HOST_LDFLAGS :=
+HOST_LIBS :=
+
+.PHONY: all
+all: $(IMAGE_NAME).iso
+
+.PHONY: all-hdd
+all-hdd: $(IMAGE_NAME).hdd
+
+.PHONY: run
+run: run-$(ARCH)
+
+.PHONY: run-hdd
+run-hdd: run-hdd-$(ARCH)
+
+.PHONY: run-x86_64
+run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		    -device VGA,vgamem_mb=16 \
+    -display sdl \
+	 -full-screen \
+		-serial stdio \
+		-cdrom $(IMAGE_NAME).iso \
+		$(QEMUFLAGS)
+
+#    -full-screen \
+# D3D3D3
+
+.PHONY: run-hdd-x86_64
+run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+.PHONY: run-aarch64
+run-aarch64: edk2-ovmf $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu cortex-a72 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-cdrom $(IMAGE_NAME).iso \
+		$(QEMUFLAGS)
+
+.PHONY: run-hdd-aarch64
+run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu cortex-a72 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+.PHONY: run-riscv64
+run-riscv64: edk2-ovmf $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu rv64 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-cdrom $(IMAGE_NAME).iso \
+		$(QEMUFLAGS)
+
+.PHONY: run-hdd-riscv64
+run-hdd-riscv64: edk2-ovmf $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu rv64 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+.PHONY: run-loongarch64
+run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu la464 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-cdrom $(IMAGE_NAME).iso \
+		$(QEMUFLAGS)
+
+.PHONY: run-hdd-loongarch64
+run-hdd-loongarch64: edk2-ovmf $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M virt \
+		-cpu la464 \
+		-device ramfb \
+		-device qemu-xhci \
+		-device usb-kbd \
+		-device usb-mouse \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+
+.PHONY: run-bios
+run-bios: $(IMAGE_NAME).iso
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-cdrom $(IMAGE_NAME).iso \
+		-boot d \
+		$(QEMUFLAGS)
+
+.PHONY: run-hdd-bios
+run-hdd-bios: $(IMAGE_NAME).hdd
+	qemu-system-$(ARCH) \
+		-M q35 \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
+
+edk2-ovmf:
+	curl -L https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/edk2-ovmf.tar.gz | gunzip | tar -xf -
+
+limine/limine:
+	rm -rf limine
+	git clone https://codeberg.org/Limine/Limine.git limine --branch=v10.x-binary --depth=1
+	$(MAKE) -C limine \
+		CC="$(HOST_CC)" \
+		CFLAGS="$(HOST_CFLAGS)" \
+		CPPFLAGS="$(HOST_CPPFLAGS)" \
+		LDFLAGS="$(HOST_LDFLAGS)" \
+		LIBS="$(HOST_LIBS)"
+
+kernel/.deps-obtained:
+	./kernel/get-deps
+
+.PHONY: kernel
+kernel: kernel/.deps-obtained
+	$(MAKE) -C kernel
+
+$(IMAGE_NAME).iso: limine/limine kernel
+	rm -rf iso_root
+	mkdir -p iso_root/boot
+	cp -v kernel/bin-$(ARCH)/kernel iso_root/boot/
+	mkdir -p iso_root/boot/limine
+	cp -v limine.conf iso_root/boot/limine/
+	mkdir -p iso_root/EFI/BOOT
+ifeq ($(ARCH),x86_64)
+	cp -v limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v limine/BOOTX64.EFI iso_root/EFI/BOOT/
+	cp -v limine/BOOTIA32.EFI iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J -b boot/limine/limine-bios-cd.bin \
+		-no-emul-boot -boot-load-size 4 -boot-info-table -hfsplus \
+		-apm-block-size 2048 --efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+	./limine/limine bios-install $(IMAGE_NAME).iso
+endif
+ifeq ($(ARCH),aarch64)
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v limine/BOOTAA64.EFI iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J \
+		-hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+endif
+ifeq ($(ARCH),riscv64)
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v limine/BOOTRISCV64.EFI iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J \
+		-hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+endif
+ifeq ($(ARCH),loongarch64)
+	cp -v limine/limine-uefi-cd.bin iso_root/boot/limine/
+	cp -v limine/BOOTLOONGARCH64.EFI iso_root/EFI/BOOT/
+	xorriso -as mkisofs -R -r -J \
+		-hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin \
+		-efi-boot-part --efi-boot-image --protective-msdos-label \
+		iso_root -o $(IMAGE_NAME).iso
+endif
+	rm -rf iso_root
+
+$(IMAGE_NAME).hdd: limine/limine kernel
+	rm -f $(IMAGE_NAME).hdd
+	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd
+ifeq ($(ARCH),x86_64)
+	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 -m 1
+	./limine/limine bios-install $(IMAGE_NAME).hdd
+else
+	PATH=$$PATH:/usr/sbin:/sbin sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00
+endif
+	mformat -i $(IMAGE_NAME).hdd@@1M
+	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT ::/boot ::/boot/limine
+	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin-$(ARCH)/kernel ::/boot
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine.conf ::/boot/limine
+ifeq ($(ARCH),x86_64)
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/boot/limine
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTX64.EFI ::/EFI/BOOT
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTIA32.EFI ::/EFI/BOOT
+endif
+ifeq ($(ARCH),aarch64)
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTAA64.EFI ::/EFI/BOOT
+endif
+ifeq ($(ARCH),riscv64)
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTRISCV64.EFI ::/EFI/BOOT
+endif
+ifeq ($(ARCH),loongarch64)
+	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTLOONGARCH64.EFI ::/EFI/BOOT
+endif
+
+.PHONY: clean
+clean:
+	$(MAKE) -C kernel clean
+	rm -rf iso_root $(IMAGE_NAME).iso $(IMAGE_NAME).hdd
+
+.PHONY: distclean
+distclean:
+	$(MAKE) -C kernel distclean
+	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
+
+dump:
+	chmod +x ./tools/dump_proj.sh
+	./tools/dump_proj.sh
+
+===== LINKER SCRIPTS =====
+
+
+===== GRUB CONFIG =====
+
+
+===== SOURCE FILES =====
+
+
+===== OBJECT SYMBOLS =====
+

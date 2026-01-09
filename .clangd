@@ -1,0 +1,6 @@
+CompileFlags:
+  Add: 
+    - -I ./kernel/limine-protocol/include/
+    - -I/home/username/projects/myos/libs/somelib
+    - -DDEBUG
+

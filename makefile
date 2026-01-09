@@ -33,8 +33,15 @@ run-x86_64: edk2-ovmf $(IMAGE_NAME).iso
 	qemu-system-$(ARCH) \
 		-M q35 \
 		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-$(ARCH).fd,readonly=on \
+		    -device VGA,vgamem_mb=16 \
+    -display sdl \
+	 -full-screen \
+		-serial stdio \
 		-cdrom $(IMAGE_NAME).iso \
 		$(QEMUFLAGS)
+
+#    -full-screen \
+# D3D3D3
 
 .PHONY: run-hdd-x86_64
 run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
@@ -242,3 +249,7 @@ clean:
 distclean:
 	$(MAKE) -C kernel distclean
 	rm -rf iso_root *.iso *.hdd limine edk2-ovmf
+
+dump:
+	chmod +x ./tools/dump_proj.sh
+	./tools/dump_proj.sh
