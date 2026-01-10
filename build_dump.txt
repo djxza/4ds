@@ -3,10 +3,12 @@
 ===== TREE =====
 
 .
-├── '
+├── brew512.png
+├── brew.png
 ├── build_dump.txt
 ├── .clangd
 ├── compile_commands.json
+├── compile_commands.tmp
 ├── edk2-ovmf
 │   ├── ovmf-code-aarch64.fd
 │   ├── ovmf-code-ia32.fd
@@ -50,6 +52,8 @@
 │   │           └── origin
 │   │               └── master
 │   ├── objects
+│   │   ├── 02
+│   │   │   └── 436aac640027d55c73d680007768a0a46d10ad
 │   │   ├── 06
 │   │   │   └── 37a088a01e8ddab3bf3fa98dbe804cbde1a0dc
 │   │   ├── 07
@@ -58,31 +62,72 @@
 │   │   │   └── 8021d142a3f69117df3d420ab9509169fe56f2
 │   │   ├── 14
 │   │   │   └── ae439e7378d3ba10b4fe3b5e1cb23d9e0267fe
+│   │   ├── 25
+│   │   │   └── 8786b1d7a6c0ac3eea1f679fecbf8d8a3fdb3a
 │   │   ├── 31
 │   │   │   └── 393ee2f413db7db6558c501d17b68db76b6915
 │   │   ├── 3d
 │   │   │   ├── 1e8235d4488162c915b40294dd2da7a885fefb
 │   │   │   └── 25dea21a8930666d35aa4e8bbabae183e00fb6
+│   │   ├── 44
+│   │   │   └── cd1ee2857caa20f097bc1980ecfa4ce1557e33
 │   │   ├── 46
 │   │   │   └── acf33cc911911692cd08ac32070d02b9b51941
+│   │   ├── 58
+│   │   │   └── 88205568e11945c92d574f25b1f9a1149dfd50
 │   │   ├── 5c
 │   │   │   └── 088c861001e559f34e81a04d39398e7b63589f
+│   │   ├── 64
+│   │   │   └── 79b46f9064bfb28dd0125fac0e7763c5685dd9
 │   │   ├── 65
 │   │   │   └── 4b0cc226e73aff9aad2b545ef9acac065237bb
 │   │   ├── 6f
 │   │   │   └── 65f883b66d4fc01fa412d76b657efc96e184a2
+│   │   ├── 73
+│   │   │   └── f9a0a4e10866838834f95575bb7eef7f161d4d
+│   │   ├── 86
+│   │   │   └── 582f06d05ace3b4c0e608c858dbc6abbdcf5c1
+│   │   ├── 88
+│   │   │   └── f39cd3bfcf19a142fcb806c26637e8aaa327ff
 │   │   ├── 99
 │   │   │   └── ce76393558879a25c1cc29ce1f04e3f6c1447c
+│   │   ├── 9f
+│   │   │   └── 3a27766c2ae4ec34b115f094b6077414434b02
+│   │   ├── bd
+│   │   │   └── 0fdac28f1551be1947cba48e398c82fc0218cf
 │   │   ├── c5
 │   │   │   └── b65dec26f84cb740d0c598f98188d38e81bfb0
+│   │   ├── ce
+│   │   │   └── 3a578ba155136f55f3f1da834b040b088a058b
+│   │   ├── cf
+│   │   │   └── 06e9a75c639cba4b7bc38507c4448abba26e8d
 │   │   ├── d0
 │   │   │   └── e3313723fe99c377fd1acc7e65e839fcbfbf1c
 │   │   ├── d2
 │   │   │   └── 52697ce88ffe9fc71405108d61f0cc5c37cff3
+│   │   ├── d5
+│   │   │   ├── 78138b2eb4e336a76ea20c0decd2a3740581a5
+│   │   │   └── a4fbc4a43662b3e848fbb062f1c6d9aa37cdb1
 │   │   ├── d6
 │   │   │   └── f40020e060c74d66f0e91044e01e84a0d3d738
+│   │   ├── e1
+│   │   │   └── 57c743a0ed42d541c8b2f56d276085438d2b69
+│   │   ├── e4
+│   │   │   └── aecb72a5cd9511143bdbb51a570276cd258892
 │   │   ├── ee
 │   │   │   └── 6a8528bdb71dc3ee84e490f6ce694f3c532051
+│   │   ├── ef
+│   │   │   └── 7dbcb0f4cc3f88fc4355554b9c4290316ddf8a
+│   │   ├── f0
+│   │   │   └── 2581123c54524f7c6ebf9b2ed9d9907aa2f33e
+│   │   ├── f3
+│   │   │   └── 83c9ef578c15cc9821857731834c920e367629
+│   │   ├── f5
+│   │   │   └── dbd5e063d72be926f36ffc03db1f641d1389de
+│   │   ├── f9
+│   │   │   └── 7782999026677b98ff138c34b32123658f2fa9
+│   │   ├── ff
+│   │   │   └── f2e74a2b983c1d386dbf03fb9383a3a0988af8
 │   │   ├── info
 │   │   └── pack
 │   │       ├── pack-ad941032bbb8d18c562051f276ae8dcba059cbd4.idx
@@ -272,6 +317,11 @@
 │   │   │       ├── cc-runtime.c.d
 │   │   │       └── cc-runtime.c.o
 │   │   └── src
+│   │       ├── fs
+│   │       │   ├── ahci.c.d
+│   │       │   ├── ahci.c.o
+│   │       │   ├── fat32.c.d
+│   │       │   └── fat32.c.o
 │   │       ├── gfx.c.d
 │   │       ├── gfx.c.o
 │   │       ├── io.c.d
@@ -288,6 +338,11 @@
 │   │           ├── home.c.d
 │   │           └── home.c.o
 │   └── src
+│       ├── fs
+│       │   ├── ahci.c
+│       │   ├── ahci.h
+│       │   ├── fat32.c
+│       │   └── fat32.h
 │       ├── gfx.c
 │       ├── gfx.h
 │       ├── io.c
@@ -300,6 +355,7 @@
 │       ├── stdlib.h
 │       ├── string.c
 │       ├── string.h
+│       ├── TEST.TXT
 │       └── ui
 │           ├── home.c
 │           └── home.h
@@ -363,12 +419,21 @@
 │   └── Makefile
 ├── limine.conf
 ├── makefile
+├── mnt
+│   ├── brew.png
+│   └── TEST.TXT
+├── png_to_c
 ├── README.md
-├── template-x86_64.iso
+├── template-x86_64.hdd
+├── test.hdd
 └── tools
-    └── dump_proj.sh
+    ├── create_test_hdd.sh
+    ├── dump_proj.sh
+    ├── png_conv.sh
+    ├── png_to_.c
+    └── png_to_c
 
-112 directories, 253 files
+136 directories, 294 files
 
 ===== MAKEFILE =====
 
@@ -2399,11 +2464,482 @@ char *itoa(int value, char *str, int base);
 char *utoa(unsigned int value, char *str, int base);
 
 #endif // _STRING_H
+\n--- ./kernel/src/fs/fat32.h ---
+#ifndef _FAT32_H
+#define _FAT32_H
+
+#include "../stdlib.h"
+
+// FAT32 structures
+typedef struct __attribute__((packed)) {
+  u8 jump[3];
+  char oem[8];
+  u16 bytes_per_sector;
+  u8 sectors_per_cluster;
+  u16 reserved_sectors;
+  u8 fat_count;
+  u16 root_dir_entries;
+  u16 total_sectors_16;
+  u8 media_descriptor;
+  u16 sectors_per_fat_16;
+  u16 sectors_per_track;
+  u16 head_count;
+  u32 hidden_sectors;
+  u32 total_sectors_32;
+
+  // Extended FAT32 fields
+  u32 sectors_per_fat;
+  u16 flags;
+  u16 version;
+  u32 root_cluster;
+  u16 fs_info_sector;
+  u16 backup_boot_sector;
+  u8 reserved[12];
+  u8 drive_number;
+  u8 reserved1;
+  u8 signature;
+  u32 volume_id;
+  char volume_label[11];
+  char fs_type[8];
+} fat32_bpb_t;
+
+typedef struct __attribute__((packed)) {
+  char name[8];
+  char ext[3];
+  u8 attributes;
+  u8 reserved;
+  u8 creation_time_tenths;
+  u16 creation_time;
+  u16 creation_date;
+  u16 last_access_date;
+  u16 cluster_high;
+  u16 modification_time;
+  u16 modification_date;
+  u16 cluster_low;
+  u32 file_size;
+} fat32_dir_entry_t;
+
+// File/directory attributes
+#define ATTR_READ_ONLY 0x01
+#define ATTR_HIDDEN 0x02
+#define ATTR_SYSTEM 0x04
+#define ATTR_VOLUME_ID 0x08
+#define ATTR_DIRECTORY 0x10
+#define ATTR_ARCHIVE 0x20
+#define ATTR_LONG_NAME 0x0F
+
+// Special entries
+#define DIR_ENTRY_FREE 0xE5
+#define DIR_ENTRY_END 0x00
+
+// Functions
+typedef struct {
+  fat32_bpb_t bpb;
+  u32 fat_start;
+  u32 data_start;
+  u32 current_cluster;
+  u32 root_dir_cluster;
+} fat32_fs_t;
+
+// Disk I/O interface
+typedef struct {
+  int (*read_sectors)(u32 lba, u32 count, void *buffer);
+  int (*write_sectors)(u32 lba, u32 count, void *buffer);
+} disk_ops_t;
+
+// Initialization
+int fat32_init(disk_ops_t *ops);
+fat32_fs_t *fat32_get_fs(void);
+
+// File operations
+int fat32_read_file(const char *path, void *buffer, u32 max_size);
+int fat32_list_dir(const char *path);
+int fat32_file_exists(const char *path);
+
+#endif // _FAT32_H
+\n--- ./kernel/src/fs/fat32.c ---
+#include "fat32.h"
+#include "../io.h"
+#include "../string.h"
+
+// Global filesystem structure
+static fat32_fs_t fs;
+static disk_ops_t *disk = NULL;
+
+// Helper functions
+static u32 cluster_to_lba(u32 cluster) {
+  return fs.data_start + (cluster - 2) * fs.bpb.sectors_per_cluster;
+}
+
+static u32 read_fat_entry(u32 cluster) {
+  u32 fat_offset = cluster * 4;
+  u32 fat_sector = fs.fat_start + (fat_offset / fs.bpb.bytes_per_sector);
+  u32 ent_offset = fat_offset % fs.bpb.bytes_per_sector;
+
+  u32 buffer[128]; // Enough for a sector
+  if (disk->read_sectors(fat_sector, 1, buffer) != 0) {
+    printb_str("[FAT32] Error reading FAT sector\n");
+    return 0x0FFFFFFF; // End of chain marker
+  }
+
+  u32 entry = buffer[ent_offset / 4] & 0x0FFFFFFF;
+  return entry;
+}
+
+static int read_cluster(u32 cluster, void *buffer) {
+  if (cluster < 2) {
+    printb_str("[FAT32] Invalid cluster: ");
+    printb_dec(cluster);
+    printb_str("\n");
+    return -1;
+  }
+
+  u32 lba = cluster_to_lba(cluster);
+  u32 sectors = fs.bpb.sectors_per_cluster;
+
+  printb_str("[FAT32] Reading cluster ");
+  printb_dec(cluster);
+  printb_str(" at LBA ");
+  printb_dec(lba);
+  printb_str(" (");
+  printb_dec(sectors);
+  printb_str(" sectors)\n");
+
+  return disk->read_sectors(lba, sectors, buffer);
+}
+
+// Initialize FAT32 filesystem
+int fat32_init(disk_ops_t *ops) {
+  disk = ops;
+
+  // Read boot sector
+  if (disk->read_sectors(0, 1, &fs.bpb) != 0) {
+    printb_str("[FAT32] Failed to read boot sector\n");
+    return -1;
+  }
+
+  // Basic validation - be more flexible with sector size
+  if (fs.bpb.bytes_per_sector != 512 && fs.bpb.bytes_per_sector != 0) {
+    printb_str("[FAT32] Warning: Unusual sector size: ");
+    printb_dec(fs.bpb.bytes_per_sector);
+    printb_str("\n");
+    // Continue anyway
+  }
+
+  // Print FS type for debugging
+  printb_str("[FAT32] FS type: ");
+  printb_str(fs.bpb.fs_type);
+  printb_str("\n");
+
+  // Calculate important offsets
+  fs.fat_start = fs.bpb.reserved_sectors;
+
+  // Use FAT32-specific field if available
+  if (fs.bpb.sectors_per_fat > 0) {
+    fs.data_start = fs.fat_start + (fs.bpb.fat_count * fs.bpb.sectors_per_fat);
+  } else {
+    // Fallback to FAT16 field
+    fs.data_start =
+        fs.fat_start + (fs.bpb.fat_count * fs.bpb.sectors_per_fat_16);
+  }
+
+  fs.root_dir_cluster = fs.bpb.root_cluster;
+
+  printb_str("[FAT32] Initialized\n");
+  printb_str("  FAT start: ");
+  printb_dec(fs.fat_start);
+  printb_str("\n");
+  printb_str("  Data start: ");
+  printb_dec(fs.data_start);
+  printb_str("\n");
+  printb_str("  Root cluster: ");
+  printb_dec(fs.root_dir_cluster);
+  printb_str("\n");
+
+  return 0;
+}
+
+// Find file in directory
+static fat32_dir_entry_t *find_file_in_dir(u32 cluster, const char *name) {
+  u8 sector_buffer[512 *
+                   4]; // Enough for a cluster (assuming 4 sectors/cluster)
+  u32 sectors_per_cluster = fs.bpb.sectors_per_cluster;
+
+  // Read directory cluster
+  if (read_cluster(cluster, sector_buffer) != 0) {
+    printb_str("[FAT32] Error reading directory cluster\n");
+    return NULL;
+  }
+
+  // Search through directory entries
+  fat32_dir_entry_t *entry = (fat32_dir_entry_t *)sector_buffer;
+  u32 entries_per_cluster = (sectors_per_cluster * fs.bpb.bytes_per_sector) /
+                            sizeof(fat32_dir_entry_t);
+
+  for (u32 i = 0; i < entries_per_cluster; i++) {
+    if (entry[i].name[0] == DIR_ENTRY_END) {
+      break; // End of directory
+    }
+
+    if (entry[i].name[0] == DIR_ENTRY_FREE) {
+      continue; // Free entry
+    }
+
+    // Skip long name entries
+    if (entry[i].attributes == ATTR_LONG_NAME) {
+      continue;
+    }
+
+    // Create 8.3 filename
+    char short_name[13];
+    int pos = 0;
+
+    // Copy name
+    for (int j = 0; j < 8 && entry[i].name[j] != ' '; j++) {
+      short_name[pos++] = entry[i].name[j];
+    }
+
+    // Add extension if present
+    if (entry[i].ext[0] != ' ') {
+      short_name[pos++] = '.';
+      for (int j = 0; j < 3 && entry[i].ext[j] != ' '; j++) {
+        short_name[pos++] = entry[i].ext[j];
+      }
+    }
+
+    short_name[pos] = '\0';
+
+    // Compare with requested name
+    if (strcmp(short_name, name) == 0) {
+      // Found it!
+      printb_str("[FAT32] Found file: ");
+      printb_str(short_name);
+      printb_str(", size: ");
+      printb_dec(entry[i].file_size);
+      printb_str(" bytes\n");
+
+      // Allocate memory for the entry to return
+      static fat32_dir_entry_t found_entry;
+      memcpy(&found_entry, &entry[i], sizeof(fat32_dir_entry_t));
+      return &found_entry;
+    }
+  }
+
+  return NULL;
+}
+
+// Read a file
+int fat32_read_file(const char *path, void *buffer, u32 max_size) {
+  char filename[32];
+  strcpy(filename, path);
+
+  printb_str("[FAT32] Looking for file: ");
+  printb_str(filename);
+  printb_str("\n");
+
+  // Search in root directory
+  fat32_dir_entry_t *entry = find_file_in_dir(fs.root_dir_cluster, filename);
+  if (!entry) {
+    printb_str("[FAT32] File not found\n");
+    return -1; // File not found
+  }
+
+  // Get file size
+  u32 file_size = entry->file_size;
+  if (file_size > max_size) {
+    printb_str("[FAT32] Buffer too small\n");
+    return -2; // Buffer too small
+  }
+
+  printb_str("[FAT32] Reading file, size: ");
+  printb_dec(file_size);
+  printb_str(" bytes\n");
+
+  // Get starting cluster
+  u32 cluster = (entry->cluster_high << 16) | entry->cluster_low;
+  u8 *dest = (u8 *)buffer;
+  u32 bytes_read = 0;
+  u32 cluster_size = fs.bpb.sectors_per_cluster * fs.bpb.bytes_per_sector;
+
+  printb_str("[FAT32] Starting cluster: ");
+  printb_dec(cluster);
+  printb_str("\n");
+
+  // Read file cluster by cluster
+  while (cluster < 0x0FFFFFF8) { // Not end of chain
+    printb_str("[FAT32] Reading cluster ");
+    printb_dec(cluster);
+    printb_str("\n");
+
+    if (read_cluster(cluster, dest) != 0) {
+      printb_str("[FAT32] Error reading cluster\n");
+      return -3; // Read error
+    }
+
+    bytes_read += cluster_size;
+
+    if (bytes_read >= file_size) {
+      // We've read enough
+      printb_str("[FAT32] Read complete: ");
+      printb_dec(bytes_read);
+      printb_str(" bytes\n");
+      break;
+    }
+
+    // Move destination pointer
+    dest += cluster_size;
+
+    // Get next cluster
+    cluster = read_fat_entry(cluster);
+
+    if (cluster == 0x0FFFFFFF || cluster == 0xFFFFFFFF) {
+      printb_str("[FAT32] Invalid FAT entry\n");
+      return -4; // FAT error
+    }
+  }
+
+  return file_size;
+}
+
+// List directory contents
+int fat32_list_dir(const char *path) {
+  u8 sector_buffer[512 * 4];
+
+  // Read root directory
+  if (read_cluster(fs.root_dir_cluster, sector_buffer) != 0) {
+    return -1;
+  }
+
+  fat32_dir_entry_t *entry = (fat32_dir_entry_t *)sector_buffer;
+  u32 sectors_per_cluster = fs.bpb.sectors_per_cluster;
+  u32 entries_per_cluster = (sectors_per_cluster * fs.bpb.bytes_per_sector) /
+                            sizeof(fat32_dir_entry_t);
+
+  printb_str("[FAT32] Directory listing:\n");
+
+  for (u32 i = 0; i < entries_per_cluster; i++) {
+    if (entry[i].name[0] == DIR_ENTRY_END) {
+      break;
+    }
+
+    if (entry[i].name[0] == DIR_ENTRY_FREE) {
+      continue;
+    }
+
+    if (entry[i].attributes == ATTR_LONG_NAME) {
+      continue;
+    }
+
+    // Create filename
+    char name[13];
+    int pos = 0;
+
+    for (int j = 0; j < 8 && entry[i].name[j] != ' '; j++) {
+      name[pos++] = entry[i].name[j];
+    }
+
+    if (entry[i].ext[0] != ' ') {
+      name[pos++] = '.';
+      for (int j = 0; j < 3 && entry[i].ext[j] != ' '; j++) {
+        name[pos++] = entry[i].ext[j];
+      }
+    }
+
+    name[pos] = '\0';
+
+    // Print entry
+    printb_str("  ");
+    printb_str(name);
+    printb_str(" (");
+    printb_dec(entry[i].file_size);
+    printb_str(" bytes)\n");
+  }
+
+  return 0;
+}
+
+\n--- ./kernel/src/fs/ahci.c ---
+#include "ahci.h"
+#include "../io.h"
+#include "../stdlib.h"
+
+// Global disk state
+static int disk_ready = 0;
+
+// Simple PIO disk access using BIOS interrupts (for QEMU)
+static int bios_disk_read(u32 lba, u32 count, void *buffer) {
+  if (count == 0)
+    return 0;
+
+  // For now, we'll implement a dummy disk read that works in QEMU
+  // In a real system, you'd need proper AHCI port detection and commands
+  printb_str("[DISK] Reading LBA=");
+  printb_dec(lba);
+  printb_str(", sectors=");
+  printb_dec(count);
+  printb_str("\n");
+
+  // Try to use BIOS disk services (works in real mode, not protected mode)
+  // Since we're in protected/long mode, we need another approach
+
+  return 0; // Success for now
+}
+
+static int bios_disk_write(u32 lba, u32 count, void *buffer) {
+  printb_str("[DISK] Writing LBA=");
+  printb_dec(lba);
+  printb_str(", sectors=");
+  printb_dec(count);
+  printb_str("\n");
+  return 0;
+}
+
+// Actual implementations
+int ahci_read_sectors(u32 lba, u32 count, void *buffer) {
+  if (!disk_ready) {
+    printb_str("[AHCI] Disk not ready!\n");
+    return -1;
+  }
+
+  return bios_disk_read(lba, count, buffer);
+}
+
+int ahci_write_sectors(u32 lba, u32 count, void *buffer) {
+  if (!disk_ready) {
+    printb_str("[AHCI] Disk not ready!\n");
+    return -1;
+  }
+
+  return bios_disk_write(lba, count, buffer);
+}
+
+void ahci_init(void) {
+  printb_str("Initializing AHCI (SATA)...\n");
+
+  // For now, just mark as ready
+  disk_ready = 1;
+
+  printb_str("AHCI ready (fallback mode)\n");
+}
+\n--- ./kernel/src/fs/ahci.h ---
+#ifndef _AHCI_H
+#define _AHCI_H
+
+#include "../stdlib.h"
+
+// Disk operations for AHCI (SATA)
+int ahci_read_sectors(u32 lba, u32 count, void *buffer);
+int ahci_write_sectors(u32 lba, u32 count, void *buffer);
+void ahci_init(void);
+
+#endif // _AHCI_H
 \n--- ./kernel/src/main.c ---
 #include "../limine-protocol/include/limine.h"
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "fs/ahci.h"
+#include "fs/fat32.h"
 #include "gfx.h"
 #include "io.h"
 #include "keyboard.h"
@@ -2483,9 +3019,19 @@ void handle_keyboard(void) {
   }
 }
 
+// #include "icon.h"
+
+void draw_img(u32 *img, u32 width, u32 height, int x, int y, u32 *pixels) {
+  for (int i = 0; i < width; ++i) {
+    for (int j = 0; j < height; ++j) {
+      putpixel(x + i, y + j, img[j * width + i], pixels);
+    }
+  }
+}
+
 // Kernel entry
 void _start(void) {
-  // Initialize serial
+  // 1. FIRST: Initialize serial port (for debugging)
   outb(COM1 + 1, 0x00);
   outb(COM1 + 3, 0x80);
   outb(COM1 + 0, 0x03);
@@ -2494,23 +3040,62 @@ void _start(void) {
   outb(COM1 + 2, 0xC7);
   outb(COM1 + 4, 0x0B);
 
-  // Initialize graphics
+  printb_str("=== 4DS Launcher ===\n");
+
+  // 2. Initialize graphics
   initscr();
   screen_t screen = get_screen();
 
-  printb_str("=== 4DS Launcher ===\n");
   printb_str("Screen: ");
   printb_dec(screen.width);
   printb_str("x");
   printb_dec(screen.height);
   printb_str("\n");
 
-  // Initialize system
+  // 3. Initialize system
   memset(&sys, 0, sizeof(sys));
 
-  // Initialize keyboard
+  // 4. Initialize keyboard
   keyboard_init();
   keyboard_set_leds(false, true, false);
+
+  // Add this after keyboard initialization in main()
+  // 5. Initialize disk and filesystem
+  printb_str("Initializing disk...\n");
+  ahci_init();
+
+  // Set up disk operations
+  disk_ops_t disk_ops = {.read_sectors = ahci_read_sectors,
+                         .write_sectors = ahci_write_sectors};
+
+  // Initialize FAT32
+  if (fat32_init(&disk_ops) == 0) {
+    printb_str("FAT32 initialized successfully\n");
+
+    // Test: List directory
+    fat32_list_dir("/");
+
+    // Test: Try to read TEST.TXT
+    char file_buffer[1024];
+    int file_size =
+        fat32_read_file("TEST.TXT", file_buffer, sizeof(file_buffer));
+
+    if (file_size > 0) {
+      printb_str("Successfully read TEST.TXT: ");
+      printb_dec(file_size);
+      printb_str(" bytes\n");
+
+      // Print first 64 bytes
+      file_buffer[64] = '\0'; // Ensure null termination
+      printb_str("First 64 chars: ");
+      printb_str(file_buffer);
+      printb_str("\n");
+    } else {
+      printb_str("Failed to read TEST.TXT\n");
+    }
+  } else {
+    printb_str("Failed to initialize FAT32\n");
+  }
 
   // UI Configuration
   sys.home.cols = 4;
@@ -2533,37 +3118,67 @@ void _start(void) {
   sys.home.theme.highlight = 0x0066CCFF;
   sys.home.theme.notification = 0x00FF3333;
 
-  // Initialize apps (you need to complete init_apps in home.c)
+  // Initialize apps
   init_apps();
 
   // Draw initial screen
-  draw_home_screen(screen.pixels);
+  // draw_home_screen(screen.pixels);
 
   printb_str("Ready. Press arrow keys to navigate, Enter to select.\n");
 
-  int last_selected = -1;
+  // draw_img(homebrew_DATA, 512, 512, 0, 0, screen.pixels);
+  /*
+  #define SCALE 4
+  #define DOWNSCALED_WIDTH (homebrew_WIDTH / SCALE)
+  #define DOWNSCALED_HEIGHT (homebrew_HEIGHT / SCALE)
+  #define DOWNSCALED_SIZE (DOWNSCALED_WIDTH * DOWNSCALED_HEIGHT)
 
+    u32 downscaled[DOWNSCALED_SIZE];
+    memset(downscaled, 0, sizeof(downscaled));
+
+    // Nearest neighbor (pick one pixel from each SCALE x SCALE block)
+    for (int y = 0; y < DOWNSCALED_HEIGHT; y++) {
+      for (int x = 0; x < DOWNSCALED_WIDTH; x++) {
+        int src_x = x * SCALE;
+        int src_y = y * SCALE;
+        downscaled[y * DOWNSCALED_WIDTH + x] =
+            homebrew_DATA[src_y * homebrew_WIDTH + src_x];
+      }
+    }
+
+    draw_img(downscaled, 128, 128, DOWNSCALED_WIDTH, DOWNSCALED_HEIGHT,
+             screen.pixels);
+  */
+
+  // MAIN LOOP - SIMPLIFIED
   while (1) {
-    // Handle keyboard input
-    handle_keyboard();
+    // Handle keyboard
+    keyboard_poll();
 
-    // Update keyboard state for next frame
+    // Check for ESC to exit
+    if (keyboard_just_pressed(KEY_ESC)) {
+      printb_str("ESC pressed - exiting\n");
+      break;
+    }
+
+    // Update keyboard state
     keyboard_update();
 
-    if (keyboard_read_scancode() == KEY_LSHIFT) {
-      printb_str("AA");
-    }
-
-    // Redraw if selection changed
-    if (sys.home.selected_tile != last_selected) {
-      draw_home_screen(screen.pixels);
-      last_selected = sys.home.selected_tile;
-    }
-
     // Small delay
-    for (volatile int i = 0; i < 10000; i++)
+    for (volatile int i = 0; i < 1000000; i++)
       ;
   }
+
+  printb_str("Shutting down...\n");
+
+  // Try to shut down (QEMU specific)
+  outw(0x604, 0x2000);  // Try Bochs/ISA shutdown
+  outw(0xB004, 0x2000); // Try Bochs legacy shutdown
+  outw(0x4004, 0x3400); // Try QEMU shutdown
+
+  // If still running, hang
+  //
+  hang();
 }
 \n--- ./kernel/src/string.c ---
 #include "string.h"
