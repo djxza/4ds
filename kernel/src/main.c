@@ -4,6 +4,7 @@
 
 #include "fs/ahci.h"
 #include "fs/fat32.h"
+#include "fs/qemu_disk.h"
 #include "gfx.h"
 #include "io.h"
 #include "keyboard.h"
@@ -123,7 +124,47 @@ void _start(void) {
   keyboard_init();
   keyboard_set_leds(false, true, false);
 
-  // Add this after keyboard initialization in main()
+  // 5. initalize disk // Initialize disk
+  printb_str("Initializing disk...\n");
+  qemu_disk_init();
+
+  // Simple test: Read first sector
+  u8 sector_buffer[512];
+  if (qemu_disk_read_sectors(0, 1, sector_buffer) == 0) {
+    printb_str("Disk read successful!\n");
+
+    // Display first 64 bytes in hex
+    printb_str("First 64 bytes of sector 0:\n");
+    for (int i = 0; i < 64; i++) {
+      if (i % 16 == 0) {
+        printb_str("\n");
+        printb_hex(i);
+        printb_str(": ");
+      }
+      printb_hex(sector_buffer[i]);
+      printb_str(" ");
+    }
+    printb_str("\n");
+
+    // Check for FAT32 BPB
+    if (sector_buffer[510] == 0x55 && sector_buffer[511] == 0xAA) {
+      printb_str("Valid boot sector found!\n");
+
+      // Print filesystem type
+      char fs_type[9] = {0};
+      for (int i = 0; i < 8; i++) {
+        fs_type[i] = sector_buffer[0x52 + i];
+      }
+      printb_str("Filesystem type: ");
+      printb_str(fs_type);
+      printb_str("\n");
+    }
+  } else {
+    printb_str("Disk read failed\n");
+  }
+
+  // TEMPORARILY DISABLE DISK INITIALIZATION - COMMENT THIS OUT
+  /*
   // 5. Initialize disk and filesystem
   printb_str("Initializing disk...\n");
   ahci_init();
@@ -160,6 +201,7 @@ void _start(void) {
   } else {
     printb_str("Failed to initialize FAT32\n");
   }
+  */
 
   // UI Configuration
   sys.home.cols = 4;
@@ -185,36 +227,22 @@ void _start(void) {
   // Initialize apps
   init_apps();
 
-  // Draw initial screen
-  // draw_home_screen(screen.pixels);
-
-  printb_str("Ready. Press arrow keys to navigate, Enter to select.\n");
-
-  // draw_img(homebrew_DATA, 512, 512, 0, 0, screen.pixels);
-  /*
-  #define SCALE 4
-  #define DOWNSCALED_WIDTH (homebrew_WIDTH / SCALE)
-  #define DOWNSCALED_HEIGHT (homebrew_HEIGHT / SCALE)
-  #define DOWNSCALED_SIZE (DOWNSCALED_WIDTH * DOWNSCALED_HEIGHT)
-
-    u32 downscaled[DOWNSCALED_SIZE];
-    memset(downscaled, 0, sizeof(downscaled));
-
-    // Nearest neighbor (pick one pixel from each SCALE x SCALE block)
-    for (int y = 0; y < DOWNSCALED_HEIGHT; y++) {
-      for (int x = 0; x < DOWNSCALED_WIDTH; x++) {
-        int src_x = x * SCALE;
-        int src_y = y * SCALE;
-        downscaled[y * DOWNSCALED_WIDTH + x] =
-            homebrew_DATA[src_y * homebrew_WIDTH + src_x];
-      }
+  // Draw something to the screen to verify graphics work
+  // Fill screen with gradient
+  for (int y = 0; y < screen.height; y++) {
+    u32 color = 0xFF0000 + (y * 255 / screen.height) * 0x100; // Red gradient
+    for (int x = 0; x < screen.width; x++) {
+      putpixel(x, y, color, screen.pixels);
     }
+  }
 
-    draw_img(downscaled, 128, 128, DOWNSCALED_WIDTH, DOWNSCALED_HEIGHT,
-             screen.pixels);
-  */
+  // Draw text to verify fonts work
+  draw_text(100, 100, "4DS Launcher Running!", 0xFFFFFF, 0x000000,
+            screen.pixels);
 
-  // MAIN LOOP - SIMPLIFIED
+  printb_str("Graphics test complete - UI should be visible\n");
+
+  // MAIN LOOP
   while (1) {
     // Handle keyboard
     keyboard_poll();
@@ -234,13 +262,5 @@ void _start(void) {
   }
 
   printb_str("Shutting down...\n");
-
-  // Try to shut down (QEMU specific)
-  outw(0x604, 0x2000);  // Try Bochs/ISA shutdown
-  outw(0xB004, 0x2000); // Try Bochs legacy shutdown
-  outw(0x4004, 0x3400); // Try QEMU shutdown
-
-  // If still running, hang
-  //
   hang();
 }

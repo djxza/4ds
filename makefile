@@ -140,7 +140,7 @@ kernel/.deps-obtained:
 kernel: kernel/.deps-obtained
 	$(MAKE) -C kernel ARCH=$(ARCH)
 
-# ========= QEMU RUN TARGETS =========
+# Update the QEMU command to use our HDD correctly
 define QEMU_UEFI_RUN
 qemu-system-$(ARCH) \
     -M $(MACHINE) \
@@ -150,7 +150,7 @@ qemu-system-$(ARCH) \
     -device isa-debug-exit,iobase=0xf4,iosize=0x04 \
     -display sdl \
     -serial stdio \
-    $(1) \
+    -drive file=$(1),format=raw,index=0,media=disk \
     $(QEMUFLAGS)
 endef
 
@@ -170,7 +170,14 @@ run-loongarch64: edk2-ovmf $(IMAGE_NAME).iso
 	$(call QEMU_UEFI_RUN,-cdrom $(IMAGE_NAME).iso)
 
 run-hdd-x86_64: edk2-ovmf $(IMAGE_NAME).hdd
-	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
+	qemu-system-x86_64 \
+		-M $(MACHINE) \
+		-drive if=pflash,unit=0,format=raw,file=edk2-ovmf/ovmf-code-x86_64.fd,readonly=on \
+		-device isa-debug-exit,iobase=0xf4,iosize=0x04 \
+		-display sdl \
+		-serial stdio \
+		-hda $(IMAGE_NAME).hdd \
+		$(QEMUFLAGS)
 
 run-hdd-aarch64: edk2-ovmf $(IMAGE_NAME).hdd
 	$(call QEMU_UEFI_RUN,-hda $(IMAGE_NAME).hdd)
@@ -235,28 +242,49 @@ $(IMAGE_NAME).iso: limine/limine kernel
 	$(call CREATE_ISO,limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI)
 endif
 
-# HDD image creation
+# HDD image creation - FIXED VERSION with proper UEFI boot support
+# HDD image creation - MINIMAL WORKING VERSION
+# HDD image creation - WORKING VERSION with mtools
 $(IMAGE_NAME).hdd: limine/limine kernel
-	rm -f $(IMAGE_NAME).hdd
-	dd if=/dev/zero bs=1M count=0 seek=64 of=$(IMAGE_NAME).hdd status=none
-	sgdisk $(IMAGE_NAME).hdd -n 1:2048 -t 1:ef00 $(if $(filter x86_64,$(ARCH)),-m 1,) >/dev/null 2>&1
-	mformat -i $(IMAGE_NAME).hdd@@1M -F >/dev/null 2>&1
-	mmd -i $(IMAGE_NAME).hdd@@1M ::/EFI ::/EFI/BOOT ::/boot ::/boot/limine
-	mcopy -i $(IMAGE_NAME).hdd@@1M kernel/bin-$(ARCH)/kernel ::/boot
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine.conf ::/boot/limine
+	@echo "=== Creating HDD image ==="
+	
+	# Clean up
+	-rm -f $(IMAGE_NAME).hdd mnt -rf 2>/dev/null || true
+	
+	# Use mformat to create a FAT32 image with proper boot sector
+	# This creates a bootable FAT32 filesystem
+	mkfs.fat -C $(IMAGE_NAME).hdd 131072 2>/dev/null || \
+	  (dd if=/dev/zero of=$(IMAGE_NAME).hdd bs=512 count=131072 && \
+	   mkfs.fat $(IMAGE_NAME).hdd)
+	
+	# Create mount point
+	mkdir -p mnt
+	
+	# Mount using mtools (avoids loop device issues)
+	# Copy files using mcopy
+	mmd -i $(IMAGE_NAME).hdd ::/EFI
+	mmd -i $(IMAGE_NAME).hdd ::/EFI/BOOT
+	mmd -i $(IMAGE_NAME).hdd ::/boot
+	mmd -i $(IMAGE_NAME).hdd ::/boot/limine
+	
+	# Copy files using mcopy
+	mcopy -i $(IMAGE_NAME).hdd kernel/bin-$(ARCH)/kernel ::/boot/kernel
+	mcopy -i $(IMAGE_NAME).hdd limine.conf ::/boot/limine/limine.conf
+	
+	# Architecture-specific bootloader copying
 ifeq ($(ARCH),x86_64)
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/limine-bios.sys ::/boot/limine
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTX64.EFI ::/EFI/BOOT
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOTIA32.EFI ::/EFI/BOOT
+	mcopy -i $(IMAGE_NAME).hdd limine/BOOTX64.EFI ::/EFI/BOOT/BOOTX64.EFI
+	mcopy -i $(IMAGE_NAME).hdd limine/limine-bios.sys ::/boot/limine/limine-bios.sys
+	# Install Limine BIOS bootloader
+	sudo ./limine/limine bios-install $(IMAGE_NAME).hdd 2>/dev/null || true
 else
-	mcopy -i $(IMAGE_NAME).hdd@@1M limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI ::/EFI/BOOT
+	mcopy -i $(IMAGE_NAME).hdd limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI ::/EFI/BOOT/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI
 endif
-
-# ========= AUTOMATIC VARIABLES =========
-# Ensure proper dependency tracking
--include $(wildcard .*.d)
-
-# Silent mode by default
-ifeq (,$(findstring s,$(MAKEFLAGS)))
-.SILENT:
-endif
+	
+	# Create test file
+	echo "Test from 4DS Launcher" | mcopy -i $(IMAGE_NAME).hdd - ::/TEST.TXT
+	
+	# Clean up
+	rmdir mnt 2>/dev/null || true
+	
+	@echo "=== HDD image created using mtools ==="

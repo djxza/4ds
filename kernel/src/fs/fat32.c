@@ -121,7 +121,7 @@ static fat32_dir_entry_t *find_file_in_dir(u32 cluster, const char *name) {
       break; // End of directory
     }
 
-    if (entry[i].name[0] == DIR_ENTRY_FREE) {
+    if ((u8)entry[i].name[0] == DIR_ENTRY_FREE) {
       continue; // Free entry
     }
 
@@ -262,7 +262,7 @@ int fat32_list_dir(const char *path) {
       break;
     }
 
-    if (entry[i].name[0] == DIR_ENTRY_FREE) {
+    if ((u8)entry[i].name[0] == DIR_ENTRY_FREE) {
       continue;
     }
 
