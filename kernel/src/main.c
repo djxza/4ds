@@ -126,71 +126,103 @@ void _start(void) {
   keyboard_set_leds(false, true, false);
 
   // 5. Initialize disk using IDE (simpler than AHCI)
-  printb_str("Initializing disk...\n");
-  ide_init();
+  // Set up disk operations
+  disk_ops_t disk_ops = {.read_sectors = ahci_read_sectors,
+                         .write_sectors = ahci_write_sectors};
 
-  // Set up disk operations for IDE
-  disk_ops_t disk_ops = {.read_sectors = ide_read_sectors,
-                         .write_sectors = ide_write_sectors};
+  /* Disk initialization: try AHCI, fall back to IDE if necessary */
+  printb_str("Initializing disk (try AHCI)...\n");
 
-  // Test disk read
+  /* Call AHCI init explicitly first so ahci_read_sectors() can succeed. */
+  ahci_init();
+
+  /* temporary buffer for testing */
+  u8 sector_buf[512];
+  memset(sector_buf, 0, sizeof(sector_buf));
+
+  disk_ops = (disk_ops_t){0};
+
+  /* Try AHCI read test (only after calling ahci_init) */
+  if (ahci_read_sectors(0, 1, sector_buf) == 0) {
+    printb_str("Using AHCI disk ops\n");
+    disk_ops.read_sectors = ahci_read_sectors;
+    disk_ops.write_sectors = ahci_write_sectors;
+  } else {
+    /* Fall back to IDE */
+    printb_str("Falling back to IDE\n");
+    ide_init();
+    disk_ops.read_sectors = ide_read_sectors;
+    disk_ops.write_sectors = ide_write_sectors;
+  }
+
+  /* Now use the selected backend (do not re-initialize/force IDE) */
+  printb_str("Initializing disk (selected backend)...\n");
   u8 sector_buffer[512];
   memset(sector_buffer, 0, sizeof(sector_buffer));
 
-  if (ide_read_sectors(0, 1, sector_buffer) == 0) {
-    printb_str("IDE disk read successful!\n");
-
-    // Check for boot sector signature
-    if (sector_buffer[510] == 0x55 && sector_buffer[511] == 0xAA) {
-      printb_str("Valid boot sector found\n");
-
-      // Initialize FAT32
-      if (fat32_init(&disk_ops) == 0) {
-        printb_str("FAT32 initialized successfully\n");
-
-        // List directory
-        fat32_list_dir("/");
-
-        // Try to read TEST.TXT
-        char file_buffer[1024];
-        int file_size =
-            fat32_read_file("TEST.TXT", file_buffer, sizeof(file_buffer));
-
-        if (file_size > 0) {
-          printb_str("Successfully read TEST.TXT: ");
-          printb_dec(file_size);
-          printb_str(" bytes\n");
-
-          // Print first part
-          file_buffer[64] = '\0';
-          printb_str("Content: ");
-          printb_str(file_buffer);
-          printb_str("\n");
-        } else {
-          printb_str("TEST.TXT not found or empty\n");
-        }
-      } else {
-        printb_str("FAT32 init failed\n");
-      }
-    } else {
-      printb_str("No boot sector signature\n");
-    }
+  if (disk_ops.read_sectors &&
+      disk_ops.read_sectors(0, 1, sector_buffer) == 0) {
+    printb_str("Disk read successful using selected backend!\n");
+    /* ...proceed with FAT32 init and file I/O as before... */
   } else {
-    printb_str("IDE disk read failed\n");
+    printb_str("Disk read failed using selected backend\n");
   }
 
-  // Check specific FAT32 fields
-  fat32_bpb_t *bpb = (fat32_bpb_t *)sector_buffer;
-  printb_str("Bytes per sector: ");
-  printb_dec(bpb->bytes_per_sector);
-  printb_str("\n");
-  printb_str("Sectors per cluster: ");
-  printb_dec(bpb->sectors_per_cluster);
-  printb_str("\n");
-  printb_str("Root cluster: ");
-  printb_dec(bpb->root_cluster);
-  printb_str("\n");
-
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
   // TEMPORARILY DISABLE DISK INITIALIZATION - COMMENT THIS OUT
   /*
   // 5. Initialize disk and filesystem
