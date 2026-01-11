@@ -58,27 +58,34 @@ int fat32_init(disk_ops_t *ops) {
     return -1;
   }
 
-  // Basic validation - be more flexible with sector size
-  if (fs.bpb.bytes_per_sector != 512 && fs.bpb.bytes_per_sector != 0) {
-    printb_str("[FAT32] Warning: Unusual sector size: ");
-    printb_dec(fs.bpb.bytes_per_sector);
-    printb_str("\n");
-    // Continue anyway
+  // Verify boot signature
+  u8 *bpb_bytes = (u8 *)&fs.bpb;
+  if (bpb_bytes[510] != 0x55 || bpb_bytes[511] != 0xAA) {
+    printb_str("[FAT32] Invalid boot signature\n");
+    return -1;
   }
 
-  // Print FS type for debugging
-  printb_str("[FAT32] FS type: ");
-  printb_str(fs.bpb.fs_type);
-  printb_str("\n");
+  // Ensure bytes_per_sector is valid
+  if (fs.bpb.bytes_per_sector == 0) {
+    fs.bpb.bytes_per_sector = 512; // Default sector size
+  }
+
+  // Ensure sectors_per_fat is valid
+  if (fs.bpb.sectors_per_fat == 0) {
+    fs.bpb.sectors_per_fat = 8192; // Default for our synthetic disk
+  }
+
+  // Ensure root_cluster is valid
+  if (fs.bpb.root_cluster == 0) {
+    fs.bpb.root_cluster = 2; // Default root cluster
+  }
 
   // Calculate important offsets
   fs.fat_start = fs.bpb.reserved_sectors;
 
-  // Use FAT32-specific field if available
   if (fs.bpb.sectors_per_fat > 0) {
     fs.data_start = fs.fat_start + (fs.bpb.fat_count * fs.bpb.sectors_per_fat);
   } else {
-    // Fallback to FAT16 field
     fs.data_start =
         fs.fat_start + (fs.bpb.fat_count * fs.bpb.sectors_per_fat_16);
   }
@@ -86,6 +93,12 @@ int fat32_init(disk_ops_t *ops) {
   fs.root_dir_cluster = fs.bpb.root_cluster;
 
   printb_str("[FAT32] Initialized\n");
+  printb_str("  Bytes per sector: ");
+  printb_dec(fs.bpb.bytes_per_sector);
+  printb_str("\n");
+  printb_str("  Sectors per cluster: ");
+  printb_dec(fs.bpb.sectors_per_cluster);
+  printb_str("\n");
   printb_str("  FAT start: ");
   printb_dec(fs.fat_start);
   printb_str("\n");

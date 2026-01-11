@@ -4,6 +4,7 @@
 
 #include "fs/ahci.h"
 #include "fs/fat32.h"
+#include "fs/ide.h"
 #include "fs/qemu_disk.h"
 #include "gfx.h"
 #include "io.h"
@@ -124,44 +125,71 @@ void _start(void) {
   keyboard_init();
   keyboard_set_leds(false, true, false);
 
-  // 5. initalize disk // Initialize disk
+  // 5. Initialize disk using IDE (simpler than AHCI)
   printb_str("Initializing disk...\n");
-  qemu_disk_init();
+  ide_init();
 
-  // Simple test: Read first sector
+  // Set up disk operations for IDE
+  disk_ops_t disk_ops = {.read_sectors = ide_read_sectors,
+                         .write_sectors = ide_write_sectors};
+
+  // Test disk read
   u8 sector_buffer[512];
-  if (qemu_disk_read_sectors(0, 1, sector_buffer) == 0) {
-    printb_str("Disk read successful!\n");
+  memset(sector_buffer, 0, sizeof(sector_buffer));
 
-    // Display first 64 bytes in hex
-    printb_str("First 64 bytes of sector 0:\n");
-    for (int i = 0; i < 64; i++) {
-      if (i % 16 == 0) {
-        printb_str("\n");
-        printb_hex(i);
-        printb_str(": ");
-      }
-      printb_hex(sector_buffer[i]);
-      printb_str(" ");
-    }
-    printb_str("\n");
+  if (ide_read_sectors(0, 1, sector_buffer) == 0) {
+    printb_str("IDE disk read successful!\n");
 
-    // Check for FAT32 BPB
+    // Check for boot sector signature
     if (sector_buffer[510] == 0x55 && sector_buffer[511] == 0xAA) {
-      printb_str("Valid boot sector found!\n");
+      printb_str("Valid boot sector found\n");
 
-      // Print filesystem type
-      char fs_type[9] = {0};
-      for (int i = 0; i < 8; i++) {
-        fs_type[i] = sector_buffer[0x52 + i];
+      // Initialize FAT32
+      if (fat32_init(&disk_ops) == 0) {
+        printb_str("FAT32 initialized successfully\n");
+
+        // List directory
+        fat32_list_dir("/");
+
+        // Try to read TEST.TXT
+        char file_buffer[1024];
+        int file_size =
+            fat32_read_file("TEST.TXT", file_buffer, sizeof(file_buffer));
+
+        if (file_size > 0) {
+          printb_str("Successfully read TEST.TXT: ");
+          printb_dec(file_size);
+          printb_str(" bytes\n");
+
+          // Print first part
+          file_buffer[64] = '\0';
+          printb_str("Content: ");
+          printb_str(file_buffer);
+          printb_str("\n");
+        } else {
+          printb_str("TEST.TXT not found or empty\n");
+        }
+      } else {
+        printb_str("FAT32 init failed\n");
       }
-      printb_str("Filesystem type: ");
-      printb_str(fs_type);
-      printb_str("\n");
+    } else {
+      printb_str("No boot sector signature\n");
     }
   } else {
-    printb_str("Disk read failed\n");
+    printb_str("IDE disk read failed\n");
   }
+
+  // Check specific FAT32 fields
+  fat32_bpb_t *bpb = (fat32_bpb_t *)sector_buffer;
+  printb_str("Bytes per sector: ");
+  printb_dec(bpb->bytes_per_sector);
+  printb_str("\n");
+  printb_str("Sectors per cluster: ");
+  printb_dec(bpb->sectors_per_cluster);
+  printb_str("\n");
+  printb_str("Root cluster: ");
+  printb_dec(bpb->root_cluster);
+  printb_str("\n");
 
   // TEMPORARILY DISABLE DISK INITIALIZATION - COMMENT THIS OUT
   /*

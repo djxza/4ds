@@ -245,46 +245,45 @@ endif
 # HDD image creation - FIXED VERSION with proper UEFI boot support
 # HDD image creation - MINIMAL WORKING VERSION
 # HDD image creation - WORKING VERSION with mtools
+
 $(IMAGE_NAME).hdd: limine/limine kernel
 	@echo "=== Creating HDD image ==="
 	
 	# Clean up
 	-rm -f $(IMAGE_NAME).hdd mnt -rf 2>/dev/null || true
 	
-	# Use mformat to create a FAT32 image with proper boot sector
-	# This creates a bootable FAT32 filesystem
-	mkfs.fat -C $(IMAGE_NAME).hdd 131072 2>/dev/null || \
-	  (dd if=/dev/zero of=$(IMAGE_NAME).hdd bs=512 count=131072 && \
-	   mkfs.fat $(IMAGE_NAME).hdd)
+	# Use mformat to create a FAT32 image
+	dd if=/dev/zero of=$(IMAGE_NAME).hdd bs=512 count=131072
+	mkfs.fat -F 32 $(IMAGE_NAME).hdd
 	
 	# Create mount point
 	mkdir -p mnt
 	
-	# Mount using mtools (avoids loop device issues)
-	# Copy files using mcopy
+	# Mount using mtools
+	# Create directory structure
 	mmd -i $(IMAGE_NAME).hdd ::/EFI
 	mmd -i $(IMAGE_NAME).hdd ::/EFI/BOOT
 	mmd -i $(IMAGE_NAME).hdd ::/boot
 	mmd -i $(IMAGE_NAME).hdd ::/boot/limine
 	
-	# Copy files using mcopy
+	# Copy files
 	mcopy -i $(IMAGE_NAME).hdd kernel/bin-$(ARCH)/kernel ::/boot/kernel
 	mcopy -i $(IMAGE_NAME).hdd limine.conf ::/boot/limine/limine.conf
 	
-	# Architecture-specific bootloader copying
+	# Create TEST.TXT with sample content
+	echo "This is a test file from 4DS Launcher!" | mcopy -i $(IMAGE_NAME).hdd - ::/TEST.TXT
+	echo "Hello from FAT32 filesystem!" | mcopy -i $(IMAGE_NAME).hdd - ::/HELLO.TXT
+	
+	# Architecture-specific bootloader
 ifeq ($(ARCH),x86_64)
 	mcopy -i $(IMAGE_NAME).hdd limine/BOOTX64.EFI ::/EFI/BOOT/BOOTX64.EFI
 	mcopy -i $(IMAGE_NAME).hdd limine/limine-bios.sys ::/boot/limine/limine-bios.sys
-	# Install Limine BIOS bootloader
 	sudo ./limine/limine bios-install $(IMAGE_NAME).hdd 2>/dev/null || true
 else
 	mcopy -i $(IMAGE_NAME).hdd limine/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI ::/EFI/BOOT/BOOT$(shell echo $(ARCH) | tr '[:lower:]' '[:upper:]').EFI
 endif
 	
-	# Create test file
-	echo "Test from 4DS Launcher" | mcopy -i $(IMAGE_NAME).hdd - ::/TEST.TXT
-	
 	# Clean up
 	rmdir mnt 2>/dev/null || true
 	
-	@echo "=== HDD image created using mtools ==="
+	@echo "=== HDD image created ==="
