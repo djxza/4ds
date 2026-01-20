@@ -1,6 +1,13 @@
 .code16
-.global start
-start:
+
+/* Define segment offsets for code and data */
+.equ CODE_OFFSET, 0x8    /* Set the code segment offset to 0x8 */
+.equ DATA_OFFSET, 0x10   /* Set the data segment offset to 0x10 */
+
+.text
+
+.global _start
+_start:
     cli
     movw $0x00, %ax
     movw %ax, %ds
@@ -9,6 +16,7 @@ start:
     movw $0x7c00, %sp
     movw $msg, %si
     sti
+    jmp print
 
 print:
     lodsb
