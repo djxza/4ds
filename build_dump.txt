@@ -4,14 +4,12 @@
 
 .
 ├── bin
-│   ├── 4ds.img
+│   ├── boot.bin
+│   ├── kernel.bin
 │   └── kernel.elf
 ├── build
 │   └── framebuffer.o
 ├── build_dump.txt
-├── fb
-│   ├── framebuffer.c
-│   └── framebuffer.h
 ├── .git
 │   ├── COMMIT_EDITMSG
 │   ├── config
@@ -45,11 +43,18 @@
 │   │               └── master
 │   ├── objects
 │   │   ├── 00
-│   │   │   └── 860e2c039a65714d0bf462c79fed4b35e946c1
+│   │   │   ├── 860e2c039a65714d0bf462c79fed4b35e946c1
+│   │   │   └── ba853fcc35b910161cd9c5f6cc5dd175d82265
 │   │   ├── 03
 │   │   │   └── c9cbab5251b0a75764c81c7d4f15faaa1ff092
 │   │   ├── 04
-│   │   │   └── 7878c3246287f21e363075f6bdb98eba5e49fd
+│   │   │   ├── 7878c3246287f21e363075f6bdb98eba5e49fd
+│   │   │   └── 8499191b50dd7478e383316121602825b56003
+│   │   ├── 05
+│   │   │   └── 657b4e74db7fa466134c84aa8ce7455606c06d
+│   │   ├── 06
+│   │   │   ├── 2d86959d91f639e25e71a2e9c6d188bb6c0a2b
+│   │   │   └── 99068a232e9a945199dbd22a3a5e728d98f996
 │   │   ├── 07
 │   │   │   └── d9154c6b68ba15ae4a65eea0b0a7e25a5d54a3
 │   │   ├── 0f
@@ -78,6 +83,8 @@
 │   │   │   └── 57a9939c6abb5b1d7e08821d204d5c662b1065
 │   │   ├── 26
 │   │   │   └── 275c1d4b4ce027c26a0721577520ec4741bf93
+│   │   ├── 28
+│   │   │   └── 063e573f5af38857668cea84e9be5a5e1191e4
 │   │   ├── 2b
 │   │   │   └── 7d7363f888592292b30e906519cf99755809ef
 │   │   ├── 2e
@@ -92,7 +99,8 @@
 │   │   ├── 37
 │   │   │   └── e24ee7ea1755a5562b6c6d9c55dbcfcba0c208
 │   │   ├── 38
-│   │   │   └── 1498e51ad11468caca9afc0db9ceed0a10637a
+│   │   │   ├── 1498e51ad11468caca9afc0db9ceed0a10637a
+│   │   │   └── c8f144374e3215e940e2b79b7946dd4101c311
 │   │   ├── 3a
 │   │   │   └── 2e435d8b8696e9ed472cfa6a751de6a2e4ab99
 │   │   ├── 3b
@@ -108,12 +116,16 @@
 │   │   ├── 41
 │   │   │   └── 65b62a57a778556dd9275910890a18e2e24dc8
 │   │   ├── 43
+│   │   │   ├── 6502b2fd0b42eb357ea404356465a152813580
 │   │   │   └── 8fb4649cda3d1a59d092633d80d9cab865667b
 │   │   ├── 46
 │   │   │   └── 9343c0d0f5c7f89e36025169b06a044c3c6277
 │   │   ├── 4e
 │   │   │   ├── b2cc464c9afd477034286781d16cdbc7f5c2d0
 │   │   │   └── f09f6322a09e00d553a0008a73379985841d8b
+│   │   ├── 4f
+│   │   │   ├── 86ae25eae033b4ae0e294a250eb2710a864c42
+│   │   │   └── ed5e63b56887597eb70028c506397e9524a5d6
 │   │   ├── 53
 │   │   │   └── 9b3b84aa213ee2c3bcd261af054ddefd2ae9a5
 │   │   ├── 55
@@ -126,6 +138,12 @@
 │   │   │   └── cccefeeb34c11610c9563318932c02a397820b
 │   │   ├── 5b
 │   │   │   └── f98947d10496ca7ad7ff24eac945532234eaf1
+│   │   ├── 5c
+│   │   │   └── b74c20352566dbe5a5881de7be8bb8f89e9c6c
+│   │   ├── 5d
+│   │   │   └── 71bbc85694c7cf738e2c38a28da0370659e7ae
+│   │   ├── 5e
+│   │   │   └── 5e88987ba252c1dde2b917c9e73fd8d100ea3e
 │   │   ├── 5f
 │   │   │   └── ac0edcf826fdf702dfc20fefbdbd9359a18fb6
 │   │   ├── 60
@@ -139,24 +157,37 @@
 │   │   ├── 66
 │   │   │   ├── 14a4d54d26cab4c6edc74d1097c9ec1246efda
 │   │   │   └── 29077e566fb143be1a728a8ec7b7c50a088d69
+│   │   ├── 67
+│   │   │   └── bbf940fa739acb37441e0140c7a32e77d3cc6e
 │   │   ├── 68
 │   │   │   └── 1d45878a6246da511f563ba1008c8cde480c7f
 │   │   ├── 69
 │   │   │   └── 81f42544b10a1a3af1bd8d70f99fd20ffff9fe
 │   │   ├── 6c
 │   │   │   └── d028b32716e90178d3537b0b73d9e0285952bc
+│   │   ├── 6d
+│   │   │   └── 3527322ae95899fbc3187e6014c11d5d7f21ed
+│   │   ├── 72
+│   │   │   └── 63726732dada2a3b03f188480a0e0d1dd52096
 │   │   ├── 73
 │   │   │   ├── 4b59703acf34067dbfe6334057aa39aa2af537
-│   │   │   └── 9a2138dd41517ace84cb2d72add7854380fc7b
+│   │   │   ├── 9a2138dd41517ace84cb2d72add7854380fc7b
+│   │   │   └── b0cee4c3dc19712c40bc962d79e35143032f3d
 │   │   ├── 74
 │   │   │   └── d10aa2b51a49b4aa8e81436d9d2ddd34f56270
 │   │   ├── 75
 │   │   │   └── 5634c15450a349a7bdc0fcd63fc54b2f74b9e7
+│   │   ├── 76
+│   │   │   └── a962e1c9e0ece9df70ec48f21cc5ca1a29aeb5
+│   │   ├── 77
+│   │   │   └── 05c61de07b4b49a5d717954896f1e657f23e1c
 │   │   ├── 7b
 │   │   │   ├── 1d9156d9277a210e93d39554020931782a30db
 │   │   │   └── d0cb58236eeafb672b902269d6a5ed51b0ece7
 │   │   ├── 7c
 │   │   │   └── 43da12a293ca5f2363c27b65a58db8f9b518ca
+│   │   ├── 7d
+│   │   │   └── 46e5b37199f421ab2b4dac5ed7d95a503dc33c
 │   │   ├── 7f
 │   │   │   └── e78f14db92ac9f2cae0118f3799bbd7affafd7
 │   │   ├── 80
@@ -165,6 +196,10 @@
 │   │   │   └── 44243f02d2fa9b9019e16a21cb584c24aae87c
 │   │   ├── 82
 │   │   │   └── d5c50638498c2fed9d72db85ac18c256d23ef7
+│   │   ├── 83
+│   │   │   └── 94f4d6b5706be2b5b7a3e39eeb65c4c6daf174
+│   │   ├── 88
+│   │   │   └── fd21acd217f8a38f864ad032b5267fe5fe4d2f
 │   │   ├── 89
 │   │   │   └── 642e05df1ecefb1a220f7633d0204f23e4c7bc
 │   │   ├── 8a
@@ -182,17 +217,29 @@
 │   │   │   └── a914833255820b995876406f70c8c81aba7833
 │   │   ├── 96
 │   │   │   └── 430eeef7394779fb1cd97b4cc29cfaa3de33ed
+│   │   ├── 97
+│   │   │   └── 92a15475d25e4731cef35f6badd563aa7b651e
+│   │   ├── 99
+│   │   │   └── d8d38dfb480a8bcab9a98ec0ec08e83a242b3d
 │   │   ├── 9b
 │   │   │   └── 6428cb17ed6b57828da1f070aff6f552b7cd35
 │   │   ├── 9d
 │   │   │   └── 7f4f8f09f80024b0f42ec190f4ef8bdfc1bd67
+│   │   ├── 9f
+│   │   │   └── ee16572c3a8bc5fea0558af6ba9aaff3d82d5a
 │   │   ├── a0
 │   │   │   └── abb0fa655802854fd9c67eaee88345c2d37b6f
 │   │   ├── a1
 │   │   │   └── a78d583e1aac8f53713c719179fb62316c568d
 │   │   ├── a6
 │   │   │   └── e7a4268bac9e198bbd9af414bd560cda53026e
+│   │   ├── a7
+│   │   │   ├── 2bfbf569333f47218286660ec48653e4277ebd
+│   │   │   └── f96b65c5ce3b2682dad23b41546517b0ac85c7
+│   │   ├── aa
+│   │   │   └── 6189d9b7dcb64d4db83ad8b2aba694ffd6d13a
 │   │   ├── ae
+│   │   │   ├── 04577fb887ac051a75dc58dcecdb85938e20cf
 │   │   │   └── 25251f6b6525999484abf926ee07973732b426
 │   │   ├── b0
 │   │   │   └── 389584b8a494483c0be669ddbf23c3f5c87ac7
@@ -213,26 +260,34 @@
 │   │   │   └── a7c7fd07085c61b16f44398ff4ef68f3318bc1
 │   │   ├── c0
 │   │   │   ├── 0cfcf6e182fa9644b3f0fbbccf4de7acd90f95
-│   │   │   └── 1fee50655d761e2e4b3528fe01de8283b1429e
+│   │   │   ├── 1fee50655d761e2e4b3528fe01de8283b1429e
+│   │   │   └── 213380001e110ec4ef05747de15a0a57180eae
 │   │   ├── c4
 │   │   │   └── d7247d6603eac2d2ed19e854331c2c4f2dde4a
 │   │   ├── c5
 │   │   │   ├── 3986d2832d9138b765dadb5c1b5cb1ba49979f
-│   │   │   └── 858f0d9b8d87995fc1399dec2eab37d27dfa19
+│   │   │   ├── 858f0d9b8d87995fc1399dec2eab37d27dfa19
+│   │   │   └── b65dec26f84cb740d0c598f98188d38e81bfb0
 │   │   ├── c6
 │   │   │   └── d5f7cdba0e8ab6fbd2952c085f9e75c43419f9
 │   │   ├── c8
-│   │   │   └── 2c4404259bcc985bce4c2d6379df70682f88db
+│   │   │   ├── 2c4404259bcc985bce4c2d6379df70682f88db
+│   │   │   └── 70ec643290f3329005d4d8ca254ea31d1a430b
 │   │   ├── c9
 │   │   │   └── e6493347c36ed409ba6f36a162154959efe58f
+│   │   ├── cb
+│   │   │   └── 26617d8db3da70908785f09b4f62fe66e73d03
 │   │   ├── cd
 │   │   │   ├── 4fa7fe5f466089184a13839bb7ec33141eb71f
 │   │   │   └── 6ae293276c87698637abc711532f4746a86302
 │   │   ├── cf
 │   │   │   ├── 5ebda00a1db5b55f2632ee8e766a4919c6d318
-│   │   │   └── 62d45273d9ed8e7849897ed819a76bf93a87fc
+│   │   │   ├── 62d45273d9ed8e7849897ed819a76bf93a87fc
+│   │   │   └── 7fd2ea23cb6421e35f4c22010c7211098f1b17
 │   │   ├── d2
-│   │   │   └── a41fab191e521e94219ebc738f99be460dea1b
+│   │   │   ├── 52697ce88ffe9fc71405108d61f0cc5c37cff3
+│   │   │   ├── a41fab191e521e94219ebc738f99be460dea1b
+│   │   │   └── ec627273bee60e36720998561ea77bb533a9a1
 │   │   ├── d4
 │   │   │   └── 7a2579fe40eb8b8f376851a7b8218e9dc6a822
 │   │   ├── d5
@@ -241,6 +296,8 @@
 │   │   ├── d8
 │   │   │   ├── 051e2ae2c63bed8930ec4c8d966808cc78474c
 │   │   │   └── d702881db77c9ec382ac7b5e586a9fd2c7c22f
+│   │   ├── dc
+│   │   │   └── da3101255097835b179d9c86a661e7ab162118
 │   │   ├── dd
 │   │   │   ├── 642d37fa8f9480b69b647c15f8616148f26349
 │   │   │   └── d541273705e0c3c1e27f79d29ac01a077a0a66
@@ -250,12 +307,15 @@
 │   │   │   └── 1f052866c909f207ba9585fe725728432aa661
 │   │   ├── e0
 │   │   │   └── 51c195d2410f326336eb9c0c8addafbc649471
+│   │   ├── e2
+│   │   │   └── 12d5e03b5e1c8af510fc9d99f157b4f9aa55e4
 │   │   ├── e3
 │   │   │   └── 20a9dcb7401f3f7477af8d73c761d45857b6d6
 │   │   ├── e4
 │   │   │   └── 28ece25e75199c81dfc4267f28af21b726ad2b
 │   │   ├── e6
-│   │   │   └── 67992572520449e38848744792c6e876f7ea48
+│   │   │   ├── 67992572520449e38848744792c6e876f7ea48
+│   │   │   └── 918e1ade96dde14e34e1bab8b9e38144872973
 │   │   ├── e7
 │   │   │   └── a821db70073b78cc48efefbce413f578554d38
 │   │   ├── ef
@@ -275,7 +335,8 @@
 │   │   │   ├── 49cf16a9bbd0756ba81436659f1f10be81f34e
 │   │   │   └── e17afb832ee27ccda29f74d4c8f776ce99587b
 │   │   ├── f8
-│   │   │   └── 08c9f2b14cb764ef55693c6ca4fbcfa751d72c
+│   │   │   ├── 08c9f2b14cb764ef55693c6ca4fbcfa751d72c
+│   │   │   └── fa2bd81d803aaa29307a17f19f67aa969c4223
 │   │   ├── fc
 │   │   │   └── 03a4295db1798f826e98cda1e5259c2323d0c4
 │   │   ├── fd
@@ -293,7 +354,6 @@
 │       │       └── master
 │       └── tags
 ├── .gitignore
-├── grub.cfg
 ├── iso
 │   └── boot
 │       ├── grub
@@ -302,147 +362,385 @@
 ├── linker.ld
 ├── makefile
 ├── obj
-│   ├── boot.o
-│   ├── kernel.o
-│   ├── long_mode.o
-│   └── mb_header.o
-├── qemu.log
+│   ├── boot
+│   │   └── stage0.o
+│   └── kernel
+│       └── kernel.o
+├── os.img
+├── os.iso
+├── setup.sh
 ├── src
-│   ├── boot.S
-│   ├── kernel.c
-│   ├── long_mode.S
-│   └── mb_header.S
+│   ├── boot
+│   │   └── stage0.S
+│   └── kernel
+│       └── kernel.c
 └── tools
     └── dump_proj.sh
 
-133 directories, 179 files
+159 directories, 215 files
 
 ===== MAKEFILE =====
 
-ARCH = x86_64-elf
-CC   = $(ARCH)-gcc
-LD   = $(ARCH)-ld
+# Simple OS Makefile - Custom Bootloader Only
+#
+ARCH = x86_64-elf-
+AS = $(ARCH)as
+CC = $(ARCH)gcc
+LD = $(ARCH)ld
+OBJCOPY = $(ARCH)objcopy
 
-SRC_DIR = src
-OBJ_DIR = obj
-BIN_DIR = bin
-ISO_DIR = iso
+CFLAGS = -m64 -ffreestanding -nostdlib -fno-stack-protector -Os -g -I./include -Wall -Wextra
+ASFLAGS = --64
+LDFLAGS = -nostdlib
 
-IMG = $(BIN_DIR)/4ds.img
-
-CFLAGS  = -ffreestanding -O2 -Wall -Wextra -m64 \
-          -fno-stack-protector -fno-pic -mno-red-zone -mcmodel=kernel
-
-ASFLAGS = -m64 -ffreestanding
-
-LDFLAGS = -T linker.ld -nostdlib -z max-page-size=0x1000
-
-# -----------------------
-# Sources
-# -----------------------
-
-C_SRCS   = $(wildcard $(SRC_DIR)/*.c)
-ASM_SRCS = $(wildcard $(SRC_DIR)/*.S)
-
-C_OBJS   = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(C_SRCS))
-ASM_OBJS = $(patsubst $(SRC_DIR)/%.S,$(OBJ_DIR)/%.o,$(ASM_SRCS))
-
-OBJS = $(ASM_OBJS) $(C_OBJS)
-
-# -----------------------
 # Targets
-# -----------------------
+IMG = os.img
+BOOT = ./bin/boot.bin
+KERNEL = ./bin/kernel.bin
+KERNEL_ELF = ./bin/kernel.elf
 
+# Source file discovery
+BOOT_SRC_S  = $(wildcard src/boot/*.S)
+BOOT_SRC_C  = $(wildcard src/boot/*.c)
+BOOT_SRC    = $(BOOT_SRC_S) $(BOOT_SRC_C)
+BOOT_OBJ    = $(patsubst src/%.S,obj/%.o,$(BOOT_SRC_S)) \
+              $(patsubst src/%.c,obj/%.o,$(BOOT_SRC_C))
+
+KERNEL_SRC_S = $(wildcard src/kernel/*.S)
+KERNEL_SRC_C = $(wildcard src/kernel/*.c)
+KERNEL_SRC   = $(KERNEL_SRC_S) $(KERNEL_SRC_C)
+KERNEL_OBJ   = $(patsubst src/%.S,obj/%.o,$(KERNEL_SRC_S)) \
+               $(patsubst src/%.c,obj/%.o,$(KERNEL_SRC_C))
+
+# All object files
+ALL_OBJ = $(BOOT_OBJ) $(KERNEL_OBJ)
+
+# Default target - build floppy image
 all: $(IMG)
 
-$(OBJ_DIR) $(BIN_DIR):
-	mkdir -p $@
+# Ensure directories exist
+bin:
+	@mkdir -p bin
 
-# C compilation
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+obj:
+	@mkdir -p obj/boot obj/kernel
+
+# Compilation rules for bootloader
+obj/boot/%.o: src/boot/%.S | obj
+	@echo "  AS    $<"
+	$(AS) $(ASFLAGS) -c $< -o $@
+
+obj/boot/%.o: src/boot/%.c | obj
+	@echo "  CC    $<"
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Assembly (GAS via GCC, 64-bit)
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.S | $(OBJ_DIR)
-	$(CC) $(ASFLAGS) -c $< -o $@
+# Compilation rules for kernel
+obj/kernel/%.o: src/kernel/%.S | obj
+	@echo "  AS    $<"
+	$(AS) $(ASFLAGS) -c $< -o $@
 
-# Link kernel ELF
-$(BIN_DIR)/kernel.elf: $(OBJS) | $(BIN_DIR)
-	$(LD) $(LDFLAGS) $(OBJS) -o $@
+obj/kernel/%.o: src/kernel/%.c | obj
+	@echo "  CC    $<"
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# ISO image
-$(IMG): $(BIN_DIR)/kernel.elf
-	mkdir -p $(ISO_DIR)/boot/grub
-	cp $< $(ISO_DIR)/boot/kernel.elf
-	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o $@ $(ISO_DIR)
+# Link bootloader - MUST be exactly 512 bytes with boot signature
+$(BOOT): $(BOOT_OBJ) | bin
+	@echo "  LD    $@ (Custom Bootloader)"
+	$(LD) -Ttext 0x7C00 --oformat=binary -nostdlib -o $@ $(BOOT_OBJ)
+	@size=$$(stat -c%s "$@" 2>/dev/null || stat -f%z "$@"); \
+	echo "Bootloader raw size: $$size bytes"; \
+	# Pad to exactly 510 bytes (boot sector minus signature)
+	if [ $$size -lt 510 ]; then \
+		echo "Padding to 510 bytes..."; \
+		dd if=/dev/zero bs=1 count=$$((510 - size)) >> "$@" 2>/dev/null; \
+	elif [ $$size -gt 510 ]; then \
+		echo "ERROR: Bootloader too large! Must be ≤ 510 bytes, got $$size bytes"; \
+		hexdump -C "$@" | tail -5; \
+		exit 1; \
+	fi
+	# Add boot signature (0xAA55 in little-endian) at byte 510
+	printf '\x55\xAA' | dd of="$@" bs=1 seek=510 conv=notrunc 2>/dev/null
+	@final_size=$$(stat -c%s "$@" 2>/dev/null || stat -f%z "$@"); \
+	echo "Bootloader final size: $$final_size bytes (with boot signature)"; \
+	echo "✓ Boot sector ready"
 
-emu:
+# Link kernel (64-bit protected mode)
+$(KERNEL_ELF): $(KERNEL_OBJ) linker.ld | bin
+	@echo "  LD    $@"
+	$(LD) $(LDFLAGS) -T linker.ld -o $@ $(KERNEL_OBJ)
+
+# Create binary kernel image
+$(KERNEL): $(KERNEL_ELF)
+	@echo "  OBJCOPY $@"
+	$(OBJCOPY) -O binary $(KERNEL_ELF) $@
+	@size=$$(stat -c%s "$@" 2>/dev/null || stat -f%z "$@"); \
+	echo "Kernel size: $$size bytes"; \
+	sectors=$$(( (size + 511) / 512 )); \
+	echo "Kernel occupies $$sectors sector(s) on disk"
+
+# Create bootable floppy image
+$(IMG): $(BOOT) $(KERNEL)
+	@echo "  IMG   $@"
+	@echo "Creating 1.44MB floppy image..."
+	@echo "Bootloader: sector 0 (0x0000-0x01FF)"
+	@echo "Kernel: starting at sector 1 (0x0200)"
+	dd if=/dev/zero of=$@ bs=512 count=2880 2>/dev/null
+	dd if=$(BOOT) of=$@ bs=512 count=1 conv=notrunc 2>/dev/null
+	dd if=$(KERNEL) of=$@ bs=512 seek=1 conv=notrunc 2>/dev/null
+	@echo "✓ Created bootable image: $@"
+
+# Run with QEMU
+run: $(IMG)
+	@echo "=== Starting QEMU ==="
+	@echo "Image: $(IMG)"
+	@echo "Boot: Custom bootloader (16-bit) → Kernel (64-bit)"
+	@echo "Memory: 512MB"
+	@echo ""
 	qemu-system-x86_64 \
-		-cdrom $(IMG) \
-		-vga std \
-		-m 512M \
+		-drive format=raw,file=$(IMG),index=0,if=floppy \
 		-serial stdio \
-		-d cpu_reset \
-		-D qemu.log \
+		-m 512M \
+		-no-reboot \
+		-no-shutdown 
+#		-serial chardev:char0
+#		-chardev stdio,id=char0,mux=on \
+
+
+# Debug with QEMU
+debug: $(IMG)
+	@echo "=== Starting QEMU in Debug Mode ==="
+	@echo "Image: $(IMG)"
+	@echo "GDB server: localhost:1234"
+	@echo "Press Ctrl+A then X to exit QEMU"
+	@echo ""
+	qemu-system-x86_64 \
+		-drive format=raw,file=$(IMG),index=0,if=floppy \
+		-serial stdio \
+		-m 64M \
+		-s -S \
 		-no-reboot \
 		-no-shutdown
 
-clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR) $(ISO_DIR)
+# Debug with GDB
+gdb: $(KERNEL_ELF)
+	@echo "=== Starting GDB ==="
+	@echo "Target: localhost:1234"
+	@echo "Symbols: $(KERNEL_ELF)"
+	@echo ""
+	$(ARCH)gdb -ex "target remote localhost:1234" \
+	            -ex "symbol-file $(KERNEL_ELF)" \
+	            -ex "break _start" \
+	            -ex "continue"
 
-dump:
-	chmod +x ./tools/dump_proj.sh
-	./tools/dump_proj.sh
+# Disassemble kernel for debugging
+disasm: $(KERNEL_ELF)
+	@echo "=== Disassembling Kernel ==="
+	$(ARCH)objdump -d $(KERNEL_ELF)
 
-.PHONY: all clean emu
+# Disassemble bootloader
+disasm-boot: $(BOOT)
+	@echo "=== Disassembling Bootloader ==="
+	$(ARCH)objdump -b binary -m i8086 -D $(BOOT)
 
+# Hex dump of boot sector
+hexdump-boot: $(BOOT)
+	@echo "=== Boot Sector Hex Dump ==="
+	hexdump -C $(BOOT)
+
+# Hex dump of kernel (first 512 bytes)
+hexdump-kernel: $(KERNEL)
+	@echo "=== Kernel Hex Dump (first 512 bytes) ==="
+	dd if=$(KERNEL) bs=512 count=1 2>/dev/null | hexdump -C
+
+# Print all source files
+print-src:
+	@echo "=== Source Files ==="
+	@echo ""
+	@echo "Bootloader Sources:"
+	@if [ -z "$(BOOT_SRC)" ]; then \
+		echo "  No bootloader source files found"; \
+	else \
+		for file in $(sort $(BOOT_SRC)); do \
+			echo "  $$file"; \
+		done; \
+	fi
+	@echo ""
+	@echo "Kernel Sources:"
+	@if [ -z "$(KERNEL_SRC)" ]; then \
+		echo "  No kernel source files found"; \
+	else \
+		for file in $(sort $(KERNEL_SRC)); do \
+			echo "  $$file"; \
+		done; \
+	fi
+	@echo ""
+	@echo "Total source files: $$(echo $(BOOT_SRC) $(KERNEL_SRC) | wc -w 2>/dev/null || echo 0)"
+	@echo "  Bootloader: $$(echo $(BOOT_SRC) | wc -w 2>/dev/null || echo 0) files"
+	@echo "  Kernel: $$(echo $(KERNEL_SRC) | wc -w 2>/dev/null || echo 0) files"
+
+# Print all object files
+print-obj:
+	@echo "=== Object Files ==="
+	@echo ""
+	@echo "Bootloader Objects:"
+	@if [ -z "$(BOOT_OBJ)" ]; then \
+		echo "  No bootloader objects defined"; \
+	else \
+		for file in $(sort $(BOOT_OBJ)); do \
+			if [ -e "$$file" ]; then \
+				size=$$(stat -c%s "$$file" 2>/dev/null || stat -f%z "$$file"); \
+				echo "  $$file ($$size bytes)"; \
+			else \
+				echo "  $$file (not built)"; \
+			fi; \
+		done; \
+	fi
+	@echo ""
+	@echo "Kernel Objects:"
+	@if [ -z "$(KERNEL_OBJ)" ]; then \
+		echo "  No kernel objects defined"; \
+	else \
+		for file in $(sort $(KERNEL_OBJ)); do \
+			if [ -e "$$file" ]; then \
+				size=$$(stat -c%s "$$file" 2>/dev/null || stat -f%z "$$file"); \
+				echo "  $$file ($$size bytes)"; \
+			else \
+				echo "  $$file (not built)"; \
+			fi; \
+		done; \
+	fi
+
+# Print all output files
+print-out:
+	@echo "=== Output Files ==="
+	@echo ""
+	@echo "Generated Files:"
+	@for file in $(sort $(BOOT) $(KERNEL) $(KERNEL_ELF) $(IMG)); do \
+		if [ -e "$$file" ]; then \
+			size=$$(stat -c%s "$$file" 2>/dev/null || stat -f%z "$$file"); \
+			echo "  $$file ($$size bytes)"; \
+		else \
+			echo "  $$file (not built)"; \
+		fi; \
+	done
+	@echo ""
+	@echo "Build Directories:"
+	@if [ -d "obj" ]; then \
+		echo "  obj/ exists"; \
+		obj_count=$$(find obj -name "*.o" 2>/dev/null | wc -l); \
+		echo "  Contains $$obj_count object file(s)"; \
+	else \
+		echo "  obj/ does not exist"; \
+	fi
+	@if [ -d "bin" ]; then \
+		echo "  bin/ exists"; \
+		bin_count=$$(find bin -type f 2>/dev/null | wc -l); \
+		echo "  Contains $$bin_count binary file(s)"; \
+	else \
+		echo "  bin/ does not exist"; \
+	fi
+
+# Print build configuration
+print-config:
+	@echo "=== Build Configuration ==="
+	@echo ""
+	@echo "Toolchain:"
+	@echo "  ARCH: $(ARCH)"
+	@echo "  AS: $(AS)"
+	@echo "  CC: $(CC)"
+	@echo "  LD: $(LD)"
+	@echo "  OBJCOPY: $(OBJCOPY)"
+	@echo ""
+	@echo "Flags:"
+	@echo "  CFLAGS: $(CFLAGS)"
+	@echo "  ASFLAGS: $(ASFLAGS)"
+	@echo "  LDFLAGS: $(LDFLAGS)"
+	@echo ""
+	@echo "Targets:"
+	@echo "  Image: $(IMG)"
+	@echo "  Bootloader: $(BOOT)"
+	@echo "  Kernel Binary: $(KERNEL)"
+	@echo "  Kernel ELF: $(KERNEL_ELF)"
+	@echo ""
+	@echo "Memory Layout:"
+	@echo "  Bootloader: 0x7C00 (512 bytes with boot signature)"
+	@echo "  Kernel: Loaded at 1MB (0x100000) via linker.ld"
+	@echo "  VGA Buffer: 0xB8000 (text mode)"
+	@echo ""
+	@echo "Boot Process:"
+	@echo "  1. BIOS loads boot sector (512 bytes) to 0x7C00"
+	@echo "  2. Bootloader jumps to kernel at 1MB"
+	@echo "  3. Kernel runs in 64-bit protected mode"
+
+# Print bootloader info in detail
+print-bootinfo: $(BOOT)
+	@echo "=== Bootloader Info ==="
+	@size=$$(stat -c%s "$(BOOT)" 2>/dev/null || stat -f%z "$(BOOT)"); \
+	echo "Size: $$size bytes"
+	@echo "Breakdown:"
+	@echo "  Code size: $$((size - 2)) bytes (without signature)"
+	@echo "  Boot signature: 2 bytes (0x55AA at offset 510)"
+	@echo ""
 
 ===== LINKER SCRIPTS =====
 
 --- ./linker.ld ---
+/* Kernel linker script - places kernel at 1MB */
+OUTPUT_FORMAT("elf64-x86-64")
+OUTPUT_ARCH(i386:x86-64)
 ENTRY(_start)
 
 SECTIONS
 {
-    . = 1M;
-
-    .multiboot : ALIGN(8) {
-        KEEP(*(.multiboot))
-    }
-
+    /* Load kernel at 1MB (0x100000) */
+    . = 0x100000;
+    
+    /* Kernel start */
+    kernel_start = .;
+    
+    /* Text section (code) */
     .text : ALIGN(4K) {
         *(.text*)
+        *(.gnu.linkonce.t*)
     }
-
+    
+    /* Read-only data */
     .rodata : ALIGN(4K) {
         *(.rodata*)
+        *(.gnu.linkonce.r*)
     }
-
+    
+    /* Data section (initialized variables) */
     .data : ALIGN(4K) {
         *(.data*)
+        *(.gnu.linkonce.d*)
     }
-
+    
+    /* BSS section (uninitialized variables) */
     .bss : ALIGN(4K) {
         *(COMMON)
         *(.bss*)
+        *(.gnu.linkonce.b*)
+    }
+    
+    /* Kernel end */
+    kernel_end = .;
+    
+    /* Debug information (discarded in final binary) */
+    /DISCARD/ : {
+        *(.comment)
+        *(.note*)
+        *(.eh_frame*)
+        *(.interp)
+        *(.dynamic)
+        *(.dynsym)
+        *(.dynstr)
+        *(.hash)
+        *(.gnu.hash)
     }
 }
 
-
 ===== GRUB CONFIG =====
-
---- ./grub.cfg ---
-set timeout=0
-set default=0
-set gfxmode=1024x768x32
-set gfxpayload=keep
-set framebuffer=keep
-
-menuentry "4DS" {
-    multiboot2 /boot/kernel.elf
-    boot
-}
 
 --- ./iso/boot/grub/grub.cfg ---
 set timeout=0
@@ -459,518 +757,188 @@ menuentry "4DS" {
 
 ===== SOURCE FILES =====
 
-\n--- src/kernel.c ---
-#include <stdint.h>
+\n--- src/boot/stage0.S ---
+.intel_syntax noprefix
+.code16                    /* Set the code to 16-bit mode */
+.org 0x7c00               /* Set the origin to 0x7c00 */
 
-#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER 5
-#define COM1 0x3F8
-#define VGA_BUFFER 0xB8000
+.global start
+start:
+    cli                   /* Clear interrupts */
+    mov ax, 0x00          /* Load 0x00 into AX */
+    mov ds, ax            /* Set data segment to 0x00 */
+    mov es, ax            /* Set extra segment to 0x00 */
+    mov ss, ax            /* Set stack segment to 0x00 */
+    mov sp, 0x7c00        /* Set stack pointer to 0x7c00 */
+    mov si, msg    /* Load address of message into SI */
+    sti                   /* Enable interrupts */
 
-/* Simple VGA functions */
-void vga_clear() {
-  uint16_t *vga = (uint16_t *)VGA_BUFFER;
-  for (int i = 0; i < 80 * 25; i++) {
-    vga[i] = 0x0F00 | ' ';
-  }
-}
+print:
+    lodsb                 /* Load byte at DS:SI into AL */
+    cmp al, 0             /* Compare AL with 0 */
+    je done               /* Jump if end of string */
+    mov ah, 0x0E          /* BIOS teletype function */
+    int 0x10              /* Call BIOS interrupt */
+    jmp print             /* Repeat for next character */
 
-void vga_putc(int x, int y, char c, uint8_t color) {
-  uint16_t *vga = (uint16_t *)VGA_BUFFER;
-  vga[y * 80 + x] = (color << 8) | c;
-}
+done:
+    cli                   /* Clear interrupts */
+    hlt                   /* Halt CPU */
 
-void vga_puts(int x, int y, const char *str, uint8_t color) {
-  while (*str) {
-    vga_putc(x++, y, *str++, color);
-    if (x >= 80) {
-      x = 0;
-      y++;
-    }
-  }
-}
+msg:
+   .asciz "Hello World!\0" /* Define the message */
+   .byte 0               /* Null terminator */
 
-void vga_print_hex(int x, int y, uint64_t val, uint8_t color) {
-  const char *hex = "0123456789ABCDEF";
-  for (int i = 0; i < 16; i++) {
-    int nibble = (val >> (60 - i * 4)) & 0xF;
-    vga_putc(x + i, y, hex[nibble], color);
-  }
-}
+/* Fill with zeros up to 510 bytes */
+. = 0x7c00 + 510
+.word 0xAA55          /* Boot signature */
+\n--- src/kernel/kernel.c ---
+/* Simple 64-bit kernel with VGA text output */
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long uint64_t;
 
-/* Serial I/O */
-static inline void outb(uint16_t port, uint8_t val) {
-  __asm__ volatile("outb %0, %1" : : "a"(val), "Nd"(port));
-}
+typedef uint64_t size_t;
 
-static inline uint8_t inb(uint16_t port) {
-  uint8_t ret;
-  __asm__ volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
-  return ret;
-}
+/* VGA text buffer */
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
+#define VGA_MEMORY 0xB8000
 
-void serial_init() {
-  outb(COM1 + 1, 0x00);
-  outb(COM1 + 3, 0x80);
-  outb(COM1 + 0, 0x03);
-  outb(COM1 + 1, 0x00);
-  outb(COM1 + 3, 0x03);
-  outb(COM1 + 2, 0xC7);
-  outb(COM1 + 4, 0x0B);
-}
+static uint16_t *vga_buffer = (uint16_t *)VGA_MEMORY;
+static uint8_t cursor_x = 0;
+static uint8_t cursor_y = 0;
 
-void serial_putchar(char c) {
-  while (!(inb(COM1 + 5) & 0x20))
-    ;
-  outb(COM1, c);
-}
-
-void serial_print(const char *s) {
-  while (*s)
-    serial_putchar(*s++);
-}
-
-/* Try to detect Multiboot2 info structure */
-struct mb2_header {
-  uint32_t total_size;
-  uint32_t reserved;
+/* Terminal colors */
+enum vga_color {
+  VGA_COLOR_BLACK = 0,
+  VGA_COLOR_BLUE = 1,
+  VGA_COLOR_GREEN = 2,
+  VGA_COLOR_CYAN = 3,
+  VGA_COLOR_RED = 4,
+  VGA_COLOR_MAGENTA = 5,
+  VGA_COLOR_BROWN = 6,
+  VGA_COLOR_LIGHT_GREY = 7,
+  VGA_COLOR_DARK_GREY = 8,
+  VGA_COLOR_LIGHT_BLUE = 9,
+  VGA_COLOR_LIGHT_GREEN = 10,
+  VGA_COLOR_LIGHT_CYAN = 11,
+  VGA_COLOR_LIGHT_RED = 12,
+  VGA_COLOR_LIGHT_MAGENTA = 13,
+  VGA_COLOR_LIGHT_BROWN = 14,
+  VGA_COLOR_WHITE = 15,
 };
 
-void *find_multiboot2_info(uint64_t start_addr, uint64_t end_addr) {
-  // Look for the multiboot2 magic pattern
-  for (uint64_t addr = start_addr; addr < end_addr; addr += 8) {
-    uint32_t *magic_ptr = (uint32_t *)addr;
-    if (*magic_ptr == 0x36d76289) {
-      // Found magic, check if it looks like a valid structure
-      struct mb2_header *header = (struct mb2_header *)(addr + 8);
-      if (header->total_size > 16 && header->total_size < 0x10000) {
-        return (void *)addr;
-      }
+/* Create color byte from foreground and background */
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
+  return fg | (bg << 4);
+}
+
+/* Create VGA entry from character and color */
+static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
+  return (uint16_t)uc | ((uint16_t)color << 8);
+}
+
+/* Clear the screen */
+void clear_screen(uint8_t color) {
+  for (size_t y = 0; y < VGA_HEIGHT; y++) {
+    for (size_t x = 0; x < VGA_WIDTH; x++) {
+      const size_t index = y * VGA_WIDTH + x;
+      vga_buffer[index] = vga_entry(' ', color);
     }
   }
-  return 0;
+  cursor_x = 0;
+  cursor_y = 0;
 }
 
-/* Direct VGA graphics mode (mode 0x13) as fallback */
-void init_vga_graphics() {
-  // Try to set 320x200 256-color mode through VGA registers
-  outb(0x3C2, 0xE3); // Misc Output Register
-  outb(0x3D4, 0x11); // Sequencer
-  outb(0x3D5, 0x00);
-
-  // More registers would be needed for full mode set...
-  // For now, just use text mode
+/* Put a character at specific position */
+void put_char_at(char c, uint8_t color, size_t x, size_t y) {
+  const size_t index = y * VGA_WIDTH + x;
+  vga_buffer[index] = vga_entry(c, color);
 }
 
-/* Main kernel */
-void kernel_main(uint64_t mbi_ptr, uint64_t magic) {
-  // Initialize VGA text immediately
-  vga_clear();
-  vga_puts(0, 0, "4DS OS Kernel Started", 0x0F);
-
-  vga_puts(0, 1, "Magic: ", 0x0E);
-  vga_print_hex(7, 1, magic, 0x0E);
-
-  vga_puts(0, 2, "MBI Ptr: ", 0x0E);
-  vga_print_hex(9, 2, mbi_ptr, 0x0E);
-
-  // Initialize serial for debugging
-  serial_init();
-  serial_print("\n\n=== 4DS OS ===\n");
-
-  void *mbi = 0;
-
-  // Try different approaches to find the multiboot2 info
-  if (magic == 0x36d76289 || magic == 0x2BADB002) {
-    // Standard multiboot magic
-    mbi = (void *)mbi_ptr;
-    vga_puts(0, 3, "Using direct MBI pointer", 0x0A);
+/* Write a character to the terminal */
+void put_char(char c, uint8_t color) {
+  if (c == '\n') {
+    cursor_x = 0;
+    cursor_y++;
+  } else if (c == '\r') {
+    cursor_x = 0;
+  } else if (c == '\t') {
+    cursor_x = (cursor_x + 4) & ~(4 - 1);
   } else {
-    vga_puts(0, 3, "Scanning memory for MBI...", 0x0C);
-
-    // Try to find it in memory
-    mbi = find_multiboot2_info(0x100000, 0x200000);
-    if (!mbi)
-      mbi = find_multiboot2_info(0x2000, 0xA0000);
-
-    if (mbi) {
-      vga_puts(0, 4, "Found MBI at: ", 0x0A);
-      vga_print_hex(14, 4, (uint64_t)mbi, 0x0A);
-    } else {
-      vga_puts(0, 4, "No MBI found!", 0x0C);
-    }
+    put_char_at(c, color, cursor_x, cursor_y);
+    cursor_x++;
   }
 
-  if (mbi) {
-    vga_puts(0, 5, "MBI Magic: ", 0x0E);
-    uint32_t actual_magic = *(uint32_t *)mbi;
-    vga_print_hex(11, 5, actual_magic, 0x0E);
+  if (cursor_x >= VGA_WIDTH) {
+    cursor_x = 0;
+    cursor_y++;
+  }
 
-    if (actual_magic == 0x36d76289) {
-      vga_puts(0, 6, "Valid Multiboot2!", 0x0A);
-
-      // Parse tags
-      uint8_t *ptr = (uint8_t *)mbi + 8;
-      int y = 7;
-
-      while (y < 20) {
-        uint32_t *tag = (uint32_t *)ptr;
-        if (tag[0] == 0)
-          break; // End tag
-
-        vga_puts(0, y, "Tag: ", 0x0E);
-        vga_print_hex(5, y, tag[0], 0x0E);
-
-        if (tag[0] == 5) { // Framebuffer tag
-          vga_puts(25, y, "FB", 0x0A);
-          // We found framebuffer!
-        }
-
-        // Move to next tag
-        uint32_t size = tag[1];
-        ptr += (size + 7) & ~7;
-        y++;
+  /* Scroll if needed */
+  if (cursor_y >= VGA_HEIGHT) {
+    for (size_t y = 1; y < VGA_HEIGHT; y++) {
+      for (size_t x = 0; x < VGA_WIDTH; x++) {
+        vga_buffer[(y - 1) * VGA_WIDTH + x] = vga_buffer[y * VGA_WIDTH + x];
       }
     }
-  }
 
-  // Direct VGA color test - always works
-  vga_puts(0, 22, "VGA Color Test:", 0x0F);
-
-  // Draw color bars in text mode
-  for (int x = 0; x < 80; x++) {
-    uint8_t color = (x % 16);
-    for (int y = 23; y < 25; y++) {
-      vga_putc(x, y, 0xDB, color); // Block character
-    }
-  }
-
-  // Animate colors
-  uint32_t frame = 0;
-  while (1) {
-    // Update frame counter
-    vga_puts(70, 0, "Frame:", 0x0F);
-    vga_print_hex(76, 0, frame, 0x0F);
-
-    // Animate color bars
-    for (int x = 0; x < 80; x++) {
-      uint8_t color = ((x + frame) % 16);
-      vga_putc(x, 23, 0xDB, color);
-      vga_putc(x, 24, 0xDB, (color + 8) % 16);
+    /* Clear last line */
+    for (size_t x = 0; x < VGA_WIDTH; x++) {
+      put_char_at(' ', color, x, VGA_HEIGHT - 1);
     }
 
-    frame++;
-
-    // Simple delay
-    for (volatile uint32_t i = 0; i < 1000000; i++)
-      ;
+    cursor_y = VGA_HEIGHT - 1;
   }
 }
-\n--- src/mb_header.S ---
-.intel_syntax noprefix
 
-#ifndef MULTIBOOT2_HEADER_MAGIC
-# define MULTIBOOT2_HEADER_MAGIC 0xe85250d6
-#endif
+/* Write a string */
+void write_string(const char *str, uint8_t color) {
+  while (*str) {
+    put_char(*str++, color);
+  }
+}
 
-#define mb2_magic  MULTIBOOT2_HEADER_MAGIC
-#define mb2_length (mb2_header_end - mb2_header_start)
+/* Kernel entry point */
+void _start(void) {
+  /* Clear screen with blue background */
+  clear_screen(vga_entry_color(VGA_COLOR_WHITE, VGA_COLOR_BLUE));
 
-.section .multiboot
-.align 8
+  /* Write welcome message */
+  write_string("64-bit Kernel Booted Successfully!\n",
+               vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLUE));
+  write_string("===================================\n",
+               vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLUE));
+  write_string("System is running in 64-bit mode\n",
+               vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLUE));
+  write_string("VGA text mode: 80x25\n",
+               vga_entry_color(VGA_COLOR_CYAN, VGA_COLOR_BLUE));
+  write_string("Kernel loaded at: 0x100000\n",
+               vga_entry_color(VGA_COLOR_MAGENTA, VGA_COLOR_BLUE));
+  write_string("\nHalted. System is stable.\n",
+               vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLUE));
 
-mb2_header_start:
-    .long mb2_magic
-    .long 0                  /* architecture = i386 */
-    .long mb2_length
-    .long -(mb2_magic + 0 + mb2_length)
-
-    /* -----------------------------
-     * Framebuffer request tag
-     * ----------------------------- */
-    .align 8
-framebuffer_tag_start:
-    .short 5                 /* MULTIBOOT_HEADER_TAG_FRAMEBUFFER = 5 */
-    .short 0                 /* FLAGS = REQUIRED */
-    .long framebuffer_tag_end - framebuffer_tag_start
-
-    .long 1024               /* preferred width  */
-    .long 768                /* preferred height */
-    .long 32                 /* preferred depth  */
-
-framebuffer_tag_end:
-
-    /* -----------------------------
-     * End tag
-     * ----------------------------- */
-    .align 8
-    .short 0                 /* type = END */
-    .short 0                 /* flags */
-    .long 8                  /* size */
-
-mb2_header_end:
-\n--- src/boot.S ---
-.intel_syntax noprefix
-.global _start
-.extern long_mode_start
-
-/* =========================
- * 32-bit entry
- * ========================= */
-.section .text
-.code32
-
-.intel_syntax noprefix
-.global _start
-.extern long_mode_start
-
-/* =========================
- * 32-bit entry
- * ========================= */
-.section .text
-.code32
-
-_start:
-    mov esp, OFFSET stack_top
-
-    /* Save multiboot2 info pointer IMMEDIATELY (passed in EBX) */
-    push ebx                    /* Save on stack */
-    
-    /* Check multiboot2 magic */
-    cmp eax, 0x36d76289
-    jne no_multiboot
-    
-    /* Restore and save to non-volatile register */
-    pop ebx
-    push ebx                    /* Save again for later */
-
-    call check_cpuid
-    call check_long_mode
-    call setup_page_tables
-    call enable_paging
-
-    lgdt gdt64_pointer
-
-    /* Get the saved MBI pointer */
-    pop esi                     /* ESI = MBI pointer (will be preserved) */
-    
-    ljmp 0x08, OFFSET long_mode_start
-
-    hlt
-
-/* ... rest of check_multiboot removed since we do it at start ... */
-
-no_multiboot:
-    mov al, 'M'
-    jmp error
-
-/* ... rest of boot.S remains similar ... */
-check_cpuid:
-    pushfd
-    pop eax
-    mov ecx, eax
-    xor eax, (1 << 21)
-    push eax
-    popfd
-    pushfd
-    pop eax
-    push ecx
-    popfd
-    cmp eax, ecx
-    je no_cpuid
-    ret
-
-no_cpuid:
-    mov al, 'C'
-    jmp error
-
-
-check_long_mode:
-    mov eax, 0x80000000
-    cpuid
-    cmp eax, 0x80000001
-    jb no_long_mode
-
-    mov eax, 0x80000001
-    cpuid
-    test edx, (1 << 29)
-    jz no_long_mode
-    ret
-
-no_long_mode:
-    mov al, 'L'
-    jmp error
-
-
-/* =========================
- * Page tables
- * ========================= */
-
-setup_page_tables:
-    mov eax, OFFSET page_table_l3
-    or  eax, 0x3                      /* present + writable */
-    mov DWORD PTR [page_table_l4], eax
-
-    mov eax, OFFSET page_table_l2
-    or  eax, 0x3
-    mov DWORD PTR [page_table_l3], eax
-
-    xor ecx, ecx                     /* counter = 0 */
-
-pt_loop:
-    mov eax, 0x200000                /* 2 MiB */
-    mul ecx
-    or  eax, 0x83                    /* present + writable + huge */
-    mov DWORD PTR [page_table_l2 + ecx*8], eax
-
-    inc ecx
-    cmp ecx, 512 // sus ahh line
-    jne pt_loop
-    ret
-
-
-enable_paging:
-    /* load PML4 */
-    mov eax, OFFSET page_table_l4
-    mov cr3, eax
-
-    /* enable PAE */
-    mov eax, cr4
-    or  eax, (1 << 5)
-    mov cr4, eax
-
-    /* enable long mode */
-    mov ecx, 0xC0000080              /* EFER MSR */
-    rdmsr
-    or  eax, (1 << 8)                /* LME */
-    wrmsr
-
-    /* enable paging */
-    mov eax, cr0
-    or  eax, (1 << 31)
-    mov cr0, eax
-    ret
-
-
-/* =========================
- * Error print (VGA text)
- * ========================= */
-
-error:
-    mov DWORD PTR [0xB8000], 0x4F524F45   /* 'E''R''R' */
-    mov DWORD PTR [0xB8004], 0x4F3A4F52   /* ':' */
-    mov DWORD PTR [0xB8008], 0x4F204F20   /* ' ' */
-    mov BYTE  PTR [0xB800A], al
-    hlt
-
-
-/* =========================
- * BSS (zeroed memory)
- * ========================= */
-
-.section .bss
-.global stack_top
-
-.align 4096
-page_table_l4:
-    .skip 4096
-page_table_l3:
-    .skip 4096
-page_table_l2:
-    .skip 4096
-
-stack_bottom:
-    .skip 4096 * 4
-stack_top:
-
-
-/* =========================
- * GDT
- * ========================= */
-
-.section .rodata
-.align 8
-gdt64:
-    .quad 0x0000000000000000         /* null descriptor */
-    .quad 0x00AF9A000000FFFF         /* 64-bit code segment */
-
-gdt64_pointer:
-    .word (gdt64_end - gdt64 - 1)
-    .long gdt64
-
-gdt64_end:
-
-\n--- src/long_mode.S ---
-.intel_syntax noprefix
-
-.global long_mode_start
-.extern kernel_main
-
-.section .text
-.code64
-long_mode_start:
-    /* Set up 64-bit stack */
-    mov rsp, OFFSET stack_top
-    
-    /* Clear segment registers */
-    mov ax, 0
-    mov ss, ax
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    
-    /* ESI has magic, EDI has MBI pointer */
-    /* Pass both to kernel_main */
-    mov rdx, 0
-    mov edx, esi            /* RDX = magic value */
-    mov rdi, 0
-    mov edi, edi            /* RDI = MBI pointer (zero-extend) */
-    
-    /* Call kernel_main with: RDI = MBI pointer, RDX = magic */
-    call kernel_main
-
-    hlt
+  /* Halt the CPU */
+  asm volatile("cli");
+  while (1) {
+    asm volatile("hlt");
+  }
+}
 
 ===== OBJECT SYMBOLS =====
 
-\n--- obj/long_mode.o ---
-                 U kernel_main
-0000000000000000 T long_mode_start
-                 U stack_top
-\n--- obj/mb_header.o ---
-0000000000000024 n framebuffer_tag_end
-0000000000000010 n framebuffer_tag_start
-0000000000000030 n mb2_header_end
-0000000000000000 n mb2_header_start
-\n--- obj/kernel.o ---
-00000000000001e0 T find_multiboot2_info
-0000000000000210 T init_vga_graphics
-0000000000000230 T kernel_main
-0000000000000011 r .LC1
-0000000000000130 T serial_init
-00000000000001a0 T serial_print
-0000000000000180 T serial_putchar
-0000000000000000 T vga_clear
-00000000000000c0 T vga_print_hex
-0000000000000040 T vga_putc
-0000000000000060 T vga_puts
-\n--- obj/boot.o ---
-000000000000003a t check_cpuid
-0000000000000055 t check_long_mode
-00000000000000b0 t enable_paging
-00000000000000db t error
-0000000000000000 r gdt64
-0000000000000016 r gdt64_end
-0000000000000010 r gdt64_pointer
-                 U long_mode_start
-000000000000004e t no_cpuid
-0000000000000073 t no_long_mode
-0000000000000033 t no_multiboot
-0000000000002000 b page_table_l2
-0000000000001000 b page_table_l3
-0000000000000000 b page_table_l4
-0000000000000093 t pt_loop
-0000000000000077 t setup_page_tables
-0000000000003000 b stack_bottom
-0000000000007000 B stack_top
-0000000000000000 T _start
+\n--- obj/boot/stage0.o ---
+0000000000007c1d t done
+0000000000007c1f t msg
+0000000000007c12 t print
+0000000000007c00 T start
+\n--- obj/kernel/kernel.o ---
+0000000000000000 T clear_screen
+0000000000000001 b cursor_x
+0000000000000000 b cursor_y
+0000000000000056 T put_char
+000000000000003d T put_char_at
+0000000000000154 T _start
+000000000000012a T write_string
